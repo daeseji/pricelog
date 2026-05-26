@@ -15,9 +15,9 @@ def get_headers(method, path, params=None):
     datetime_str = datetime.datetime.utcnow().strftime("%y%m%dT%H%M%SZ")
 
     if params:
-        sorted_params = sorted(params.items())
-        query_string = urllib.parse.urlencode(sorted_params)
-        canonical = datetime_str + method + path + query_string
+        sorted_items = sorted(params.items())
+        query_string = urllib.parse.urlencode(sorted_items, quote_via=urllib.parse.quote)
+        canonical = datetime_str + method + path + "?" + query_string
         full_url = BASE_URL + path + "?" + query_string
     else:
         canonical = datetime_str + method + path
@@ -47,7 +47,7 @@ def get_price(keyword, product_id):
     resp = requests.get(full_url, headers=headers, timeout=10)
 
     if resp.status_code != 200:
-        print(f"  API 오류 {resp.status_code}: {resp.text[:200]}")
+        print(f"  API 오류 {resp.status_code}: {resp.text[:300]}")
         return None
 
     data = resp.json()
@@ -56,14 +56,15 @@ def get_price(keyword, product_id):
     for p in products:
         if str(p.get("productId")) == str(product_id):
             price = p.get("productPrice")
-            print(f"  ID 매칭 성공: {price}원")
+            print(f"  ID 매칭: {price}원")
             return price
 
     if products:
         price = products[0].get("productPrice")
-        print(f"  첫 번째 결과 사용: {price}원")
+        print(f"  첫번째 결과: {price}원")
         return price
 
+    print("  검색 결과 없음")
     return None
 
 
@@ -78,17 +79,15 @@ def main():
     for product in data["products"]:
         print(f"조회 중: {product['name']}")
         price = get_price(product["keyword"], product["id"])
-
         if price is not None:
             product["history"].append({"date": now, "price": price})
             product["history"] = product["history"][-180:]
-            print(f"  ✅ 완료: {price:,}원\n")
+            print(f"  ✅ {price:,}원\n")
         else:
-            print(f"  ❌ 가격 조회 실패\n")
+            print(f"  ❌ 실패\n")
 
     with open("data/prices.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-
     print("저장 완료!")
 
 
