@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pricelog</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f6fa;
+      color: #1a1a2e;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a1a2e;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header .logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    header .logo span { color: #4f8ef7; }
+    header .subtitle {
+      font-size: 12px;
+      color: #888;
+      margin-left: 4px;
+    }
+    header .updated {
+      margin-left: auto;
+      font-size: 11px;
+      color: #555;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 28px 16px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+
+    .product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: box-shadow 0.2s;
+    }
+    .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+
+    .product-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: #f0f0f0;
+      flex-shrink: 0;
+    }
+    .product-img.placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .product-info { min-width: 0; }
+    .product-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a2e;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .current-price {
+      font-size: 22px;
+      font-weight: 800;
+      color: #e53e3e;
+    }
+    .current-price.no-data { color: #aaa; font-size: 15px; font-weight: 400; }
+    .price-change {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 20px;
+    }
+    .price-change.down { background: #e8f5e9; color: #2e7d32; }
+    .price-change.up   { background: #fce4e4; color: #c62828; }
+    .price-change.flat { background: #f5f5f5; color: #777; }
+    .min-price {
+      font-size: 12px;
+      color: #888;
+      margin-top: 4px;
+    }
+    .min-price span { color: #4f8ef7; font-weight: 600; }
+
+    .product-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+    .chart-wrap {
+      width: 200px;
+      height: 60px;
+    }
+    .buy-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fee500;
+      color: #1a1a2e;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .buy-btn:hover { opacity: 0.85; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 0;
+      color: #aaa;
+    }
+    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    @media (max-width: 600px) {
+      .product-card {
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto auto;
+      }
+      .product-right {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .chart-wrap { width: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">price<span>log</span></div>
+  <span class="subtitle">내 쿠팡 가격 추적기</span>
+  <div class="updated" id="updated-at"></div>
+</header>
+
+<main>
+  <div class="section-title">즐겨찾기 상품</div>
+  <div class="product-list" id="product-list">
+    <div class="empty-state">
+      <div class="icon">📦</div>
+      <p>데이터를 불러오는 중...</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const REPO_BASE = window.location.pathname.replace(/\/$/, '');
+
+async function loadData() {
+  const res = await fetch(REPO_BASE + '/data/prices.json?_=' + Date.now());
+  return res.json();
+}
+
+function formatPrice(p) {
+  return p.toLocaleString('ko-KR') + '원';
+}
+
+function getPriceChange(history) {
+  if (history.length < 2) return null;
+  const prev = history[history.length - 2].price;
+  const curr = history[history.length - 1].price;
+  const diff = curr - prev;
+  const pct = ((diff / prev) * 100).toFixed(1);
+  return { diff, pct };
+}
+
+function renderChart(canvasId, history) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || history.length < 2) return;
+
+  const labels = history.map(h => h.date.slice(5, 10)); // MM-DD
+  const prices = history.map(h => h.price);
+  const minPrice = Math.min(...prices);
+
+  new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: prices,
+        borderColor: '#4f8ef7',
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 3,
+        tension: 0.3,
+        fill: true,
+        backgroundColor: 'rgba(79,142,247,0.08)',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => formatPrice(ctx.raw)
+          }
+        }
+      },
+      scales: {
+        x: { display: false },
+        y: {
+          display: false,
+          min: minPrice * 0.97,
+        }
+      },
+      animation: false,
+    }
+  });
+}
+
+function renderProducts(data) {
+  const list = document.getElementById('product-list');
+  list.innerHTML = '';
+
+  // 마지막 업데이트 시간
+  let lastUpdated = '';
+  data.products.forEach(p => {
+    if (p.history.length > 0) {
+      const d = p.history[p.history.length - 1].date;
+      if (d > lastUpdated) lastUpdated = d;
+    }
+  });
+  if (lastUpdated) {
+    document.getElementById('updated-at').textContent = '마지막 업데이트: ' + lastUpdated;
+  }
+
+  data.products.forEach((product, i) => {
+    const history = product.history;
+    const hasData = history.length > 0;
+    const currentPrice = hasData ? history[history.length - 1].price : null;
+    const minPrice = hasData ? Math.min(...history.map(h => h.price)) : null;
+    const change = getPriceChange(history);
+    const canvasId = `chart-${i}`;
+
+    let changeBadge = '';
+    if (change) {
+      const sign = change.diff < 0 ? '▼' : change.diff > 0 ? '▲' : '─';
+      const cls = change.diff < 0 ? 'down' : change.diff > 0 ? 'up' : 'flat';
+      changeBadge = `<span class="price-change ${cls}">${sign} ${Math.abs(change.pct)}%</span>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-img placeholder">🛒</div>
+      <div class="product-info">
+        <div class="product-name">${product.name}</div>
+        <div class="price-row">
+          ${hasData
+            ? `<div class="current-price">${formatPrice(currentPrice)}</div>${changeBadge}`
+            : `<div class="current-price no-data">아직 데이터 없음</div>`
+          }
+        </div>
+        ${minPrice ? `<div class="min-price">3개월 최저가: <span>${formatPrice(minPrice)}</span></div>` : ''}
+      </div>
+      <div class="product-right">
+        <div class="chart-wrap"><canvas id="${canvasId}"></canvas></div>
+        <a class="buy-btn" href="${product.url}" target="_blank">🛍 구매하러 가기</a>
+      </div>
+    `;
+    list.appendChild(card);
+
+    if (hasData) {
+      setTimeout(() => renderChart(canvasId, history), 0);
+    }
+  });
+}
+
+loadData()
+  .then(renderProducts)
+  .catch(() => {
+    document.getElementById('product-list').innerHTML = `
+      <div class="empty-state">
+        <div class="icon">⚠️</div>
+        <p>데이터를 불러오지 못했어요</p>
+      </div>`;
+  });
+</script>
+
+</body>
+</html>
