@@ -23,8 +23,11 @@ def get_headers(method, path, params=None):
         canonical = datetime_str + method + path
         full_url = BASE_URL + path
 
+    # ← 여기가 핵심 변경점: hex 디코딩
+    key = bytes.fromhex(SECRET_KEY)
+
     signature = hmac.new(
-        SECRET_KEY.encode("utf-8"),
+        key,
         canonical.encode("utf-8"),
         hashlib.sha256,
     ).hexdigest()
