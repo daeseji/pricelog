@@ -1,4 +1,4 @@
-import json, hmac, hashlib, datetime, requests, urllib.parse, os
+import json, hmac, hashlib, datetime, requests, urllib.parse, os, base64
 
 ACCESS_KEY = os.environ["COUPANG_ACCESS_KEY"]
 SECRET_KEY = os.environ["COUPANG_SECRET_KEY"]
@@ -8,26 +8,22 @@ PATH = "/v2/providers/affiliate_open_api/apis/openapi/products/search"
 def try_all(keyword):
     dt = datetime.datetime.utcnow().strftime("%y%m%dT%H%M%SZ")
     params = sorted({"keyword": keyword, "limit": "20"}.items())
-    qs_enc = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
-    qs_raw = "&".join(f"{k}={v}" for k, v in params)
-    url = BASE_URL + PATH + "?" + qs_enc
-
-    key_str = SECRET_KEY.encode("utf-8")
-    key_hex = bytes.fromhex(SECRET_KEY)
+    qs = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+    url = BASE_URL + PATH + "?" + qs
+    canonical = dt + "GET" + PATH + "?" + qs
 
     combos = [
-        ("str_enc_Q",  key_str, dt + "GET" + PATH + "?" + qs_enc),
-        ("str_raw_Q",  key_str, dt + "GET" + PATH + "?" + qs_raw),
-        ("str_noParam",key_str, dt + "GET" + PATH),
-        ("hex_enc_Q",  key_hex, dt + "GET" + PATH + "?" + qs_enc),
-        ("hex_raw_Q",  key_hex, dt + "GET" + PATH + "?" + qs_raw),
-        ("hex_noParam",key_hex, dt + "GET" + PATH),
+        ("hex_str",    SECRET_KEY.encode(),     False),
+        ("b64_str",    SECRET_KEY.encode(),     True),
+        ("hex_hex",    bytes.fromhex(SECRET_KEY), False),
+        ("b64_hex",    bytes.fromhex(SECRET_KEY), True),
     ]
-    for name, key, canonical in combos:
-        sig = hmac.new(key, canonical.encode("utf-8"), hashlib.sha256).hexdigest()
+    for name, key, use_b64 in combos:
+        mac = hmac.new(key, canonical.encode("utf-8"), hashlib.sha256)
+        sig = base64.b64encode(mac.digest()).decode() if use_b64 else mac.hexdigest()
         auth = f"CEA algorithm=HmacSHA256, access-key={ACCESS_KEY}, signed-date={dt}, signature={sig}"
         r = requests.get(url, headers={"Authorization": auth, "Content-Type": "application/json;charset=UTF-8"}, timeout=10)
-        print(f"[{name}] {r.status_code}: {r.text[:60]}")
+        print(f"[{name}] {r.status_code}: {r.text[:80]}")
         if r.status_code == 200:
             data = r.json().get("data", {}).get("productData", [])
             return data[0].get("productPrice") if data else None
