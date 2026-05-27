@@ -1,338 +1,626 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>pricelog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <style>
+    :root {
+      --bg: #05050a;
+      --s1: #0d0d15;
+      --s2: #11111c;
+      --border: rgba(255,255,255,0.06);
+      --border2: rgba(255,255,255,0.12);
+      --text: #f0f0ff;
+      --muted: #454566;
+      --dim: #2a2a44;
+      --green: #0dff9f;
+      --green2: #00cc7a;
+      --red: #ff2d6b;
+      --yellow: #ffcc00;
+      --blue: #4d9fff;
+      --purple: #9b6fff;
+    }
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f5f6fa;
-      color: #1a1a2e;
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
+    /* Ambient grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(77,159,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,159,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Radial glow top */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(155,111,255,0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── HEADER ── */
     header {
-      background: #1a1a2e;
-      padding: 0 24px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
       position: sticky;
       top: 0;
-      z-index: 100;
-    }
-    header .logo {
-      font-size: 20px;
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -0.5px;
-    }
-    header .logo span { color: #4f8ef7; }
-    header .subtitle {
-      font-size: 12px;
-      color: #888;
-      margin-left: 4px;
-    }
-    header .updated {
-      margin-left: auto;
-      font-size: 11px;
-      color: #555;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      height: 64px;
+      background: rgba(5,5,10,0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
     }
 
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--purple), var(--blue));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 3px;
+      background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.5) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-tag {
+      margin-left: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      padding: 3px 8px;
+      border: 1px solid var(--dim);
+      border-radius: 20px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .updated-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .updated-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── MAIN ── */
     main {
       max-width: 960px;
       margin: 0 auto;
-      padding: 28px 16px;
+      padding: 48px 24px 80px;
+      position: relative;
+      z-index: 1;
     }
 
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #888;
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 14px;
-    }
-
-    .product-list {
+      margin-bottom: 28px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       gap: 12px;
     }
+    .page-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border2), transparent);
+    }
 
-    .product-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 20px 24px;
+    /* ── CARDS ── */
+    .cards { display: flex; flex-direction: column; gap: 20px; }
+
+    .card {
+      position: relative;
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.2s;
+      animation: cardIn 0.5s ease both;
+    }
+    .card:nth-child(2) { animation-delay: 0.1s; }
+    .card:nth-child(3) { animation-delay: 0.2s; }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card:hover {
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-2px);
+    }
+
+    /* Gradient top border */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(155,111,255,0.4), rgba(77,159,255,0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover::before { opacity: 1; }
+
+    /* Signal color accent on left */
+    .card-accent {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      border-radius: 20px 0 0 20px;
+    }
+    .accent-buy { background: linear-gradient(180deg, var(--green), var(--green2)); }
+    .accent-wait { background: linear-gradient(180deg, var(--red), #aa1144); }
+    .accent-neutral { background: linear-gradient(180deg, var(--yellow), #cc9900); }
+    .accent-nodata { background: var(--dim); }
+
+    /* ── CARD BODY ── */
+    .card-body {
+      padding: 28px 32px 0 36px;
       display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 16px;
-      align-items: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      transition: box-shadow 0.2s;
-    }
-    .product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-
-    .product-img {
-      width: 72px;
-      height: 72px;
-      border-radius: 10px;
-      object-fit: cover;
-      background: #f0f0f0;
-      flex-shrink: 0;
-    }
-    .product-img.placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
+      grid-template-columns: 1fr 160px;
+      gap: 24px;
+      align-items: start;
     }
 
-    .product-info { min-width: 0; }
     .product-name {
       font-size: 15px;
       font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.3px;
+      margin-bottom: 14px;
     }
-    .price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .current-price {
-      font-size: 22px;
-      font-weight: 800;
-      color: #e53e3e;
-    }
-    .current-price.no-data { color: #aaa; font-size: 15px; font-weight: 400; }
-    .price-change {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 20px;
-    }
-    .price-change.down { background: #e8f5e9; color: #2e7d32; }
-    .price-change.up   { background: #fce4e4; color: #c62828; }
-    .price-change.flat { background: #f5f5f5; color: #777; }
-    .min-price {
-      font-size: 12px;
-      color: #888;
-      margin-top: 4px;
-    }
-    .min-price span { color: #4f8ef7; font-weight: 600; }
 
-    .product-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-      flex-shrink: 0;
+    .price-block { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+
+    .price-value {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      line-height: 1;
+      letter-spacing: 1px;
+      transition: color 0.3s;
     }
-    .chart-wrap {
-      width: 200px;
-      height: 60px;
-    }
-    .buy-btn {
+
+    .change-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      background: #fee500;
-      color: #1a1a2e;
-      font-size: 12px;
+      gap: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
       font-weight: 700;
-      padding: 7px 14px;
-      border-radius: 8px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 4px;
+    }
+    .pill-down { background: rgba(13,255,159,0.1); color: var(--green); border: 1px solid rgba(13,255,159,0.2); }
+    .pill-up   { background: rgba(255,45,107,0.1); color: var(--red);   border: 1px solid rgba(255,45,107,0.2); }
+    .pill-flat { background: rgba(69,69,102,0.3);  color: var(--muted); border: 1px solid var(--dim); }
+
+    .stats-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .stat-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* CTA Button */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      font-weight: 500;
       text-decoration: none;
-      transition: opacity 0.15s;
+      transition: all 0.2s;
     }
-    .buy-btn:hover { opacity: 0.85; }
+    .cta-btn:hover {
+      background: rgba(255,255,255,0.09);
+      border-color: rgba(255,255,255,0.2);
+      color: #fff;
+      transform: translateX(2px);
+    }
+    .cta-btn svg { transition: transform 0.2s; }
+    .cta-btn:hover svg { transform: translateX(3px); }
 
-    .empty-state {
+    /* ── SIGNAL DIAL ── */
+    .signal-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .signal-outer {
+      position: relative;
+      width: 120px; height: 120px;
+    }
+
+    .signal-outer svg {
+      position: absolute;
+      inset: 0;
+      animation: spinSlow 8s linear infinite;
+    }
+    @keyframes spinSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+    .signal-inner {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .signal-emoji { font-size: 30px; line-height: 1; }
+    .signal-text {
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
       text-align: center;
-      padding: 60px 0;
-      color: #aaa;
     }
-    .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-    .empty-state p { font-size: 14px; }
 
-    @media (max-width: 600px) {
-      .product-card {
-        grid-template-columns: auto 1fr;
-        grid-template-rows: auto auto;
-      }
-      .product-right {
-        grid-column: 1 / -1;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .chart-wrap { width: 140px; }
+    .signal-caption {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      max-width: 140px;
+      line-height: 1.4;
+    }
+
+    /* ring colors */
+    .ring-buy { stroke: var(--green); filter: drop-shadow(0 0 4px var(--green)); }
+    .ring-wait { stroke: var(--red); filter: drop-shadow(0 0 4px var(--red)); }
+    .ring-neutral { stroke: var(--yellow); filter: drop-shadow(0 0 4px var(--yellow)); }
+    .ring-nodata { stroke: var(--dim); }
+
+    .inner-buy { background: radial-gradient(circle, rgba(13,255,159,0.08) 0%, transparent 70%); }
+    .inner-wait { background: radial-gradient(circle, rgba(255,45,107,0.08) 0%, transparent 70%); }
+    .inner-neutral { background: radial-gradient(circle, rgba(255,204,0,0.08) 0%, transparent 70%); }
+    .inner-nodata { background: transparent; }
+
+    .text-buy { color: var(--green); }
+    .text-wait { color: var(--red); }
+    .text-neutral { color: var(--yellow); }
+    .text-nodata { color: var(--muted); }
+
+    /* ── CHART ── */
+    .card-divider {
+      height: 1px;
+      margin: 24px 36px 0;
+      background: var(--border);
+    }
+
+    .chart-wrap {
+      padding: 16px 32px 24px 36px;
+      height: 100px;
+      position: relative;
+    }
+
+    .chart-label {
+      position: absolute;
+      top: 18px; right: 36px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 1.5px;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .no-chart {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 36px;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--dim);
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 640px) {
+      .card-body { grid-template-columns: 1fr; }
+      .signal-wrap { flex-direction: row; align-items: center; }
+      .price-value { font-size: 44px; }
+      header { padding: 0 20px; }
+      .card-body { padding: 24px 20px 0 24px; }
+      .card-divider { margin: 20px 24px 0; }
+      .chart-wrap { padding: 12px 20px 20px 24px; }
+      .no-chart { margin: 0 24px; }
+      .stats-row { gap: 14px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">price<span>log</span></div>
-  <span class="subtitle">내 쿠팡 가격 추적기</span>
-  <div class="updated" id="updated-at"></div>
+  <div class="logo-wrap">
+    <div class="logo-icon">💰</div>
+    <div class="logo">PRICELOG</div>
+    <div class="header-tag">PERSONAL</div>
+  </div>
+  <div class="header-right">
+    <div class="updated-badge" id="updated-at">LIVE</div>
+  </div>
 </header>
 
 <main>
-  <div class="section-title">즐겨찾기 상품</div>
-  <div class="product-list" id="product-list">
-    <div class="empty-state">
-      <div class="icon">📦</div>
-      <p>데이터를 불러오는 중...</p>
-    </div>
+  <div class="page-title">즐겨찾기 상품 가격 추적</div>
+  <div class="cards" id="cards">
+    <div style="padding:80px;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px">LOADING...</div>
   </div>
 </main>
 
 <script>
 const REPO_BASE = window.location.pathname.replace(/\/$/, '');
 
-async function loadData() {
-  const res = await fetch(REPO_BASE + '/data/prices.json?_=' + Date.now());
-  return res.json();
-}
+function fmt(p) { return Number(p).toLocaleString('ko-KR') + '원'; }
 
-function formatPrice(p) {
-  return p.toLocaleString('ko-KR') + '원';
-}
-
-function getPriceChange(history) {
-  if (history.length < 2) return null;
-  const prev = history[history.length - 2].price;
-  const curr = history[history.length - 1].price;
-  const diff = curr - prev;
-  const pct = ((diff / prev) * 100).toFixed(1);
-  return { diff, pct };
-}
-
-function renderChart(canvasId, history) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas || history.length < 2) return;
-
-  const labels = history.map(h => h.date.slice(5, 10)); // MM-DD
+function getSignal(history) {
+  if (history.length < 3) return { cls:'nodata', emoji:'📡', text:'TRACKING', caption:'데이터 수집 중이에요' };
   const prices = history.map(h => h.price);
-  const minPrice = Math.min(...prices);
+  const curr = prices[prices.length-1];
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const avg = prices.reduce((a,b)=>a+b,0)/prices.length;
+  if (max === min) return { cls:'neutral', emoji:'📊', text:'STABLE', caption:'가격 변동이 없어요' };
+  const pos = (curr - min) / (max - min);
+  if (curr <= min) return { cls:'buy', emoji:'🔥', text:'BUY NOW', caption:'역대 최저가예요!' };
+  if (pos <= 0.2)  return { cls:'buy', emoji:'✅', text:'GO BUY', caption:'최저가 근처예요' };
+  if (pos >= 0.8)  return { cls:'wait', emoji:'⛔', text:'WAIT', caption:'지금은 비싼 편이에요' };
+  return { cls:'neutral', emoji:'🟡', text:'AVERAGE', caption:'평균 ' + fmt(Math.round(avg)) };
+}
+
+function getPriceChange(h) {
+  if (h.length < 2) return null;
+  const prev = h[h.length-2].price, curr = h[h.length-1].price;
+  const diff = curr - prev;
+  const pct = ((Math.abs(diff)/prev)*100).toFixed(1);
+  return { diff, pct, cls: diff<0?'down':diff>0?'up':'flat' };
+}
+
+function makeDashedRing(cls) {
+  const r = 46, cx = 48, cy = 48;
+  const circ = 2 * Math.PI * r;
+  return `<svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke-width="1.5"
+      stroke-dasharray="4 6" stroke-linecap="round"
+      class="ring-${cls}" style="transform-origin:center"/>
+  </svg>`;
+}
+
+function renderChart(id, history) {
+  const canvas = document.getElementById(id);
+  if (!canvas || history.length < 2) return;
+  const prices = history.map(h => h.price);
+  const min = Math.min(...prices);
+  const curr = prices[prices.length-1];
+  const isLow = curr <= min * 1.03;
+  const col = isLow ? '#0dff9f' : curr >= Math.max(...prices)*0.92 ? '#ff2d6b' : '#9b6fff';
 
   new Chart(canvas, {
     type: 'line',
     data: {
-      labels,
+      labels: history.map(h => h.date.slice(5,10)),
       datasets: [{
         data: prices,
-        borderColor: '#4f8ef7',
-        borderWidth: 2,
+        borderColor: col,
+        borderWidth: 1.5,
         pointRadius: 0,
-        pointHoverRadius: 3,
-        tension: 0.3,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: col,
+        tension: 0.4,
         fill: true,
-        backgroundColor: 'rgba(79,142,247,0.08)',
+        backgroundColor: ctx => {
+          const g = ctx.chart.ctx.createLinearGradient(0,0,0,100);
+          g.addColorStop(0, col.replace('#','rgba(').replace('0dff9f','13,255,159,0.18)').replace('ff2d6b','255,45,107,0.18)').replace('9b6fff','155,111,255,0.18)'));
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          return g;
+        }
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
+      responsive: true, maintainAspectRatio: false, animation: false,
       plugins: {
         legend: { display: false },
         tooltip: {
-          callbacks: {
-            label: ctx => formatPrice(ctx.raw)
-          }
+          backgroundColor: 'rgba(13,13,21,0.9)',
+          borderColor: 'rgba(255,255,255,0.1)',
+          borderWidth: 1,
+          titleFont: { family: 'JetBrains Mono', size: 10 },
+          bodyFont: { family: 'JetBrains Mono', size: 12 },
+          callbacks: { label: ctx => fmt(ctx.raw) }
         }
       },
       scales: {
         x: { display: false },
-        y: {
-          display: false,
-          min: minPrice * 0.97,
-        }
+        y: { display: false, min: Math.min(...prices) * 0.965 }
       },
-      animation: false,
+      interaction: { mode: 'index', intersect: false }
     }
   });
 }
 
-function renderProducts(data) {
-  const list = document.getElementById('product-list');
-  list.innerHTML = '';
+async function load() {
+  const res = await fetch(REPO_BASE + '/data/prices.json?_=' + Date.now());
+  const data = await res.json();
 
-  // 마지막 업데이트 시간
-  let lastUpdated = '';
+  let lastDate = '';
   data.products.forEach(p => {
     if (p.history.length > 0) {
-      const d = p.history[p.history.length - 1].date;
-      if (d > lastUpdated) lastUpdated = d;
+      const d = p.history[p.history.length-1].date;
+      if (d > lastDate) lastDate = d;
     }
   });
-  if (lastUpdated) {
-    document.getElementById('updated-at').textContent = '마지막 업데이트: ' + lastUpdated;
+  if (lastDate) {
+    document.getElementById('updated-at').textContent = 'UPDATED ' + lastDate;
   }
 
-  data.products.forEach((product, i) => {
-    const history = product.history;
-    const hasData = history.length > 0;
-    const currentPrice = hasData ? history[history.length - 1].price : null;
-    const minPrice = hasData ? Math.min(...history.map(h => h.price)) : null;
-    const change = getPriceChange(history);
-    const canvasId = `chart-${i}`;
+  const container = document.getElementById('cards');
+  container.innerHTML = '';
 
-    let changeBadge = '';
+  data.products.forEach((product, i) => {
+    const h = product.history;
+    const hasData = h.length > 0;
+    const curr = hasData ? h[h.length-1].price : null;
+    const prices = h.map(x => x.price);
+    const minPrice = hasData ? Math.min(...prices) : null;
+    const maxPrice = hasData ? Math.max(...prices) : null;
+    const signal = getSignal(h);
+    const change = getPriceChange(h);
+    const cid = 'chart-' + i;
+
+    let priceCol = 'var(--text)';
+    if (signal.cls === 'buy') priceCol = 'var(--green)';
+    if (signal.cls === 'wait') priceCol = 'var(--red)';
+
+    let changePill = '';
     if (change) {
-      const sign = change.diff < 0 ? '▼' : change.diff > 0 ? '▲' : '─';
-      const cls = change.diff < 0 ? 'down' : change.diff > 0 ? 'up' : 'flat';
-      changeBadge = `<span class="price-change ${cls}">${sign} ${Math.abs(change.pct)}%</span>`;
+      const icon = change.diff < 0 ? '▼' : change.diff > 0 ? '▲' : '─';
+      const pillCls = change.cls === 'down' ? 'pill-down' : change.cls === 'up' ? 'pill-up' : 'pill-flat';
+      changePill = `<span class="change-pill ${pillCls}">${icon} ${change.pct}%</span>`;
     }
+
+    const statsHtml = hasData ? `
+      <div class="stats-row">
+        ${minPrice != null ? `<div class="stat"><div class="stat-label">최저가</div><div class="stat-value">${fmt(minPrice)}</div></div>` : ''}
+        ${maxPrice != null ? `<div class="stat"><div class="stat-label">최고가</div><div class="stat-value">${fmt(maxPrice)}</div></div>` : ''}
+        <div class="stat"><div class="stat-label">수집</div><div class="stat-value">${h.length}회</div></div>
+      </div>
+    ` : '';
 
     const card = document.createElement('div');
-    card.className = 'product-card';
+    card.className = 'card';
     card.innerHTML = `
-      <div class="product-img placeholder">🛒</div>
-      <div class="product-info">
-        <div class="product-name">${product.name}</div>
-        <div class="price-row">
-          ${hasData
-            ? `<div class="current-price">${formatPrice(currentPrice)}</div>${changeBadge}`
-            : `<div class="current-price no-data">아직 데이터 없음</div>`
-          }
+      <div class="card-accent accent-${signal.cls}"></div>
+      <div class="card-body">
+        <div>
+          <div class="product-name">${product.name}</div>
+          <div class="price-block">
+            ${hasData
+              ? `<div class="price-value" style="color:${priceCol}">${fmt(curr)}</div>${changePill}`
+              : `<div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:1px">NO DATA YET</div>`
+            }
+          </div>
+          ${statsHtml}
+          <a class="cta-btn" href="${product.url}" target="_blank">
+            쿠팡에서 보기
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
         </div>
-        ${minPrice ? `<div class="min-price">3개월 최저가: <span>${formatPrice(minPrice)}</span></div>` : ''}
+        <div class="signal-wrap">
+          <div class="signal-outer">
+            ${makeDashedRing(signal.cls)}
+            <div class="signal-inner inner-${signal.cls}">
+              <div class="signal-emoji">${signal.emoji}</div>
+              <div class="signal-text text-${signal.cls}">${signal.text}</div>
+            </div>
+          </div>
+          <div class="signal-caption">${signal.caption}</div>
+        </div>
       </div>
-      <div class="product-right">
-        <div class="chart-wrap"><canvas id="${canvasId}"></canvas></div>
-        <a class="buy-btn" href="${product.url}" target="_blank">🛍 구매하러 가기</a>
-      </div>
+      <div class="card-divider"></div>
+      ${h.length >= 2
+        ? `<div class="chart-wrap"><div class="chart-label">PRICE HISTORY</div><canvas id="${cid}"></canvas></div>`
+        : `<div class="no-chart">▸ 데이터가 쌓이면 그래프가 나타나요</div>`
+      }
     `;
-    list.appendChild(card);
-
-    if (hasData) {
-      setTimeout(() => renderChart(canvasId, history), 0);
-    }
+    container.appendChild(card);
+    if (h.length >= 2) setTimeout(() => renderChart(cid, h), 0);
   });
 }
 
-loadData()
-  .then(renderProducts)
-  .catch(() => {
-    document.getElementById('product-list').innerHTML = `
-      <div class="empty-state">
-        <div class="icon">⚠️</div>
-        <p>데이터를 불러오지 못했어요</p>
-      </div>`;
-  });
+load().catch(() => {
+  document.getElementById('cards').innerHTML = '<div style="padding:80px;text-align:center;color:var(--muted);font-family:JetBrains Mono,monospace;font-size:11px;letter-spacing:2px">FAILED TO LOAD DATA</div>';
+});
 </script>
-
 </body>
 </html>
