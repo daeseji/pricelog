@@ -18,7 +18,7 @@ def get_price(keyword, product_id):
         "/v2/providers/affiliate_open_api/apis/openapi/v1/products/search",
         "/v2/providers/affiliate_open_api/apis/openapi/products/search",
     ]:
-        qs = urllib.parse.urlencode({"keyword": keyword, "limit": "20"}, quote_via=urllib.parse.quote)
+        qs = urllib.parse.urlencode({"keyword": keyword, "limit": 5}, quote_via=urllib.parse.quote)
         url = path + "?" + qs
         auth = generateHmac("GET", url, SECRET_KEY, ACCESS_KEY)
         r = requests.get(DOMAIN + url, headers={"Authorization": auth, "Content-Type": "application/json"}, timeout=10)
