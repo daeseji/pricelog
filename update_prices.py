@@ -1,96 +1,52 @@
-import os
-import json
-import hmac
-import hashlib
-import datetime
-import requests
-import urllib.parse
+import json, hmac, hashlib, datetime, requests, urllib.parse
 
-ACCESS_KEY = os.environ["COUPANG_ACCESS_KEY"]
-SECRET_KEY = os.environ["COUPANG_SECRET_KEY"]
+ACCESS_KEY = __import__('os').environ["COUPANG_ACCESS_KEY"]
+SECRET_KEY = __import__('os').environ["COUPANG_SECRET_KEY"]
 BASE_URL = "https://api-gateway.coupang.com"
+PATH = "/v2/providers/affiliate_open_api/apis/openapi/products/search"
 
+def try_all(keyword):
+    dt = datetime.datetime.utcnow().strftime("%y%m%dT%H%M%SZ")
+    params = sorted({"keyword": keyword, "limit": "20"}.items())
+    
+    qs_encoded = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+    qs_plus    = urllib.parse.urlencode(params)
+    qs_raw     = "&".join(f"{k}={v}" for k, v in params)  # 한글 그대로
+    url = BASE_URL + PATH + "?" + qs_encoded
 
-def get_headers(method, path, params=None):
-    datetime_str = datetime.datetime.utcnow().strftime("%y%m%dT%H%M%SZ")
-
-    if params:
-        sorted_params = sorted(params.items())
-        query_string = urllib.parse.urlencode(sorted_params)
-        canonical = datetime_str + method + path + query_string
-        full_url = BASE_URL + path + "?" + query_string
-    else:
-        canonical = datetime_str + method + path
-        full_url = BASE_URL + path
-
-    signature = hmac.new(
-        SECRET_KEY.encode("utf-8"),
-        canonical.encode("utf-8"),
-        hashlib.sha256,
-    ).hexdigest()
-
-    headers = {
-        "Authorization": (
-            f"CEA algorithm=HmacSHA256, access-key={ACCESS_KEY}, "
-            f"signed-date={datetime_str}, signature={signature}"
-        ),
-        "Content-Type": "application/json;charset=UTF-8",
-    }
-    return headers, full_url
-
-
-def get_price(keyword, product_id):
-    path = "/v2/providers/affiliate_open_api/apis/openapi/products/search"
-    params = {"keyword": keyword, "limit": "20"}
-
-    headers, full_url = get_headers("GET", path, params)
-    resp = requests.get(full_url, headers=headers, timeout=10)
-
-    if resp.status_code != 200:
-        print(f"  API 오류 {resp.status_code}: {resp.text[:200]}")
-        return None
-
-    data = resp.json()
-    products = data.get("data", {}).get("productData", [])
-
-    for p in products:
-        if str(p.get("productId")) == str(product_id):
-            price = p.get("productPrice")
-            print(f"  ID 매칭 성공: {price}원")
-            return price
-
-    if products:
-        price = products[0].get("productPrice")
-        print(f"  첫 번째 결과 사용: {price}원")
-        return price
-
+    combos = [
+        ("raw_Q",     "GET", PATH + "?" + qs_raw),
+        ("raw_noQ",   "GET", PATH + qs_raw),
+        ("enc_Q",     "GET", PATH + "?" + qs_encoded),
+        ("plus_Q",    "GET", PATH + "?" + qs_plus),
+        ("noParam",   "GET", PATH),
+    ]
+    for name, method, canonical_tail in combos:
+        canonical = dt + method + canonical_tail
+        sig = hmac.new(SECRET_KEY.encode(), canonical.encode("utf-8"), hashlib.sha256).hexdigest()
+        auth = f"CEA algorithm=HmacSHA256, access-key={ACCESS_KEY}, signed-date={dt}, signature={sig}"
+        r = requests.get(url, headers={"Authorization": auth, "Content-Type": "application/json;charset=UTF-8"}, timeout=10)
+        print(f"[{name}] {r.status_code}: {r.text[:60]}")
+        if r.status_code == 200:
+            return r.json().get("data", {}).get("productData", [{}])[0].get("productPrice")
     return None
-
 
 def main():
     with open("data/prices.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-
-    now = datetime.datetime.now(
-        datetime.timezone(datetime.timedelta(hours=9))
-    ).strftime("%Y-%m-%d %H:%M")
-
+    now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
     for product in data["products"]:
-        print(f"조회 중: {product['name']}")
-        price = get_price(product["keyword"], product["id"])
-
-        if price is not None:
+        print(f"\n조회 중: {product['name']}")
+        price = try_all(product["keyword"])
+        if price:
             product["history"].append({"date": now, "price": price})
             product["history"] = product["history"][-180:]
-            print(f"  ✅ 완료: {price:,}원\n")
+            print(f"✅ {price:,}원")
         else:
-            print(f"  ❌ 가격 조회 실패\n")
-
+            print("❌ 실패")
     with open("data/prices.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-
-    print("저장 완료!")
-
+    print("\n저장 완료!")
 
 if __name__ == "__main__":
     main()
