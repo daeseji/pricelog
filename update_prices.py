@@ -1,34 +1,36 @@
-import json, hmac, hashlib, datetime, requests, urllib.parse
+import json, hmac, hashlib, datetime, requests, urllib.parse, os
 
-ACCESS_KEY = __import__('os').environ["COUPANG_ACCESS_KEY"]
-SECRET_KEY = __import__('os').environ["COUPANG_SECRET_KEY"]
+ACCESS_KEY = os.environ["COUPANG_ACCESS_KEY"]
+SECRET_KEY = os.environ["COUPANG_SECRET_KEY"]
 BASE_URL = "https://api-gateway.coupang.com"
 PATH = "/v2/providers/affiliate_open_api/apis/openapi/products/search"
 
 def try_all(keyword):
     dt = datetime.datetime.utcnow().strftime("%y%m%dT%H%M%SZ")
     params = sorted({"keyword": keyword, "limit": "20"}.items())
-    
-    qs_encoded = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
-    qs_plus    = urllib.parse.urlencode(params)
-    qs_raw     = "&".join(f"{k}={v}" for k, v in params)  # 한글 그대로
-    url = BASE_URL + PATH + "?" + qs_encoded
+    qs_enc = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
+    qs_raw = "&".join(f"{k}={v}" for k, v in params)
+    url = BASE_URL + PATH + "?" + qs_enc
+
+    key_str = SECRET_KEY.encode("utf-8")
+    key_hex = bytes.fromhex(SECRET_KEY)
 
     combos = [
-        ("raw_Q",     "GET", PATH + "?" + qs_raw),
-        ("raw_noQ",   "GET", PATH + qs_raw),
-        ("enc_Q",     "GET", PATH + "?" + qs_encoded),
-        ("plus_Q",    "GET", PATH + "?" + qs_plus),
-        ("noParam",   "GET", PATH),
+        ("str_enc_Q",  key_str, dt + "GET" + PATH + "?" + qs_enc),
+        ("str_raw_Q",  key_str, dt + "GET" + PATH + "?" + qs_raw),
+        ("str_noParam",key_str, dt + "GET" + PATH),
+        ("hex_enc_Q",  key_hex, dt + "GET" + PATH + "?" + qs_enc),
+        ("hex_raw_Q",  key_hex, dt + "GET" + PATH + "?" + qs_raw),
+        ("hex_noParam",key_hex, dt + "GET" + PATH),
     ]
-    for name, method, canonical_tail in combos:
-        canonical = dt + method + canonical_tail
-        sig = hmac.new(SECRET_KEY.encode(), canonical.encode("utf-8"), hashlib.sha256).hexdigest()
+    for name, key, canonical in combos:
+        sig = hmac.new(key, canonical.encode("utf-8"), hashlib.sha256).hexdigest()
         auth = f"CEA algorithm=HmacSHA256, access-key={ACCESS_KEY}, signed-date={dt}, signature={sig}"
         r = requests.get(url, headers={"Authorization": auth, "Content-Type": "application/json;charset=UTF-8"}, timeout=10)
         print(f"[{name}] {r.status_code}: {r.text[:60]}")
         if r.status_code == 200:
-            return r.json().get("data", {}).get("productData", [{}])[0].get("productPrice")
+            data = r.json().get("data", {}).get("productData", [])
+            return data[0].get("productPrice") if data else None
     return None
 
 def main():
