@@ -1,52 +1,59 @@
-import os, json, hmac, hashlib, datetime, requests, urllib.parse
+import os
+import json
+import datetime
+import requests
+from bs4 import BeautifulSoup
 
-ACCESS_KEY = os.environ["COUPANG_ACCESS_KEY"]
-SECRET_KEY = os.environ["COUPANG_SECRET_KEY"]
-BASE_URL = "https://api-gateway.coupang.com"
-PATH = "/v2/providers/affiliate_open_api/apis/openapi/products/search"
+BASE_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Accept-Language": "ko-KR,ko;q=0.9",
+}
 
-def try_request(fmt_name, canonical, full_url, datetime_str):
-    sig = hmac.new(SECRET_KEY.encode("utf-8"), canonical.encode("utf-8"), hashlib.sha256).hexdigest()
-    headers = {
-        "Authorization": f"CEA algorithm=HmacSHA256, access-key={ACCESS_KEY}, signed-date={datetime_str}, signature={sig}",
-        "Content-Type": "application/json;charset=UTF-8",
-    }
-    r = requests.get(full_url, headers=headers, timeout=10)
-    print(f"[{fmt_name}] {r.status_code}: {r.text[:80]}")
-    return r.status_code == 200, r
+def get_price(url):
+    try:
+        resp = requests.get(url, headers=BASE_HEADERS, timeout=10)
+        soup = BeautifulSoup(resp.text, "html.parser")
+
+        # 가격 셀렉터 시도
+        selectors = [
+            "span.total-price strong",
+            "span.price-value",
+            ".prod-sale-price .price-value",
+            "#prod-sale-price .price-value",
+        ]
+        for sel in selectors:
+            el = soup.select_one(sel)
+            if el:
+                price_str = el.get_text().strip().replace(",", "").replace("원", "")
+                return int(price_str)
+    except Exception as e:
+        print(f"  오류: {e}")
+    return None
+
 
 def main():
-    keyword = "코카콜라"
-    params = {"keyword": keyword, "limit": "20"}
-    dt = datetime.datetime.utcnow().strftime("%y%m%dT%H%M%SZ")
-
-    sorted_items = sorted(params.items())
-    qs_plus   = urllib.parse.urlencode(sorted_items)
-    qs_quote  = urllib.parse.urlencode(sorted_items, quote_via=urllib.parse.quote)
-    qs_plus_u = urllib.parse.urlencode(params)
-    qs_quote_u= urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
-
-    formats = [
-        ("sorted_plus_noQ",  dt+"GET"+PATH+qs_plus,    BASE_URL+PATH+"?"+qs_plus),
-        ("sorted_plus_Q",    dt+"GET"+PATH+"?"+qs_plus, BASE_URL+PATH+"?"+qs_plus),
-        ("sorted_quote_noQ", dt+"GET"+PATH+qs_quote,   BASE_URL+PATH+"?"+qs_quote),
-        ("sorted_quote_Q",   dt+"GET"+PATH+"?"+qs_quote,BASE_URL+PATH+"?"+qs_quote),
-        ("unsrt_plus_noQ",   dt+"GET"+PATH+qs_plus_u,  BASE_URL+PATH+"?"+qs_plus_u),
-        ("unsrt_plus_Q",     dt+"GET"+PATH+"?"+qs_plus_u,BASE_URL+PATH+"?"+qs_plus_u),
-        ("unsrt_quote_noQ",  dt+"GET"+PATH+qs_quote_u, BASE_URL+PATH+"?"+qs_quote_u),
-        ("unsrt_quote_Q",    dt+"GET"+PATH+"?"+qs_quote_u,BASE_URL+PATH+"?"+qs_quote_u),
-    ]
-
-    for name, canonical, url in formats:
-        ok, r = try_request(name, canonical, url, dt)
-        if ok:
-            print(f"\n✅ 성공한 형식: {name}")
-            break
-
     with open("data/prices.json", "r", encoding="utf-8") as f:
         data = json.load(f)
+
+    now = datetime.datetime.now(
+        datetime.timezone(datetime.timedelta(hours=9))
+    ).strftime("%Y-%m-%d %H:%M")
+
+    for product in data["products"]:
+        print(f"조회 중: {product['name']}")
+        price = get_price(product["url"])
+
+        if price:
+            product["history"].append({"date": now, "price": price})
+            product["history"] = product["history"][-180:]
+            print(f"  ✅ {price:,}원\n")
+        else:
+            print(f"  ❌ 실패\n")
+
     with open("data/prices.json", "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    print("저장 완료!")
+
 
 if __name__ == "__main__":
     main()
