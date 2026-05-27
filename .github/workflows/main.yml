@@ -21,7 +21,7 @@ jobs:
           python-version: "3.11"
 
       - name: 라이브러리 설치
-        run: pip install requests
+        run: pip install requests beautifulsoup4
 
       - name: 가격 업데이트 실행
         env:
