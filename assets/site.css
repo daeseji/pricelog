@@ -328,7 +328,9 @@ a { color: inherit; }
 /* 푸터 */
 .site-foot { margin-top: 72px; padding: 40px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; line-height: 1.7; }
 .foot-grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
-@media (min-width: 760px) { .foot-grid { grid-template-columns: 1.4fr 1fr 1.4fr; } }
+@media (min-width: 640px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 960px) { .foot-grid { grid-template-columns: 1.35fr .75fr .75fr 1.45fr; gap: 32px; } }
+.foot-col a { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .site-foot .logo img { width: 26px; height: 26px; }
 .site-foot .logo b { font-size: 17px; }
 .site-foot p { margin: 10px 0 0; }

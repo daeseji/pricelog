@@ -11,6 +11,7 @@ index.html의 메뉴·꼬리말·검색엔진 정보를 다른 페이지와 똑�
     python3 scripts/build_site.py     # 공유 이미지를 페이지에 연결
 """
 import datetime
+import hashlib
 import html
 import json
 import math
@@ -26,6 +27,8 @@ SITE_BASE = "/pricelog/"  # 404 페이지처럼 주소가 정해지지 않은 �
 FONT_CSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
 DATA_REMOTE = "https://raw.githubusercontent.com/daeseji/pricelog/main/data"
 AUTHOR = "스타차일드"
+# 디자인 파일이 바뀔 때마다 주소 뒤 버전이 바뀌어서, 브라우저가 예전 파일을 쓰지 않아요
+CSS_VER = hashlib.md5((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:8]
 
 # 카테고리: 이름 → (주소·색 이름, 소개, 대표 아이콘)
 CATS = {
@@ -209,7 +212,7 @@ def page_head(title, desc, path, root, image="og.png", extra="", og_type="websit
 <link rel="alternate" type="application/rss+xml" title="싸다구 장보기 노트" href="{SITE_URL}tips/feed.xml">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="{FONT_CSS}">
-<link rel="stylesheet" href="{root}assets/site.css">
+<link rel="stylesheet" href="{root}assets/site.css?v={CSS_VER}">
 {extra}</head>
 <body>
 """
@@ -237,7 +240,7 @@ def header(root, active):
 
 def footer(root, notes, links, icons):
     home = root or "./"
-    picks = [n for n in notes if n["order"] <= 10][:4]
+    picks = [n for n in notes if n["order"] <= 10][:5]
     top_notes = "".join(f'<a href="{root}tips/{n["slug"]}/">{esc(n["title"])}</a>' for n in picks)
     cats = "".join(f'<a href="{root}tips/c/{v[0]}/">{esc(k)}</a>' for k, v in CATS.items())
     sns = "".join(
@@ -254,14 +257,17 @@ def footer(root, notes, links, icons):
       </div>
       <div class="foot-col">
         <b>둘러보기</b>
-        <a href="{home}">오늘의 가격</a><a href="{root}tips/">장보기 노트</a><a href="{root}about/">싸다구 소개</a><a href="{root}links/">링크 모음</a>
+        <a href="{home}">오늘의 가격</a><a href="{root}tips/">장보기 노트</a><a href="{root}about/">싸다구 소개</a><a href="{root}links/">링크 모음</a><a href="{SITE_URL}tips/feed.xml">RSS 구독</a>
       </div>
       <div class="foot-col">
         <b>노트 카테고리</b>
         {cats}
       </div>
+      <div class="foot-col">
+        <b>많이 읽는 노트</b>
+        {top_notes}
+      </div>
     </div>
-    <div class="foot-col" style="margin-top:24px"><b>많이 읽는 노트</b>{top_notes}</div>
     <p class="disc">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
     <p class="copy">© 2026 싸다구 · 만든 사람 {AUTHOR}</p>
   </div>
@@ -759,6 +765,7 @@ def home_seo():
 def update_index(notes, links, icons):
     path = ROOT / "index.html"
     s = path.read_text(encoding="utf-8")
+    s = re.sub(r'href="assets/site\.css(\?v=\w+)?"', f'href="assets/site.css?v={CSS_VER}"', s)
     s = re.sub(r"<!-- @seo -->.*?<!-- /@seo -->", lambda m: "<!-- @seo -->\n" + home_seo() + "<!-- /@seo -->", s, flags=re.S)
     s = re.sub(r"<!-- @header -->.*?<!-- /@header -->", lambda m: "<!-- @header -->\n" + header("", "home") + "\n<!-- /@header -->", s, flags=re.S)
     s = re.sub(r"<!-- @footer -->.*?<!-- /@footer -->", lambda m: "<!-- @footer -->\n" + footer("", notes, links, icons) + "\n<!-- /@footer -->", s, flags=re.S)
