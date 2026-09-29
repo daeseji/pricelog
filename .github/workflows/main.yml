@@ -28,7 +28,7 @@ jobs:
           python-version: "3.11"
 
       - name: 라이브러리 설치
-        run: pip install requests
+        run: pip install requests pillow
 
       - name: 가격 업데이트 실행
         env:
@@ -43,7 +43,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/prices.json img
+          git add -A data/prices.json img
           git diff --staged --quiet || git commit -m "💰 가격 업데이트"
           git pull --rebase
           git push

@@ -19,14 +19,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: pip install requests
+      - run: pip install requests pillow
       - name: 상품 사진 저장
         run: python save_images.py
       - name: 커밋 & 푸시
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/prices.json img
+          git add -A data/prices.json img
           git diff --staged --quiet || git commit -m "🖼 상품 사진 저장"
           git pull --rebase
           git push
