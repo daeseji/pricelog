@@ -1,0 +1,34 @@
+{
+  "sns": [
+    { "name": "Instagram", "handle": "@wait_secs", "url": "https://www.instagram.com/wait_secs/", "desc": "일상과 개발 사이, 그 어딘가의 기록", "icon": "instagram", "color": "#E1306C" },
+    { "name": "Threads", "handle": "@wait_secs", "url": "https://www.threads.com/@wait_secs/", "desc": "짧고 굵은 단상과 기술 이야기", "icon": "threads", "color": "#101010" },
+    { "name": "X", "handle": "@wait_secs", "url": "https://x.com/wait_secs", "desc": "기술 트렌드, 트레이딩 인사이트, 개발 메모", "icon": "x", "color": "#101010" },
+    { "name": "Bluesky", "handle": "@chart2x.bsky.social", "url": "https://bsky.app/profile/chart2x.bsky.social", "desc": "탈중앙 소셜에서 나누는 기술·금융 이야기", "icon": "bluesky", "color": "#1185FE" },
+    { "name": "YouTube", "handle": "@TRADERSTARCHILD", "url": "https://www.youtube.com/@TRADERSTARCHILD", "desc": "트레이딩 전략, 개발 강의, 금융 인사이트 영상", "icon": "youtube", "color": "#FF0033" },
+    { "name": "Facebook", "handle": "CodexOpenAI", "url": "https://www.facebook.com/CodexOpenAI", "desc": "AI·코드·금융 콘텐츠 아카이브", "icon": "facebook", "color": "#0866FF" },
+    { "name": "GitHub", "handle": "daeseji", "url": "https://github.com/daeseji", "desc": "싸다구를 포함한 프로젝트 저장소", "icon": "github", "color": "#181717" },
+    { "name": "Telegram", "handle": "Starchild_R", "url": "https://t.me/Starchild_R", "desc": "실시간 트레이딩 신호와 시장 분석 채널", "icon": "telegram", "color": "#26A5E4" },
+    { "name": "Pinterest", "handle": "OpenAICodex", "url": "https://kr.pinterest.com/OpenAICodex/", "desc": "AI·디자인·기술 이미지 큐레이션", "icon": "pinterest", "color": "#E60023" },
+    { "name": "SoundCloud", "handle": "aicodex", "url": "https://soundcloud.com/aicodex", "desc": "AI가 만든 음악과 창작 사운드 실험실", "icon": "soundcloud", "color": "#FF5500" },
+    { "name": "LinkedIn", "handle": "라이브러리", "url": "https://www.linkedin.com/in/라이브러리/", "desc": "커리어와 기술 네트워킹", "icon": "", "initial": "in", "color": "#0A66C2" },
+    { "name": "litt.ly", "handle": "trading", "url": "https://litt.ly/trading", "desc": "퍼스널 트레이딩 채널 링크 모음", "icon": "", "initial": "L", "color": "#7C5CFF" }
+  ],
+  "projects": [
+    { "name": "기술 라이브러리", "url": "https://beautifulsoup.dev/", "desc": "개발자를 위한 기술 인사이트와 에세이", "tag": "블로그", "initial": "B", "color": "#10B981" },
+    { "name": "STUDIO 100", "url": "https://creativestudio.kr/", "desc": "복리·BMI·QR·퇴직금까지, 일상 계산과 변환 도구 100가지", "tag": "도구", "initial": "100", "color": "#17171B" },
+    { "name": "해지냥", "url": "https://cancelcat.space/", "desc": "쿠팡·넷플릭스·멜론 등 구독 서비스 취소 방법을 바로 찾아주는 곳", "tag": "구독 관리", "initial": "냥", "color": "#F97316" }
+  ],
+  "partners": [
+    { "name": "테크살림", "url": "https://aipages.net/", "desc": "생활 가전과 IT 기기, 똑똑하게 고르고 쓰는 살림 이야기", "tag": "가전·테크" },
+    { "name": "카드팁", "url": "https://cardtip.net/", "desc": "금융 데이터 기반 신용카드 혜택 분석과 맞춤 카드 추천", "tag": "카드·금융" },
+    { "name": "인포 네트워크", "url": "https://late.kr/", "desc": "보험·금융·건강·생활 트렌드를 큐레이션하는 정보 미디어", "tag": "생활 정보" },
+    { "name": "금융리더", "url": "https://capitalize.kr/", "desc": "거시경제·대출·부동산 시장 전망을 다루는 금융 정보 플랫폼", "tag": "금융" },
+    { "name": "세무사랑", "url": "https://taxsarang.com/", "desc": "개인사업자 절세, 부동산세, 상속·증여 세무 가이드", "tag": "세금·절세" },
+    { "name": "비즈서울 법률", "url": "https://bizseoul.net/", "desc": "생활법률·세무노무·비즈니스 판례 중심의 법률 정보 미디어", "tag": "법률" },
+    { "name": "달러 인베스트먼트", "url": "https://dollar.im/", "desc": "달러인덱스로 읽는 외환·경제·금융 시장 흐름", "tag": "외환·금융" },
+    { "name": "제네시스 블록", "url": "https://sanhwabi.com/", "desc": "코인·주식 투자와 매매 기법을 쉽게 풀어주는 블로그", "tag": "투자" },
+    { "name": "이클립스 트레이딩", "url": "https://eclipse.trading/", "desc": "퀀트 투자와 AI 자동매매 실전 인사이트", "tag": "퀀트·트레이딩" },
+    { "name": "사주클래스", "url": "https://sajuclass.com/", "desc": "사주명리학 기초부터 심화까지 전문 강의 블로그", "tag": "운세·명리" },
+    { "name": "판타지라이프", "url": "https://ladeca.tistory.com/", "desc": "마비노기 공략과 IT 트렌드, 생활 정보 블로그", "tag": "게임·IT" }
+  ]
+}
