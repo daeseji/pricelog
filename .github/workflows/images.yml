@@ -1,0 +1,32 @@
+name: 상품 사진 저장
+
+# 이미 기록된 사진 주소에서 사진만 받아 둬요. 쿠팡 파트너스 API는 부르지 않아요.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: price-update
+  cancel-in-progress: false
+
+jobs:
+  images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - name: 상품 사진 저장
+        run: python save_images.py
+      - name: 커밋 & 푸시
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions"
+          git add data/prices.json img
+          git diff --staged --quiet || git commit -m "🖼 상품 사진 저장"
+          git pull --rebase
+          git push

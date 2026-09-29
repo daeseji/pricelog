@@ -181,6 +181,8 @@
     const DATA = location.hostname.endsWith('.github.io') ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/data' : ROOT + 'data';
     const ICONS = {"먹거리": "<path d=\"M3.5 11.5h17a8.5 8.5 0 0 1-17 0Z\"/><path d=\"M8.5 8c0-1.2 1.2-1.6 1.2-2.8M12.5 8c0-1.2 1.2-1.6 1.2-2.8M16.5 8c0-1.2 1.2-1.6 1.2-2.8\"/>", "음료": "<path d=\"M6.5 8h11l-1.3 12a1.2 1.2 0 0 1-1.2 1H9a1.2 1.2 0 0 1-1.2-1L6.5 8Z\"/><path d=\"M5.5 8h13M12.5 8l1.6-5H17\"/>", "뷰티·건강": "<path d=\"M12 3.2s6 6.4 6 10.8a6 6 0 0 1-12 0c0-4.4 6-10.8 6-10.8Z\"/><path d=\"M9.3 14.5a2.8 2.8 0 0 0 2.2 2.6\"/>", "반려견": "<circle cx=\"6.3\" cy=\"10.3\" r=\"1.7\"/><circle cx=\"9.8\" cy=\"6.6\" r=\"1.7\"/><circle cx=\"14.2\" cy=\"6.6\" r=\"1.7\"/><circle cx=\"17.7\" cy=\"10.3\" r=\"1.7\"/><path d=\"M12 11.3c-2.9 0-5.4 3.1-5.4 5.4 0 1.5 1.2 2.3 2.7 2.3 1.1 0 1.7-.5 2.7-.5s1.6.5 2.7.5c1.5 0 2.7-.8 2.7-2.3 0-2.3-2.5-5.4-5.4-5.4Z\"/>", "생활용품": "<path d=\"M9.5 3h4v3h-4z\"/><path d=\"M8 6h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z\"/><path d=\"M17 9.5h1a1.5 1.5 0 0 1 1.5 1.5v2.5M9 12h5\"/>", "_": "<path d=\"M3.5 12.6V4.8a1.3 1.3 0 0 1 1.3-1.3h7.8l8 8a1.3 1.3 0 0 1 0 1.9l-6.9 6.9a1.3 1.3 0 0 1-1.9 0l-8-8Z\"/><circle cx=\"8.3\" cy=\"8.3\" r=\"1.4\"/>"};
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const IMG = location.hostname.endsWith('.github.io') ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/data'.replace(/data$/, '') : ROOT;
+    const pic = m => m.localImage ? IMG + m.localImage : m.image;
     const icon = c => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[c] || ICONS._}</svg>`;
     const b = '?_=' + Date.now();
     Promise.all([fetch(DATA + '/products.json' + b).then(r => r.json()), fetch(DATA + '/prices.json' + b).then(r => r.json())])
@@ -190,9 +192,9 @@
         box.querySelector('.rel-list').innerHTML = list.map(p => {
           const h = history[p.name] || [], m = meta[p.name] || {};
           const price = h.length ? Math.round(h[h.length - 1].price).toLocaleString('ko-KR') + '원' : '';
-          const img = m.image ? `<img src="${esc(m.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img');this.remove()">` : icon(p.category);
+          const img = pic(m) ? `<img src="${esc(pic(m))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img');this.remove()">` : icon(p.category);
           return `<a class="rel" href="${ROOT}#${encodeURIComponent(p.name)}">
-            <span class="th${m.image ? ' has-img' : ''}">${img}</span>
+            <span class="th${pic(m) ? ' has-img' : ''}">${img}</span>
             <span><b>${esc(p.name)}</b><small>${esc(p.category || '')}</small></span>
             <span class="pr num${price ? '' : ' none'}">${price || '기록 대기'}</span></a>`;
         }).join('');

@@ -330,6 +330,11 @@ const REPO_BASE = window.location.pathname.replace(/\/[^/]*\.html$/, '').replace
 const DATA_BASE = window.location.hostname.endsWith('.github.io')
   ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/data'
   : REPO_BASE + '/data';
+// 상품 사진도 저장소에 받아 둔 것을 먼저 써요 (광고 차단기가 쿠팡 이미지 주소를 막아서)
+const IMG_BASE = window.location.hostname.endsWith('.github.io')
+  ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/'
+  : REPO_BASE + '/';
+const pic = m => (m.localImage ? IMG_BASE + m.localImage : m.image);
 
 const ICONS = {
   '먹거리': '<path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0Z"/><path d="M8.5 8c0-1.2 1.2-1.6 1.2-2.8M12.5 8c0-1.2 1.2-1.6 1.2-2.8M16.5 8c0-1.2 1.2-1.6 1.2-2.8"/>',
@@ -412,7 +417,7 @@ function sparkSVG(prices) {
 }
 
 function thumbHTML(p, withBadge = true) {
-  const img = p.meta.image ? `<img src="${esc(p.meta.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img');this.remove()">` : '';
+  const img = pic(p.meta) ? `<img src="${esc(pic(p.meta))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img');this.remove()">` : '';
   return `<div class="thumb${img ? ' has-img' : ''}">
     ${withBadge ? `<div class="badges">${badgeHTML(p.a.key)}</div>` : ''}
     ${img}<div class="ph">${icon(p.category)}</div>

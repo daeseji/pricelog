@@ -36,11 +36,14 @@ jobs:
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
         run: python update_prices.py
 
+      - name: 상품 사진 저장 (API 호출 없음)
+        run: python save_images.py
+
       - name: 커밋 & 푸시
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions"
-          git add data/prices.json
+          git add data/prices.json img
           git diff --staged --quiet || git commit -m "💰 가격 업데이트"
           git pull --rebase
           git push
