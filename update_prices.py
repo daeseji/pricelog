@@ -12,7 +12,7 @@ SEARCH_PATH = "/v2/providers/affiliate_open_api/apis/openapi/v1/products/search"
 # - 한 번 실행할 때 최대 MAX_CALLS_PER_RUN 번까지만 호출합니다.
 # - 실패하면 재시도하지 않고 바로 멈춥니다. (연속 오류로 차단되는 것 방지)
 DELAY_SECONDS = 400
-MAX_CALLS_PER_RUN = 15
+MAX_CALLS_PER_RUN = 20
 SEARCH_LIMIT = 10
 HISTORY_LIMIT = 365
 
@@ -112,6 +112,8 @@ def main():
             "image": match.get("productImage"),
             "rocket": bool(match.get("isRocket")),
             "freeShipping": bool(match.get("isFreeShipping")),
+            # 검색 결과의 상품 링크는 내 파트너스 계정의 제휴링크라서 그대로 저장
+            "link": match.get("productUrl"),
         }
         print(f"  ✅ {price:,}원 (상품 ID {match.get('productId')})")
 
