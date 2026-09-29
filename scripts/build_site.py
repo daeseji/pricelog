@@ -435,6 +435,8 @@ NOTE_JS = """<script>
     const DATA = location.hostname.endsWith('.github.io') ? '__REMOTE__' : ROOT + 'data';
     const ICONS = __ICONS__;
     const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const IMG = location.hostname.endsWith('.github.io') ? '__REMOTE__'.replace(/data$/, '') : ROOT;
+    const pic = m => m.localImage ? IMG + m.localImage : m.image;
     const icon = c => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[c] || ICONS._}</svg>`;
     const b = '?_=' + Date.now();
     Promise.all([fetch(DATA + '/products.json' + b).then(r => r.json()), fetch(DATA + '/prices.json' + b).then(r => r.json())])
@@ -444,9 +446,9 @@ NOTE_JS = """<script>
         box.querySelector('.rel-list').innerHTML = list.map(p => {
           const h = history[p.name] || [], m = meta[p.name] || {};
           const price = h.length ? Math.round(h[h.length - 1].price).toLocaleString('ko-KR') + '원' : '';
-          const img = m.image ? `<img src="${esc(m.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img');this.remove()">` : icon(p.category);
+          const img = pic(m) ? `<img src="${esc(pic(m))}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.parentNode.classList.remove('has-img');this.remove()">` : icon(p.category);
           return `<a class="rel" href="${ROOT}#${encodeURIComponent(p.name)}">
-            <span class="th${m.image ? ' has-img' : ''}">${img}</span>
+            <span class="th${pic(m) ? ' has-img' : ''}">${img}</span>
             <span><b>${esc(p.name)}</b><small>${esc(p.category || '')}</small></span>
             <span class="pr num${price ? '' : ' none'}">${price || '기록 대기'}</span></a>`;
         }).join('');
