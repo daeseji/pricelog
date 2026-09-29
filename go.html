@@ -4,15 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>PRICELOG · 이동 중</title>
+  <title>싸다구 · 쿠팡으로 이동 중</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <style>
-    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
-           background:#0a0a0f; color:#7070a0; font-family:sans-serif; font-size:13px; text-align:center; padding:0 16px; }
-    a { color:#00ff9d; }
+    :root { --bg:#F6F5F0; --ink:#17171B; --muted:#8D8C94; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#111113; --ink:#F4F3EE; --muted:#8E8D96; } }
+    body { margin:0; min-height:100vh; display:grid; place-items:center; background:var(--bg); color:var(--ink);
+           font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; text-align:center; padding:0 16px; }
+    img { width:64px; height:64px; animation: bob 1s ease-in-out infinite alternate; }
+    @keyframes bob { to { transform: translateY(-6px) rotate(-4deg); } }
+    p { margin:16px 0 0; font-weight:700; font-size:16px; letter-spacing:-0.02em; }
+    small { display:block; margin-top:6px; color:var(--muted); font-size:13px; }
+    a { color:inherit; }
   </style>
 </head>
 <body>
-  <div id="msg">쿠팡으로 이동 중...</div>
+  <div>
+    <img src="favicon.svg" alt="">
+    <p id="msg">쿠팡으로 이동 중이에요</p>
+    <small id="sub">잠시만 기다려주세요</small>
+  </div>
   <script>
     // go.html?u=<Base64> 형식의 제휴링크를 풀어서 쿠팡으로 이동합니다
     // (쿠팡 주소만 허용해서 다른 사이트로 악용되지 않게 막습니다)
@@ -28,7 +39,8 @@
       if (target.protocol !== 'https:' || !ALLOWED.includes(target.hostname)) throw new Error('not allowed');
       location.replace(target.href);
     } catch (e) {
-      document.getElementById('msg').innerHTML = '링크가 올바르지 않아요. <a href="./">PRICELOG로 돌아가기</a>';
+      document.getElementById('msg').textContent = '링크가 올바르지 않아요';
+      document.getElementById('sub').innerHTML = '<a href="./">싸다구로 돌아가기</a>';
     }
   </script>
 </body>

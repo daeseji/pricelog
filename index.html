@@ -1,340 +1,405 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>pricelog</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pretendard:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --bg: #0c0c12;
-      --s1: #14141f;
-      --s2: #1a1a28;
-      --border: rgba(255,255,255,0.08);
-      --border2: rgba(255,255,255,0.15);
-      --text: #ffffff;
-      --text2: #c8c8e0;
-      --muted: #7070a0;
-      --green: #00ff9d;
-      --green-bg: rgba(0,255,157,0.08);
-      --green-border: rgba(0,255,157,0.25);
-      --red: #ff3d71;
-      --red-bg: rgba(255,61,113,0.08);
-      --red-border: rgba(255,61,113,0.25);
-      --yellow: #ffd60a;
-      --yellow-bg: rgba(255,214,10,0.08);
-      --yellow-border: rgba(255,214,10,0.25);
-      --purple: #8b5cf6;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>싸다구 · 쌀 때 사다구</title>
+<meta name="description" content="자주 사는 쿠팡 상품 가격을 매일 기록하고, 쌀 때만 알려주는 개인 장보기 노트.">
+<meta name="theme-color" content="#F6F5F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111113" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="싸다구 · 쌀 때 사다구">
+<meta property="og:description" content="자주 사는 쿠팡 상품 가격을 매일 기록하고, 쌀 때만 알려주는 개인 장보기 노트.">
+<meta property="og:image" content="https://daeseji.github.io/pricelog/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  :root {
+    --bg: #F6F5F0;
+    --surface: #FFFFFF;
+    --surface-2: #F0EFE9;
+    --ink: #17171B;
+    --ink-2: #4B4B53;
+    --muted: #8D8C94;
+    --line: #E6E4DC;
+    --brand: #FFD84D;
+    --brand-ink: #1B1600;
+    --deal: #EE3F35;
+    --deal-bg: #FFEDEB;
+    --good: #2563EB;
+    --good-bg: #E9F0FF;
+    --dark-badge: #2A2A30;
+    --shadow: 0 1px 2px rgba(20,20,10,.04), 0 8px 24px rgba(20,20,10,.06);
+    --radius: 20px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111113;
+      --surface: #1A1A1E;
+      --surface-2: #232328;
+      --ink: #F4F3EE;
+      --ink-2: #C9C8CF;
+      --muted: #8E8D96;
+      --line: #2C2C32;
+      --deal: #FF6B61;
+      --deal-bg: rgba(255,107,97,.14);
+      --good: #7EA6FF;
+      --good-bg: rgba(126,166,255,.14);
+      --dark-badge: #3A3A42;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+      color-scheme: dark;
     }
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    body {
-      font-family: 'Pretendard', -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-    body::before {
-      content:'';
-      position:fixed; inset:0;
-      background:
-        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139,92,246,0.06) 0%, transparent 100%);
-      pointer-events:none; z-index:0;
-    }
+  }
 
-    /* ── HEADER ── */
-    header {
-      position:sticky; top:0; z-index:100;
-      height:58px;
-      display:flex; align-items:center;
-      padding:0 32px;
-      background:rgba(12,12,18,0.92);
-      backdrop-filter:blur(16px);
-      border-bottom:1px solid var(--border);
-    }
-    .logo {
-      font-family:'Bebas Neue',sans-serif;
-      font-size:24px; letter-spacing:3px;
-      color:#fff;
-    }
-    .logo em { color:var(--purple); font-style:normal; }
-    .badge {
-      margin-left:10px;
-      font-family:'JetBrains Mono',monospace;
-      font-size:9px; letter-spacing:1.5px;
-      padding:3px 8px;
-      background:var(--s2);
-      border:1px solid var(--border2);
-      border-radius:4px;
-      color:var(--muted);
-    }
-    .live-dot {
-      margin-left:auto;
-      display:flex; align-items:center; gap:7px;
-      font-family:'JetBrains Mono',monospace;
-      font-size:10px; color:var(--muted);
-    }
-    .dot {
-      width:7px; height:7px; border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 8px var(--green);
-      animation:blink 2.5s ease-in-out infinite;
-    }
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    word-break: keep-all;
+  }
+  button { font: inherit; color: inherit; }
+  .num { font-variant-numeric: tabular-nums; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  @media (min-width: 720px) { .wrap { padding: 0 28px; } }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-    /* ── MAIN ── */
-    main {
-      max-width:920px; margin:0 auto;
-      padding:40px 20px 80px;
-      position:relative; z-index:1;
-    }
+  /* 헤더 */
+  .top {
+    position: sticky; top: 0; z-index: 20;
+    background: color-mix(in srgb, var(--bg) 86%, transparent);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s;
+  }
+  .top.scrolled { border-bottom-color: var(--line); }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; gap: 12px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .logo svg { width: 32px; height: 32px; flex: none; }
+  .logo b { font-size: 20px; font-weight: 800; letter-spacing: -0.04em; }
+  .logo span { font-size: 13px; color: var(--muted); font-weight: 500; }
+  @media (max-width: 420px) { .logo span { display: none; } }
+  .schedule {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+    background: var(--surface); border: 1px solid var(--line);
+    padding: 6px 12px; border-radius: 999px; white-space: nowrap;
+  }
+  .schedule i { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; box-shadow: 0 0 0 3px rgba(34,197,94,.18); }
 
-    .section-title {
-      font-size:11px; font-weight:600;
-      letter-spacing:3px; text-transform:uppercase;
-      color:var(--muted);
-      margin-bottom:24px;
-      display:flex; align-items:center; gap:14px;
-    }
-    .section-title::after {
-      content:''; flex:1; height:1px;
-      background:linear-gradient(90deg, var(--border2), transparent);
-    }
+  /* 히어로 */
+  .hero {
+    margin-top: 12px;
+    display: grid; gap: 16px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 860px) { .hero { grid-template-columns: 1.35fr 1fr; } }
+  .hero-main {
+    position: relative; overflow: hidden;
+    background: var(--brand); color: var(--brand-ink);
+    border-radius: 28px; padding: 28px 24px 26px;
+    min-height: 220px;
+  }
+  @media (min-width: 720px) { .hero-main { padding: 40px 40px 36px; } }
+  .hero-eyebrow { font-size: 13px; font-weight: 700; opacity: .72; }
+  .hero h1 {
+    margin: 10px 0 12px; font-size: clamp(28px, 5.4vw, 42px);
+    line-height: 1.18; font-weight: 800; letter-spacing: -0.045em;
+    max-width: 13em; position: relative; z-index: 1;
+  }
+  .hero h1 em { font-style: normal; background: var(--brand-ink); color: var(--brand); padding: 0 .18em; border-radius: .18em; }
+  .hero p { margin: 0; font-size: 15px; line-height: 1.6; max-width: 26em; opacity: .8; position: relative; z-index: 1; }
+  .hero-mascot {
+    position: absolute; right: -18px; bottom: -26px; width: 170px; height: 170px;
+    transform: rotate(-12deg); opacity: .95; pointer-events: none;
+  }
+  @media (max-width: 560px) { .hero-mascot { width: 58px; height: 58px; right: 18px; top: 18px; bottom: auto; transform: rotate(8deg); } }
+  .hero-stats {
+    margin: 0;
+    background: var(--surface); border-radius: 28px; box-shadow: var(--shadow);
+    display: grid; grid-template-columns: 1fr 1fr;
+  }
+  .stat { padding: 20px 22px; }
+  .stat:nth-child(1), .stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .stat:nth-child(odd) { border-right: 1px solid var(--line); }
+  .stat dt { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .stat dd { margin: 6px 0 0; font-size: 26px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; }
+  .stat dd small { font-size: 14px; font-weight: 700; margin-left: 2px; color: var(--ink-2); }
+  .stat dd.small { font-size: 16px; line-height: 1.35; padding-top: 3px; }
+  .stat .deal { color: var(--deal); }
+  .stat .good { color: var(--good); }
 
-    /* ── CARD ── */
-    .cards { display:flex; flex-direction:column; gap:16px; }
+  /* 섹션 */
+  section { margin-top: 40px; }
+  .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .sec-head h2 { margin: 0; font-size: 21px; font-weight: 800; letter-spacing: -0.035em; }
+  .sec-head p { margin: 3px 0 0; font-size: 13.5px; color: var(--muted); }
 
-    .card {
-      background:var(--s1);
-      border-radius:18px;
-      border:1px solid var(--border);
-      overflow:hidden;
-      animation:fadeUp .4s ease both;
-    }
-    .card:nth-child(2){animation-delay:.08s}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  .rail {
+    display: grid; grid-auto-flow: column; grid-auto-columns: minmax(168px, 200px);
+    gap: 14px; overflow-x: auto; padding: 2px 16px 10px; margin: 0 -16px;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  .rail > * { scroll-snap-align: start; }
+  @media (min-width: 720px) { .rail { padding: 2px 28px 10px; margin: 0 -28px; } }
+  .empty-note {
+    border: 1.5px dashed var(--line); border-radius: var(--radius);
+    padding: 22px; color: var(--muted); font-size: 14px; text-align: center; background: var(--surface);
+  }
+  .empty-note b { color: var(--ink-2); }
 
-    /* colored top line based on signal */
-    .card-line {
-      height:3px;
-      background:var(--muted);
-    }
-    .card-line.buy  { background:linear-gradient(90deg,var(--green),#00cc78); }
-    .card-line.wait { background:linear-gradient(90deg,var(--red),#cc2255); }
-    .card-line.mid  { background:linear-gradient(90deg,var(--yellow),#cc9900); }
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
+  .chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -16px; padding: 0 16px; }
+  .chips::-webkit-scrollbar { display: none; }
+  @media (min-width: 720px) { .chips { margin: 0; padding: 0; } }
+  .chip {
+    flex: none; border: 1px solid var(--line); background: var(--surface);
+    padding: 8px 15px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--ink-2);
+    cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+  }
+  .chip:hover { border-color: var(--ink-2); }
+  .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+  .chip .cnt { opacity: .55; margin-left: 4px; font-weight: 500; }
+  .sort {
+    appearance: none; -webkit-appearance: none; border: 1px solid var(--line); background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 7.5 9 4.5' fill='none' stroke='%238D8C94' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+    color: var(--ink-2); font: inherit; font-size: 14px; font-weight: 600;
+    padding: 8px 34px 8px 14px; border-radius: 999px; cursor: pointer;
+  }
 
-    .card-inner {
-      padding:24px 28px 0;
-    }
+  .grid { display: grid; gap: 22px 14px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (min-width: 900px) { .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 18px; } }
 
-    /* top row: name + signal badge */
-    .card-header {
-      display:flex; align-items:flex-start;
-      justify-content:space-between; gap:16px;
-      margin-bottom:16px;
-    }
+  /* 상품 카드 */
+  .card {
+    display: block; width: 100%; text-align: left; background: none; border: 0; padding: 0;
+    cursor: pointer; border-radius: var(--radius); align-self: start;
+  }
+  .card:focus-visible { outline: 3px solid var(--good); outline-offset: 4px; }
+  .thumb {
+    position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden;
+    background: #fff; border: 1px solid var(--line);
+    display: grid; place-items: center;
+  }
+  .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 9%; transition: transform .35s ease; }
+  .card:hover .thumb img { transform: scale(1.04); }
+  .ph { position: absolute; inset: 0; display: grid; place-items: center; background: var(--surface-2); color: var(--muted); }
+  .ph svg { width: 34%; height: 34%; opacity: .55; }
+  .thumb img + .ph { visibility: hidden; }
+  .badges { position: absolute; top: 10px; left: 10px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; z-index: 1; }
+  .badge {
+    display: inline-block; font-size: 11.5px; font-weight: 700; line-height: 1; letter-spacing: -0.02em;
+    padding: 5px 7px 5px; border-radius: 6px; white-space: nowrap;
+  }
+  .badge.deal { background: var(--deal); color: #fff; }
+  .badge.good { background: var(--good); color: #fff; }
+  .badge.dark { background: var(--dark-badge); color: #fff; }
+  .badge.mute { background: rgba(255,255,255,.92); color: #55545C; box-shadow: inset 0 0 0 1px #E6E4DC; }
+  .rocket { position: absolute; left: 10px; bottom: 10px; font-size: 11px; font-weight: 700; color: #3468D9; background: rgba(255,255,255,.94); padding: 4px 7px; border-radius: 6px; box-shadow: inset 0 0 0 1px #E1E8F7; }
+  .meta { padding: 11px 2px 0; }
+  .cat { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .name {
+    margin-top: 2px; font-size: 15px; font-weight: 600; line-height: 1.38; color: var(--ink);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.76em;
+  }
+  .price-line { display: flex; align-items: baseline; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+  .price { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; }
+  .price.none { font-size: 14px; font-weight: 600; color: var(--muted); letter-spacing: -0.01em; }
+  .delta { font-size: 12.5px; font-weight: 700; padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+  .delta.down { color: var(--deal); background: var(--deal-bg); }
+  .delta.up { color: var(--muted); background: var(--surface-2); }
+  .spark { display: block; width: 100%; height: 30px; margin-top: 8px; color: var(--ink-2); }
+  .spark.down { color: var(--deal); }
+  .hint { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
 
-    .product-name {
-      font-size:17px; font-weight:700;
-      color:var(--text2);
-      line-height:1.3;
-    }
+  /* 로딩 */
+  .skel .thumb, .skel .sk { background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface) 50%, var(--surface-2) 100%); background-size: 200% 100%; animation: sh 1.3s infinite linear; border-color: transparent; }
+  .skel .sk { height: 14px; border-radius: 6px; margin-top: 10px; }
+  @keyframes sh { to { background-position: -200% 0; } }
 
-    /* Signal badge - the main "cheap/expensive" indicator */
-    .signal-badge {
-      display:flex; align-items:center; gap:8px;
-      padding:8px 16px;
-      border-radius:100px;
-      border:1px solid;
-      white-space:nowrap;
-      font-size:14px; font-weight:700;
-      flex-shrink:0;
-    }
-    .signal-badge.buy {
-      background:var(--green-bg);
-      border-color:var(--green-border);
-      color:var(--green);
-    }
-    .signal-badge.wait {
-      background:var(--red-bg);
-      border-color:var(--red-border);
-      color:var(--red);
-    }
-    .signal-badge.mid {
-      background:var(--yellow-bg);
-      border-color:var(--yellow-border);
-      color:var(--yellow);
-    }
-    .signal-badge.nodata {
-      background:rgba(112,112,160,0.1);
-      border-color:rgba(112,112,160,0.2);
-      color:var(--muted);
-    }
-    .signal-icon { font-size:18px; }
+  /* 상세 */
+  dialog {
+    border: 0; padding: 0; background: var(--surface); color: var(--ink);
+    width: min(720px, 100%); max-height: min(92vh, 900px);
+    border-radius: 28px; box-shadow: 0 30px 80px rgba(0,0,0,.25);
+    overflow: auto; overscroll-behavior: contain;
+  }
+  dialog::backdrop { background: rgba(15,15,12,.45); backdrop-filter: blur(3px); }
+  @media (max-width: 640px) {
+    dialog { margin: auto 0 0; width: 100%; max-width: 100%; max-height: 92vh; border-radius: 26px 26px 0 0; }
+  }
+  dialog[open] { animation: up .28s cubic-bezier(.2,.8,.2,1); }
+  @keyframes up { from { transform: translateY(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .d-close {
+    position: sticky; top: 12px; float: right; margin: 12px 12px 0 0; z-index: 2;
+    width: 38px; height: 38px; border-radius: 50%; border: 0; background: var(--surface-2); cursor: pointer;
+    display: grid; place-items: center;
+  }
+  .d-close:hover { background: var(--line); }
+  .d-body { padding: 22px 22px 26px; }
+  @media (min-width: 640px) { .d-body { padding: 30px 32px 32px; } }
+  .d-top { display: grid; grid-template-columns: 112px 1fr; gap: 18px; align-items: start; }
+  @media (min-width: 640px) { .d-top { grid-template-columns: 168px 1fr; gap: 24px; } }
+  .d-top .thumb { border-radius: 18px; }
+  .d-title { margin: 4px 0 0; font-size: 20px; font-weight: 800; letter-spacing: -0.035em; line-height: 1.3; padding-right: 36px; }
+  .d-sub { margin-top: 4px; font-size: 13px; color: var(--muted); }
+  .d-price { margin-top: 12px; font-size: 32px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; }
+  .d-deltas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .verdict {
+    margin-top: 22px; padding: 16px 18px; border-radius: 18px; background: var(--surface-2);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .verdict .v-badge { flex: none; }
+  .verdict p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.5; }
+  .verdict p b { color: var(--ink); }
+  .range { margin-top: 22px; }
+  .range-track { position: relative; height: 8px; border-radius: 99px; background: linear-gradient(90deg, var(--deal) 0%, #F5B83D 50%, var(--line) 100%); opacity: .9; }
+  .range-dot { position: absolute; top: 50%; width: 20px; height: 20px; border-radius: 50%; background: var(--surface); border: 4px solid var(--ink); transform: translate(-50%, -50%); box-shadow: 0 2px 6px rgba(0,0,0,.2); }
+  .range-labels { display: flex; justify-content: space-between; margin-top: 9px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .chart { position: relative; margin-top: 26px; height: 210px; }
+  .chart svg { display: block; width: 100%; height: 100%; overflow: visible; touch-action: pan-y; }
+  .chart .tip {
+    position: absolute; top: 0; pointer-events: none; transform: translateX(-50%);
+    background: var(--ink); color: var(--bg); font-size: 12.5px; font-weight: 700; padding: 6px 9px; border-radius: 8px; white-space: nowrap;
+    opacity: 0; transition: opacity .12s;
+  }
+  .chart .tip span { font-weight: 500; opacity: .7; margin-right: 6px; }
+  .chart-empty { display: grid; place-items: center; height: 100%; border-radius: 18px; background: var(--surface-2); color: var(--muted); font-size: 14px; text-align: center; padding: 16px; }
+  .stats4 { display: grid; grid-template-columns: repeat(4, 1fr); margin: 20px 0 0; border: 1px solid var(--line); border-radius: 18px; }
+  .stats4 div { padding: 14px 12px; text-align: center; }
+  .stats4 div + div { border-left: 1px solid var(--line); }
+  .stats4 dt { font-size: 12px; color: var(--muted); font-weight: 600; }
+  .stats4 dd { margin: 4px 0 0; font-size: 15px; font-weight: 800; letter-spacing: -0.02em; }
+  @media (max-width: 420px) { .stats4 div { padding: 12px 6px; } .stats4 dd { font-size: 13px; } }
+  .log { margin-top: 22px; }
+  .log h3 { margin: 0 0 6px; font-size: 15px; font-weight: 800; }
+  .log ol { list-style: none; margin: 0; padding: 0; }
+  .log li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .log li:last-child { border-bottom: 0; }
+  .log .when { color: var(--muted); }
+  .log .chg { font-size: 12.5px; font-weight: 700; margin-left: 8px; }
+  .log .chg.down { color: var(--deal); }
+  .log .chg.up { color: var(--muted); }
+  .cta {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    margin-top: 24px; height: 56px; border-radius: 16px;
+    background: var(--ink); color: var(--bg); text-decoration: none; font-size: 16.5px; font-weight: 800;
+    transition: transform .12s, opacity .12s;
+  }
+  .cta:hover { opacity: .92; }
+  .cta:active { transform: scale(.985); }
+  .fine { margin-top: 12px; font-size: 12px; color: var(--muted); text-align: center; line-height: 1.6; }
 
-    /* Price display */
-    .price-row {
-      display:flex; align-items:baseline; gap:12px;
-      margin-bottom:4px;
-    }
-    .price-main {
-      font-family:'Bebas Neue',sans-serif;
-      font-size:54px; line-height:1;
-      letter-spacing:1px;
-    }
-    .price-change {
-      font-family:'JetBrains Mono',monospace;
-      font-size:12px; font-weight:600;
-      padding:3px 9px; border-radius:20px;
-      margin-bottom:6px;
-    }
-    .price-change.down { background:var(--green-bg); color:var(--green); }
-    .price-change.up   { background:var(--red-bg);   color:var(--red);   }
+  /* 푸터 */
+  footer { margin: 64px 0 0; padding: 32px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.7; }
+  footer .logo b { font-size: 16px; }
+  footer .logo svg { width: 24px; height: 24px; }
+  footer p { margin: 10px 0 0; }
+  footer .disc { margin-top: 14px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; color: var(--ink-2); }
 
-    /* ── PRICE GAUGE ── */
-    .gauge-wrap {
-      margin-top:20px;
-    }
-    .gauge-labels {
-      display:flex; justify-content:space-between;
-      margin-bottom:6px;
-    }
-    .gauge-label {
-      font-family:'JetBrains Mono',monospace;
-      font-size:10px; font-weight:600;
-      letter-spacing:0.5px;
-    }
-    .gauge-label.min-label { color:var(--green); }
-    .gauge-label.max-label { color:var(--red); }
+  .err { text-align: center; padding: 48px 16px; color: var(--muted); }
+  .err button { margin-top: 12px; border: 1px solid var(--line); background: var(--surface); padding: 9px 16px; border-radius: 999px; cursor: pointer; font-weight: 600; }
 
-    .gauge-track {
-      position:relative;
-      height:6px;
-      background:var(--s2);
-      border-radius:10px;
-      overflow:visible;
-    }
-    .gauge-fill {
-      position:absolute;
-      left:0; top:0; height:100%;
-      border-radius:10px;
-      transition:width 1s cubic-bezier(.4,0,.2,1);
-    }
-    .gauge-thumb {
-      position:absolute;
-      top:50%;
-      width:14px; height:14px;
-      border-radius:50%;
-      border:2px solid var(--bg);
-      transform:translate(-50%, -50%);
-      box-shadow:0 0 8px rgba(0,0,0,0.6);
-      transition:left 1s cubic-bezier(.4,0,.2,1);
-    }
-
-    .gauge-sub {
-      display:flex; justify-content:space-between;
-      margin-top:8px;
-    }
-    .gauge-sub-item {
-      font-size:12px; color:var(--muted); font-weight:500;
-    }
-    .gauge-sub-item strong { color:var(--text2); }
-
-    /* ── STATS ── */
-    .stats-row {
-      display:flex; gap:0;
-      margin-top:20px;
-      background:var(--s2);
-      border-radius:10px;
-      overflow:hidden;
-    }
-    .stat {
-      flex:1; padding:12px 16px;
-      border-right:1px solid var(--border);
-    }
-    .stat:last-child { border-right:none; }
-    .stat-label {
-      font-family:'JetBrains Mono',monospace;
-      font-size:9px; letter-spacing:1.5px;
-      text-transform:uppercase;
-      color:var(--muted);
-      margin-bottom:4px;
-    }
-    .stat-value {
-      font-size:14px; font-weight:700;
-      color:var(--text);
-    }
-
-    /* CTA */
-    .cta-wrap { padding:16px 28px; }
-    .cta-btn {
-      display:inline-flex; align-items:center; gap:8px;
-      background:#fee500;
-      color:#000;
-      font-size:13px; font-weight:700;
-      padding:10px 20px;
-      border-radius:10px;
-      text-decoration:none;
-      transition:opacity .15s, transform .15s;
-    }
-    .cta-btn:hover { opacity:.88; transform:translateX(2px); }
-
-    /* ── CHART ── */
-    .chart-section {
-      border-top:1px solid var(--border);
-      padding:16px 28px 22px;
-    }
-    .chart-title {
-      font-family:'JetBrains Mono',monospace;
-      font-size:9px; letter-spacing:2px;
-      text-transform:uppercase;
-      color:var(--muted);
-      margin-bottom:10px;
-    }
-    .chart-box { height:90px; }
-
-    .disclosure {
-      max-width:760px; margin:0 auto; padding:24px 20px 40px;
-      text-align:center; font-size:11px; line-height:1.6;
-      color:var(--muted);
-    }
-
-    .no-chart {
-      border-top:1px solid var(--border);
-      padding:20px 28px;
-      font-size:12px; color:var(--muted);
-      font-family:'JetBrains Mono',monospace;
-      letter-spacing:1px;
-    }
-
-    @media(max-width:580px){
-      .card-header { flex-direction:column; gap:10px; }
-      .price-main { font-size:44px; }
-      .stats-row { flex-wrap:wrap; }
-      .stat { flex:1 1 40%; }
-    }
-  </style>
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
 </head>
 <body>
-<header>
-  <div class="logo">PRICE<em>LOG</em></div>
-  <div class="badge">PERSONAL</div>
-  <div class="live-dot">
-    <div class="dot"></div>
-    <span id="updated-at">LIVE</span>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mark" viewBox="0 0 64 64">
+    <rect width="64" height="64" rx="16" fill="#FFD84D"/>
+    <g transform="rotate(-14 32 32)">
+      <path d="M15 19h24.5a3 3 0 0 1 2.1.9l11.9 11.9a1.7 1.7 0 0 1 0 2.4L41.6 45.1a3 3 0 0 1-2.1.9H15a4 4 0 0 1-4-4V23a4 4 0 0 1 4-4Z" fill="#17171B"/>
+      <circle cx="44.5" cy="32.5" r="3" fill="#FFD84D"/>
+      <circle cx="20.5" cy="29" r="2.7" fill="#FFD84D"/>
+      <circle cx="31" cy="29" r="2.7" fill="#FFD84D"/>
+      <path d="M19.5 35.5c3.6 3.8 9.4 3.8 13 0" fill="none" stroke="#FFD84D" stroke-width="3" stroke-linecap="round"/>
+    </g>
+  </symbol>
+</svg>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="싸다구 홈">
+      <svg aria-hidden="true"><use href="#mark"/></svg>
+      <b>싸다구</b><span>쌀 때 사다구</span>
+    </a>
+    <div class="schedule"><i aria-hidden="true"></i>매일 오전 9시 가격 체크</div>
   </div>
 </header>
 
-<main>
-  <div class="section-title">즐겨찾기 상품</div>
-  <div class="cards" id="cards">
-    <div style="padding:60px;text-align:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px">LOADING...</div>
+<main class="wrap">
+  <div class="hero">
+    <div class="hero-main">
+      <div class="hero-eyebrow" id="hero-eyebrow">오늘의 장보기 브리핑</div>
+      <h1 id="hero-title">가격 불러오는 중…</h1>
+      <p id="hero-desc">자주 사는 쿠팡 상품 가격을 매일 적어두고, 쌀 때만 알려드려요.</p>
+      <svg class="hero-mascot" aria-hidden="true"><use href="#mark"/></svg>
+    </div>
+    <dl class="hero-stats" id="hero-stats">
+      <div class="stat"><dt>지켜보는 상품</dt><dd class="num">–</dd></div>
+      <div class="stat"><dt>사다구 타이밍</dt><dd class="num good">–</dd></div>
+      <div class="stat"><dt>역대 최저</dt><dd class="num deal">–</dd></div>
+      <div class="stat"><dt>마지막 확인</dt><dd class="small">–</dd></div>
+    </dl>
   </div>
+
+  <section aria-labelledby="h-timing">
+    <div class="sec-head">
+      <div>
+        <h2 id="h-timing">지금이 타이밍</h2>
+        <p>기록된 가격 중 가장 싼 쪽에 있는 상품이에요</p>
+      </div>
+    </div>
+    <div id="timing"></div>
+  </section>
+
+  <section aria-labelledby="h-all">
+    <div class="sec-head">
+      <div>
+        <h2 id="h-all">전체 상품</h2>
+        <p>눌러서 가격 그래프를 볼 수 있어요</p>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="chips" id="chips" role="group" aria-label="카테고리"></div>
+      <label class="sr" for="sort">정렬</label>
+      <select class="sort" id="sort">
+        <option value="rec">추천순</option>
+        <option value="drop">많이 싸진 순</option>
+        <option value="low">가격 낮은 순</option>
+        <option value="name">이름순</option>
+      </select>
+    </div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </section>
+
+  <footer>
+    <a class="logo" href="./"><svg aria-hidden="true"><use href="#mark"/></svg><b>싸다구</b></a>
+    <p>자주 사는 것만 골라 매일 아침 가격을 적어두는 개인 장보기 노트예요.<br>
+      가격은 쿠팡 파트너스 API 기준이며, 쿠폰·카드 할인이나 실시간 변동은 반영되지 않을 수 있어요.</p>
+    <p class="disc">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+  </footer>
 </main>
 
-<footer class="disclosure">
-  이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
-</footer>
+<dialog id="detail" aria-labelledby="d-title">
+  <button class="d-close" id="d-close" aria-label="닫기">
+    <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="d-body" id="d-body"></div>
+</dialog>
 
 <script>
 const REPO_BASE = window.location.pathname.replace(/\/[^/]*\.html$/, '').replace(/\/$/, '');
@@ -342,198 +407,356 @@ const REPO_BASE = window.location.pathname.replace(/\/[^/]*\.html$/, '').replace
 const DATA_BASE = window.location.hostname.endsWith('.github.io')
   ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/data'
   : REPO_BASE + '/data';
-const fmt = p => Number(p).toLocaleString('ko-KR') + '원';
 
-function getSignal(history) {
-  if (history.length < 3) return { cls:'nodata', icon:'📡', text:'수집 중' };
-  const prices = history.map(h=>h.price);
-  const curr = prices[prices.length-1];
-  const min = Math.min(...prices), max = Math.max(...prices);
-  if (max===min) return { cls:'mid', icon:'😐', text:'변동 없음' };
-  const pos = (curr-min)/(max-min);
-  if (curr<=min) return { cls:'buy', icon:'🔥', text:'역대 최저가!' };
-  if (pos<=0.25)  return { cls:'buy', icon:'✅', text:'살 타이밍' };
-  if (pos>=0.75)  return { cls:'wait', icon:'⛔', text:'기다리세요' };
-  return { cls:'mid', icon:'🟡', text:'보통 가격' };
+const ICONS = {
+  '먹거리': '<path d="M3.5 11.5h17a8.5 8.5 0 0 1-17 0Z"/><path d="M8.5 8c0-1.2 1.2-1.6 1.2-2.8M12.5 8c0-1.2 1.2-1.6 1.2-2.8M16.5 8c0-1.2 1.2-1.6 1.2-2.8"/>',
+  '음료': '<path d="M6.5 8h11l-1.3 12a1.2 1.2 0 0 1-1.2 1H9a1.2 1.2 0 0 1-1.2-1L6.5 8Z"/><path d="M5.5 8h13M12.5 8l1.6-5H17"/>',
+  '뷰티·건강': '<path d="M12 3.2s6 6.4 6 10.8a6 6 0 0 1-12 0c0-4.4 6-10.8 6-10.8Z"/><path d="M9.3 14.5a2.8 2.8 0 0 0 2.2 2.6"/>',
+  '반려견': '<circle cx="6.3" cy="10.3" r="1.7"/><circle cx="9.8" cy="6.6" r="1.7"/><circle cx="14.2" cy="6.6" r="1.7"/><circle cx="17.7" cy="10.3" r="1.7"/><path d="M12 11.3c-2.9 0-5.4 3.1-5.4 5.4 0 1.5 1.2 2.3 2.7 2.3 1.1 0 1.7-.5 2.7-.5s1.6.5 2.7.5c1.5 0 2.7-.8 2.7-2.3 0-2.3-2.5-5.4-5.4-5.4Z"/>',
+  '_': '<path d="M3.5 12.6V4.8a1.3 1.3 0 0 1 1.3-1.3h7.8l8 8a1.3 1.3 0 0 1 0 1.9l-6.9 6.9a1.3 1.3 0 0 1-1.9 0l-8-8Z"/><circle cx="8.3" cy="8.3" r="1.4"/>',
+};
+const icon = cat => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[cat] || ICONS._}</svg>`;
+
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const won = n => Math.round(n).toLocaleString('ko-KR') + '원';
+const pct = x => (Math.abs(x) * 100).toFixed(Math.abs(x) < 0.1 ? 1 : 0) + '%';
+function parseDate(s) { const [d, t = '00:00'] = s.split(' '); const [y, m, dd] = d.split('-').map(Number); const [h, mi] = t.split(':').map(Number); return { y, m, d: dd, h, mi }; }
+function dateLabel(s, withTime) {
+  const p = parseDate(s);
+  const base = `${p.m}월 ${p.d}일`;
+  if (!withTime) return base;
+  const ampm = p.h < 12 ? '오전' : '오후';
+  const h12 = p.h % 12 || 12;
+  return `${base} ${ampm} ${h12}:${String(p.mi).padStart(2, '0')}`;
+}
+const shortDate = s => { const p = parseDate(s); return `${p.m}/${p.d}`; };
+
+const VERDICTS = {
+  low:  { label: '역대 최저',      tone: 'deal', rank: 0 },
+  buy:  { label: '사다구 타이밍',  tone: 'good', rank: 1 },
+  mid:  { label: '보통 가격',      tone: 'mute', rank: 2 },
+  flat: { label: '변동 없음',      tone: 'mute', rank: 3 },
+  wait: { label: '존버 추천',      tone: 'dark', rank: 4 },
+  rec:  { label: '기록 중',        tone: 'mute', rank: 5 },
+  none: { label: '첫 기록 대기',   tone: 'mute', rank: 6 },
+};
+
+function analyze(history) {
+  const prices = history.map(h => Number(h.price));
+  const n = prices.length;
+  const a = { n, prices };
+  if (!n) return { ...a, key: 'none' };
+  a.curr = prices[n - 1];
+  a.min = Math.min(...prices);
+  a.max = Math.max(...prices);
+  a.avg = prices.reduce((s, x) => s + x, 0) / n;
+  a.prev = n > 1 ? prices[n - 2] : null;
+  a.pos = a.max === a.min ? 0.5 : (a.curr - a.min) / (a.max - a.min);
+  // 비교 기준: 3번 이상 쌓이면 평균, 2번이면 직전 기록
+  if (n >= 3) { a.change = (a.curr - a.avg) / a.avg; a.basis = '평균'; }
+  else if (n === 2) { a.change = (a.curr - a.prev) / a.prev; a.basis = '지난번'; }
+  if (n < 3) a.key = 'rec';
+  else if (a.max === a.min) a.key = 'flat';
+  else if (a.curr <= a.min) a.key = 'low';
+  else if (a.pos <= 0.3) a.key = 'buy';
+  else if (a.pos >= 0.7) a.key = 'wait';
+  else a.key = 'mid';
+  return a;
 }
 
-function renderChart(id, history) {
-  const canvas = document.getElementById(id);
-  if (!canvas || history.length<2) return;
-  const prices = history.map(h=>h.price);
-  const curr = prices[prices.length-1];
-  const min = Math.min(...prices);
-  const col = curr<=min*1.03?'#00ff9d':curr>=Math.max(...prices)*0.9?'#ff3d71':'#8b5cf6';
-  new Chart(canvas, {
-    type:'line',
-    data:{
-      labels:history.map(h=>h.date.slice(5,10)),
-      datasets:[{
-        data:prices,
-        borderColor:col, borderWidth:1.5,
-        pointRadius:0, pointHoverRadius:4, tension:0.4, fill:true,
-        backgroundColor:ctx=>{
-          const g=ctx.chart.ctx.createLinearGradient(0,0,0,90);
-          const a=col==='#00ff9d'?'0,255,157':col==='#ff3d71'?'255,61,113':'139,92,246';
-          g.addColorStop(0,`rgba(${a},0.15)`);
-          g.addColorStop(1,`rgba(${a},0)`);
-          return g;
-        }
-      }]
-    },
-    options:{
-      responsive:true, maintainAspectRatio:false, animation:false,
-      plugins:{
-        legend:{display:false},
-        tooltip:{
-          backgroundColor:'rgba(20,20,31,0.95)',
-          borderColor:'rgba(255,255,255,0.1)', borderWidth:1,
-          titleColor:'#7070a0', bodyColor:'#fff',
-          titleFont:{family:'JetBrains Mono',size:9},
-          bodyFont:{family:'JetBrains Mono',size:13,weight:'600'},
-          callbacks:{label:ctx=>fmt(ctx.raw)}
-        }
-      },
-      scales:{
-        x:{display:false},
-        y:{display:false, min:Math.min(...prices)*0.965}
-      },
-      interaction:{mode:'index',intersect:false}
-    }
-  });
+function badgeHTML(key) {
+  const v = VERDICTS[key];
+  return `<span class="badge ${v.tone}">${v.label}</span>`;
 }
 
-function buildGauge(prices, curr) {
+function deltaHTML(a) {
+  if (a.change == null || Math.abs(a.change) < 0.0005) return '';
+  const down = a.change < 0;
+  return `<span class="delta ${down ? 'down' : 'up'} num" title="${a.basis} 가격 대비">${down ? '▼' : '▲'} ${pct(a.change)}</span>`;
+}
+
+function sparkSVG(prices) {
   if (prices.length < 2) return '';
-  const min = Math.min(...prices), max = Math.max(...prices);
-  if (max === min) return '';
-  const pos = Math.round(((curr-min)/(max-min))*100);
-  const clampedPos = Math.max(2, Math.min(98, pos));
-
-  // Gradient: green (cheap) → yellow → red (expensive)
-  let thumbColor, fillColor;
-  if (pos <= 25)      { thumbColor='#00ff9d'; fillColor='linear-gradient(90deg,#00ff9d,#00cc78)'; }
-  else if (pos >= 75) { thumbColor='#ff3d71'; fillColor='linear-gradient(90deg,#00ff9d,#ffd60a,#ff3d71)'; }
-  else                { thumbColor='#ffd60a'; fillColor='linear-gradient(90deg,#00ff9d,#ffd60a)'; }
-
-  return `
-    <div class="gauge-wrap">
-      <div class="gauge-labels">
-        <div class="gauge-label min-label">최저 ${fmt(min)}</div>
-        <div class="gauge-label max-label">최고 ${fmt(max)}</div>
-      </div>
-      <div class="gauge-track" id="track-${curr}">
-        <div class="gauge-fill" style="width:${clampedPos}%;background:${fillColor};opacity:0.4"></div>
-        <div class="gauge-thumb" style="left:${clampedPos}%;background:${thumbColor};box-shadow:0 0 10px ${thumbColor}80"></div>
-      </div>
-      <div class="gauge-sub">
-        <div class="gauge-sub-item">현재 위치 <strong>${pos <= 33 ? '저렴한 구간' : pos >= 67 ? '비싼 구간' : '중간 구간'}</strong></div>
-        <div class="gauge-sub-item"><strong>${pos}%</strong> 위치</div>
-      </div>
-    </div>`;
+  const W = 100, H = 30, lo = Math.min(...prices), hi = Math.max(...prices), span = hi - lo || 1;
+  const pts = prices.map((p, i) => [i / (prices.length - 1) * W, 3 + (hi - p) / span * (H - 6)]);
+  const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(2) + ' ' + p[1].toFixed(2)).join(' ');
+  const down = prices[prices.length - 1] < prices[0];
+  return `<svg class="spark ${down ? 'down' : ''}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+    <path d="${d} L${W} ${H} L0 ${H} Z" fill="currentColor" opacity=".08"/>
+    <path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
 }
 
-// 제휴링크는 블로그와 같은 방식(go?u=Base64)으로 연결합니다
-function productLink(product) {
-  if (product.link_b64) return REPO_BASE + '/go.html?u=' + encodeURIComponent(product.link_b64);
-  return product.url;
+function thumbHTML(p, withBadge = true) {
+  const img = p.meta.image ? `<img src="${esc(p.meta.image)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : '';
+  return `<div class="thumb">
+    ${withBadge ? `<div class="badges">${badgeHTML(p.a.key)}</div>` : ''}
+    ${img}<div class="ph">${icon(p.category)}</div>
+    ${p.meta.rocket ? '<span class="rocket">로켓배송</span>' : ''}
+  </div>`;
 }
+
+function cardHTML(p) {
+  const a = p.a;
+  const priceRow = a.n
+    ? `<div class="price-line"><span class="price num">${won(a.curr)}</span>${deltaHTML(a)}</div>`
+    : `<div class="price-line"><span class="price none">첫 기록 대기 중</span></div>`;
+  const extra = a.n >= 2 ? sparkSVG(a.prices) : a.n === 1 ? `<div class="hint">두 번째 기록부터 그래프가 그려져요</div>` : '';
+  return `<button class="card" data-key="${esc(p.name)}" aria-label="${esc(p.name)} 가격 자세히 보기">
+    ${thumbHTML(p)}
+    <div class="meta">
+      <div class="cat">${esc(p.category || '')}</div>
+      <div class="name">${esc(p.name)}</div>
+      ${priceRow}
+      ${extra}
+    </div>
+  </button>`;
+}
+
+let PRODUCTS = [];
+const state = { cat: '전체', sort: 'rec' };
+
+function sorted(list) {
+  const by = {
+    rec: (x, y) => VERDICTS[x.a.key].rank - VERDICTS[y.a.key].rank || (x.a.change ?? 0) - (y.a.change ?? 0),
+    drop: (x, y) => (x.a.change ?? 9) - (y.a.change ?? 9),
+    low: (x, y) => (x.a.curr ?? Infinity) - (y.a.curr ?? Infinity),
+    name: (x, y) => x.name.localeCompare(y.name, 'ko'),
+  }[state.sort];
+  return [...list].sort(by);
+}
+
+function renderGrid() {
+  const list = PRODUCTS.filter(p => state.cat === '전체' || p.category === state.cat);
+  document.getElementById('grid').innerHTML = sorted(list).map(cardHTML).join('');
+}
+
+function renderChips() {
+  const cats = ['전체', ...new Set(PRODUCTS.map(p => p.category).filter(Boolean))];
+  const count = c => c === '전체' ? PRODUCTS.length : PRODUCTS.filter(p => p.category === c).length;
+  document.getElementById('chips').innerHTML = cats.map(c =>
+    `<button class="chip" data-cat="${esc(c)}" aria-pressed="${c === state.cat}">${esc(c)}<span class="cnt num">${count(c)}</span></button>`
+  ).join('');
+}
+
+function renderHero() {
+  const total = PRODUCTS.length;
+  const low = PRODUCTS.filter(p => p.a.key === 'low').length;
+  const timing = PRODUCTS.filter(p => p.a.key === 'low' || p.a.key === 'buy').length;
+  const judged = PRODUCTS.filter(p => p.a.n >= 3).length;
+  const last = PRODUCTS.flatMap(p => p.history.map(h => h.date)).sort().pop();
+
+  const title = document.getElementById('hero-title');
+  const desc = document.getElementById('hero-desc');
+  if (!judged) {
+    title.innerHTML = '가격 기록,<br>이제 막 시작했어요';
+    desc.textContent = '매일 아침 9시쯤 가격을 적어둬요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.';
+  } else if (timing) {
+    title.innerHTML = `지금 사면 좋은 상품<br><em class="num">${timing}개</em> 있어요`;
+    desc.textContent = low ? `그중 ${low}개는 기록 중 가장 싼 가격이에요. 필요한 거면 지금이 기회!` : '기록된 가격 중 싼 쪽에 있어요. 필요한 거면 지금 담아두세요.';
+  } else {
+    title.innerHTML = '오늘은<br>존버하는 날';
+    desc.textContent = '지금은 평소보다 싼 상품이 없어요. 내일 아침에 다시 확인할게요.';
+  }
+  if (last) document.getElementById('hero-eyebrow').textContent = `${dateLabel(last)} 장보기 브리핑`;
+
+  const dds = document.querySelectorAll('#hero-stats dd');
+  dds[0].innerHTML = `${total}<small>개</small>`;
+  dds[1].innerHTML = judged ? `${timing}<small>개</small>` : '–';
+  dds[2].innerHTML = judged ? `${low}<small>개</small>` : '–';
+  dds[3].textContent = last ? dateLabel(last, true) : '첫 기록 대기 중';
+}
+
+function renderTiming() {
+  const el = document.getElementById('timing');
+  const list = sorted(PRODUCTS.filter(p => p.a.key === 'low' || p.a.key === 'buy'));
+  if (!list.length) {
+    const judged = PRODUCTS.some(p => p.a.n >= 3);
+    el.innerHTML = `<div class="empty-note">${judged
+      ? '<b>지금은 타이밍인 상품이 없어요.</b> 평소보다 싸지면 여기에 떠요.'
+      : '<b>아직 판단하기엔 기록이 부족해요.</b> 가격이 3번 이상 쌓이면 여기에 떠요.'}</div>`;
+    return;
+  }
+  el.innerHTML = `<div class="rail">${list.map(cardHTML).join('')}</div>`;
+}
+
+/* 상세 그래프 */
+function drawChart(box, history) {
+  const n = history.length;
+  if (!n) { box.innerHTML = '<div class="chart-empty">첫 가격이 기록되면 그래프가 그려져요</div>'; return; }
+  const W = box.clientWidth, H = box.clientHeight;
+  const padL = 6, padR = 70, padT = 34, padB = 26;
+  const prices = history.map(h => Number(h.price));
+  const lo = Math.min(...prices), hi = Math.max(...prices);
+  const span0 = hi - lo || Math.max(1, hi * 0.08);
+  const lo2 = lo - span0 * 0.25, hi2 = hi + span0 * 0.25;
+  const x = i => n === 1 ? padL + (W - padL - padR) / 2 : padL + i * (W - padL - padR) / (n - 1);
+  const y = v => padT + (hi2 - v) / (hi2 - lo2) * (H - padT - padB);
+  const pts = prices.map((p, i) => [x(i), y(p)]);
+  const line = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+  const minI = prices.lastIndexOf(lo), last = pts[n - 1];
+  const guide = (v, label, cls) => `
+    <line x1="${padL}" x2="${W - padR + 8}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-dasharray="3 4"/>
+    <text x="${W - padR + 14}" y="${y(v) + 4}" font-size="11.5" font-weight="700" fill="var(--${cls})">${label}</text>`;
+  box.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="가격 추이 그래프">
+      <defs><linearGradient id="fillg" x1="0" x2="0" y1="0" y2="1">
+        <stop offset="0" stop-color="var(--ink)" stop-opacity=".10"/><stop offset="1" stop-color="var(--ink)" stop-opacity="0"/>
+      </linearGradient></defs>
+      ${hi !== lo ? guide(hi, won(hi), 'muted') : ''}
+      ${guide(lo, won(lo), hi !== lo ? 'deal' : 'muted')}
+      ${n > 1 ? `<path d="${line} L${last[0]} ${H - padB} L${pts[0][0]} ${H - padB} Z" fill="url(#fillg)"/>
+      <path d="${line}" fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>` : ''}
+      ${n > 1 && hi !== lo ? `<circle cx="${pts[minI][0]}" cy="${pts[minI][1]}" r="4.5" fill="var(--deal)" stroke="var(--surface)" stroke-width="2"/>` : ''}
+      <circle cx="${last[0]}" cy="${last[1]}" r="6" fill="var(--ink)" stroke="var(--surface)" stroke-width="3"/>
+      <text x="${padL}" y="${H - 6}" font-size="11.5" fill="var(--muted)">${shortDate(history[0].date)}</text>
+      ${n > 1 ? `<text x="${x(n - 1)}" y="${H - 6}" font-size="11.5" fill="var(--muted)" text-anchor="end">${shortDate(history[n - 1].date)}</text>` : ''}
+      <g class="hover" opacity="0">
+        <line class="hl" y1="${padT - 8}" y2="${H - padB}" stroke="var(--muted)" stroke-dasharray="2 3"/>
+        <circle class="hc" r="5" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>
+      </g>
+      <rect x="0" y="0" width="${W - padR + 8}" height="${H}" fill="transparent"/>
+    </svg>
+    <div class="tip"></div>`;
+  if (n < 2) return;
+  const svg = box.querySelector('svg'), g = svg.querySelector('.hover'), tip = box.querySelector('.tip');
+  const show = e => {
+    const r = svg.getBoundingClientRect();
+    const mx = (e.clientX - r.left) * (W / r.width);
+    let i = Math.round((mx - padL) / ((W - padL - padR) / (n - 1)));
+    i = Math.max(0, Math.min(n - 1, i));
+    const [px, py] = pts[i];
+    g.setAttribute('opacity', 1);
+    g.querySelector('.hl').setAttribute('x1', px); g.querySelector('.hl').setAttribute('x2', px);
+    g.querySelector('.hc').setAttribute('cx', px); g.querySelector('.hc').setAttribute('cy', py);
+    tip.innerHTML = `<span>${dateLabel(history[i].date, true)}</span>${won(prices[i])}`;
+    tip.style.left = Math.max(70, Math.min(W - 70, px)) + 'px';
+    tip.style.opacity = 1;
+  };
+  const hide = () => { g.setAttribute('opacity', 0); tip.style.opacity = 0; };
+  svg.addEventListener('pointermove', show);
+  svg.addEventListener('pointerdown', show);
+  svg.addEventListener('pointerleave', hide);
+}
+
+function verdictText(a) {
+  if (a.key === 'none') return '아직 기록이 없어요. <b>매일 오전 9시쯤</b> 가격을 적어둘게요.';
+  if (a.key === 'rec') return `기록 <b>${a.n}번</b>째예요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.`;
+  if (a.key === 'flat') return `기록하는 동안 <b>가격이 한 번도 안 바뀌었어요.</b> 급하면 그냥 사도 돼요.`;
+  const rank = Math.round(a.pos * 100);
+  if (a.key === 'low') return `지금이 <b>기록 중 가장 싼 가격</b>이에요. 평균보다 <b>${won(a.avg - a.curr)}</b> 저렴해요.`;
+  if (a.key === 'buy') return `기록된 가격 중 <b>싼 쪽 ${Math.max(rank, 1)}%</b> 위치예요. 필요하면 지금 사도 좋아요.`;
+  if (a.key === 'wait') return `지금은 <b>비싼 편</b>이에요. 최저가보다 <b>${won(a.curr - a.min)}</b> 비싸니 조금 기다려봐요.`;
+  return `딱 <b>평소 가격</b>이에요. 급하지 않다면 더 싸질 때를 기다려봐도 좋아요.`;
+}
+
+let openKey = null;
+function openDetail(key, push = true) {
+  const p = PRODUCTS.find(x => x.name === key);
+  if (!p) return;
+  openKey = key;
+  const a = p.a, h = p.history;
+  const deltas = [];
+  if (a.prev != null && a.curr !== a.prev) {
+    const d = a.curr - a.prev;
+    deltas.push(`<span class="delta ${d < 0 ? 'down' : 'up'} num">지난번보다 ${won(Math.abs(d))} ${d < 0 ? '▼' : '▲'}</span>`);
+  }
+  if (a.n >= 3 && Math.abs(a.curr - a.avg) >= 1) {
+    const d = a.curr - a.avg;
+    deltas.push(`<span class="delta ${d < 0 ? 'down' : 'up'} num">평균보다 ${pct(d / a.avg)} ${d < 0 ? '저렴' : '비쌈'}</span>`);
+  }
+  const recent = h.slice(-10).map((e, i, arr) => {
+    const gi = h.length - arr.length + i;
+    const prev = gi > 0 ? Number(h[gi - 1].price) : null;
+    return { e, d: prev == null ? 0 : Number(e.price) - prev };
+  }).reverse();
+  const link = p.link_b64 ? REPO_BASE + '/go.html?u=' + encodeURIComponent(p.link_b64) : p.url;
+
+  document.getElementById('d-body').innerHTML = `
+    <div class="d-top">
+      ${thumbHTML(p, false)}
+      <div>
+        <div class="cat">${esc(p.category || '')}${p.meta.rocket ? ' · 로켓배송' : ''}</div>
+        <h2 class="d-title" id="d-title">${esc(p.name)}</h2>
+        <div class="d-sub">${esc(p.title || '')}</div>
+        <div class="d-price num">${a.n ? won(a.curr) : '–'}</div>
+        <div class="d-deltas">${deltas.join('')}</div>
+      </div>
+    </div>
+    <div class="verdict"><span class="v-badge">${badgeHTML(a.key)}</span><p>${verdictText(a)}</p></div>
+    ${a.n >= 2 && a.max > a.min ? `
+      <div class="range">
+        <div class="range-track"><div class="range-dot" style="left:${(a.pos * 100).toFixed(1)}%"></div></div>
+        <div class="range-labels num"><span>최저 ${won(a.min)}</span><span>최고 ${won(a.max)}</span></div>
+      </div>` : ''}
+    <div class="chart" id="d-chart"></div>
+    ${a.n ? `<dl class="stats4 num">
+      <div><dt>최저가</dt><dd style="color:var(--deal)">${won(a.min)}</dd></div>
+      <div><dt>평균가</dt><dd>${won(a.avg)}</dd></div>
+      <div><dt>최고가</dt><dd>${won(a.max)}</dd></div>
+      <div><dt>기록</dt><dd>${a.n}번</dd></div>
+    </dl>` : ''}
+    ${recent.length ? `<div class="log"><h3>최근 기록</h3><ol>${recent.map(({ e, d }) => `
+      <li><span class="when">${dateLabel(e.date, true)}</span><span class="num"><b>${won(e.price)}</b>${d ? `<span class="chg ${d < 0 ? 'down' : 'up'}">${d < 0 ? '▼' : '▲'} ${won(Math.abs(d))}</span>` : ''}</span></li>`).join('')}
+    </ol></div>` : ''}
+    <a class="cta" href="${esc(link)}" target="_blank" rel="sponsored nofollow noopener">쿠팡에서 보기
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 13 13 5M7 5h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <p class="fine">쿠팡 파트너스 링크예요. 구매하시면 일정액의 수수료를 받을 수 있어요.<br>가격은 매일 오전 9시쯤 확인한 값이라 지금과 다를 수 있어요.</p>`;
+
+  const dlg = document.getElementById('detail');
+  if (!dlg.open) dlg.showModal();
+  dlg.scrollTop = 0;
+  requestAnimationFrame(() => drawChart(document.getElementById('d-chart'), h));
+  if (push) history.replaceState(null, '', '#' + encodeURIComponent(p.name));
+}
+
+function renderAll() { renderHero(); renderTiming(); renderChips(); renderGrid(); }
 
 async function load() {
+  document.getElementById('grid').innerHTML = Array.from({ length: 8 }, () =>
+    '<div class="skel"><div class="thumb"></div><div class="sk" style="width:40%"></div><div class="sk"></div><div class="sk" style="width:60%"></div></div>').join('');
   const bust = '?_=' + Date.now();
-  const [productsRes, pricesRes] = await Promise.all([
+  const [pr, hr] = await Promise.all([
     fetch(DATA_BASE + '/products.json' + bust),
     fetch(DATA_BASE + '/prices.json' + bust),
   ]);
-  const { products } = await productsRes.json();
-  const { history = {} } = await pricesRes.json();
-  products.forEach(p => { p.history = history[p.name] || []; });
-  let lastDate = '';
-  products.forEach(p => {
-    if (p.history.length>0){ const d=p.history[p.history.length-1].date; if(d>lastDate)lastDate=d; }
+  if (!pr.ok || !hr.ok) throw new Error('load failed');
+  const { products } = await pr.json();
+  const { history = {}, meta = {} } = await hr.json();
+  PRODUCTS = products.map(p => {
+    const h = history[p.name] || [];
+    return { ...p, history: h, meta: meta[p.name] || {}, a: analyze(h) };
   });
-  if (lastDate) document.getElementById('updated-at').textContent = lastDate;
-
-  const container = document.getElementById('cards');
-  container.innerHTML = '';
-
-  products.forEach((product, i) => {
-    const h = product.history;
-    const hasData = h.length > 0;
-    const curr = hasData ? h[h.length-1].price : null;
-    const prices = h.map(x=>x.price);
-    const minPrice = hasData ? Math.min(...prices) : null;
-    const maxPrice = hasData ? Math.max(...prices) : null;
-    const avg = hasData ? Math.round(prices.reduce((a,b)=>a+b,0)/prices.length) : null;
-    const signal = getSignal(h);
-    const cid = 'chart-'+i;
-
-    let priceColor = 'var(--text)';
-    if (signal.cls==='buy') priceColor='var(--green)';
-    if (signal.cls==='wait') priceColor='var(--red)';
-
-    let changePill = '';
-    if (h.length>=2) {
-      const prev=h[h.length-2].price, c=h[h.length-1].price;
-      const diff=c-prev, pct=((Math.abs(diff)/prev)*100).toFixed(1);
-      const icon=diff<0?'▼':'▲', cls=diff<0?'down':'up';
-      changePill=`<span class="price-change ${cls}">${icon} ${pct}%</span>`;
-    }
-
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <div class="card-line ${signal.cls}"></div>
-      <div class="card-inner">
-        <div class="card-header">
-          <div class="product-name">${product.name}</div>
-          <div class="signal-badge ${signal.cls}">
-            <span class="signal-icon">${signal.icon}</span>
-            <span>${signal.text}</span>
-          </div>
-        </div>
-
-        ${hasData ? `
-          <div class="price-row">
-            <div class="price-main" style="color:${priceColor}">${fmt(curr)}</div>
-            ${changePill}
-          </div>
-          ${buildGauge(prices, curr)}
-          <div class="stats-row" style="margin-top:20px">
-            <div class="stat">
-              <div class="stat-label">최저가</div>
-              <div class="stat-value" style="color:var(--green)">${fmt(minPrice)}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">평균가</div>
-              <div class="stat-value">${avg ? fmt(avg) : '-'}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">최고가</div>
-              <div class="stat-value" style="color:var(--red)">${fmt(maxPrice)}</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">수집</div>
-              <div class="stat-value">${h.length}회</div>
-            </div>
-          </div>
-        ` : `<div style="padding:16px 0;color:var(--muted);font-size:13px">첫 데이터 수집 중이에요...</div>`}
-      </div>
-      <div class="cta-wrap">
-        <a class="cta-btn" href="${productLink(product)}" target="_blank" rel="sponsored nofollow noopener">🛍 쿠팡에서 보기 →</a>
-      </div>
-      ${h.length>=2
-        ? `<div class="chart-section"><div class="chart-title">가격 추이</div><div class="chart-box"><canvas id="${cid}"></canvas></div></div>`
-        : `<div class="no-chart">▸ 데이터가 쌓이면 그래프가 나타나요</div>`
-      }
-    `;
-    container.appendChild(card);
-    if (h.length>=2) setTimeout(()=>renderChart(cid,h),0);
-  });
+  renderAll();
+  const hash = decodeURIComponent(location.hash.slice(1));
+  if (hash) openDetail(hash, false);
 }
 
-load().catch(()=>{
-  document.getElementById('cards').innerHTML='<div style="padding:60px;text-align:center;color:var(--muted)">데이터를 불러오지 못했어요</div>';
+const dlg = document.getElementById('detail');
+document.addEventListener('click', e => {
+  const card = e.target.closest('.card');
+  if (card) return openDetail(card.dataset.key);
+  const chip = e.target.closest('.chip');
+  if (chip) { state.cat = chip.dataset.cat; renderChips(); renderGrid(); }
+});
+document.getElementById('sort').addEventListener('change', e => { state.sort = e.target.value; renderGrid(); renderTiming(); });
+document.getElementById('d-close').addEventListener('click', () => dlg.close());
+dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+dlg.addEventListener('close', () => { openKey = null; if (location.hash) history.replaceState(null, '', location.pathname + location.search); });
+let rt;
+window.addEventListener('resize', () => {
+  clearTimeout(rt);
+  rt = setTimeout(() => {
+    const p = openKey && PRODUCTS.find(x => x.name === openKey);
+    if (p) drawChart(document.getElementById('d-chart'), p.history);
+  }, 120);
+});
+const topEl = document.getElementById('top');
+window.addEventListener('scroll', () => topEl.classList.toggle('scrolled', scrollY > 4), { passive: true });
+
+load().catch(() => {
+  document.getElementById('grid').innerHTML = '<div class="err" style="grid-column:1/-1">가격 데이터를 불러오지 못했어요.<br><button onclick="location.reload()">다시 시도</button></div>';
+  document.getElementById('hero-title').textContent = '잠깐 연결이 안 돼요';
 });
 </script>
 </body>

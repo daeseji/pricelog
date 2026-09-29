@@ -1,92 +1,84 @@
 {
   "products": [
     {
-      "id": "7166996396",
-      "itemId": "18047953609",
-      "name": "미국산 소갈비",
-      "keyword": "미국산 소갈비",
-      "url": "https://www.coupang.com/vp/products/7166996396?itemId=18047953609",
-      "link_b64": ""
-    },
-    {
-      "id": "6357109541",
-      "itemId": "23902862999",
-      "name": "코카콜라",
-      "keyword": "코카콜라",
-      "url": "https://www.coupang.com/vp/products/6357109541?itemId=23902862999",
-      "link_b64": ""
-    },
-    {
+      "name": "미국산 소갈비살 리테일팩",
+      "title": "미국산 소갈비살 리테일팩(원육) (냉장), 0.8kg, 1개",
+      "category": "먹거리",
       "id": "",
-      "itemId": "",
-      "name": "티젠 파인애플 콤부차, 5g, 30개입, 1개",
-      "keyword": "티젠 파인애플 콤부차, 5g, 30개입, 1개",
+      "url": "https://www.coupang.com/np/search?q=%EB%AF%B8%EA%B5%AD%EC%82%B0%20%EC%86%8C%EA%B0%88%EB%B9%84%EC%82%B4%20%EB%A6%AC%ED%85%8C%EC%9D%BC%ED%8C%A9%28%EC%9B%90%EC%9C%A1%29%20%28%EB%83%89%EC%9E%A5%29%2C%200.8kg%2C%201%EA%B0%9C",
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOa0FaUmh2Mg"
+    },
+    {
+      "name": "코카콜라 오리지널",
+      "title": "코카콜라 오리지널, 2L, 8개",
+      "category": "음료",
+      "id": "",
+      "url": "https://www.coupang.com/np/search?q=%EC%BD%94%EC%B9%B4%EC%BD%9C%EB%9D%BC%20%EC%98%A4%EB%A6%AC%EC%A7%80%EB%84%90%2C%202L%2C%208%EA%B0%9C",
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOb2t4WlA0MA"
+    },
+    {
+      "name": "티젠 파인애플 콤부차",
+      "title": "티젠 파인애플 콤부차, 5g, 30개입, 1개",
+      "category": "음료",
+      "id": "",
       "url": "https://www.coupang.com/np/search?q=%ED%8B%B0%EC%A0%A0%20%ED%8C%8C%EC%9D%B8%EC%95%A0%ED%94%8C%20%EC%BD%A4%EB%B6%80%EC%B0%A8%2C%205g%2C%2030%EA%B0%9C%EC%9E%85%2C%201%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOcEQxTlROSQ"
     },
     {
+      "name": "제이웨이브 듀오덤 스팟패치",
+      "title": "제이웨이브 듀오덤 스팟패치, 1개",
+      "category": "뷰티·건강",
       "id": "",
-      "itemId": "",
-      "name": "페브리즈 에어 린넨 앤 스카이 실내 탈취제 본품, 165g, 2개",
-      "keyword": "페브리즈 에어 린넨 앤 스카이 실내 탈취제 본품, 165g, 2개",
-      "url": "https://www.coupang.com/np/search?q=%ED%8E%98%EB%B8%8C%EB%A6%AC%EC%A6%88%20%EC%97%90%EC%96%B4%20%EB%A6%B0%EB%84%A8%20%EC%95%A4%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%20%EC%8B%A4%EB%82%B4%20%ED%83%88%EC%B7%A8%EC%A0%9C%20%EB%B3%B8%ED%92%88%2C%20165g%2C%202%EA%B0%9C",
-      "link_b64": ""
-    },
-    {
-      "id": "",
-      "itemId": "",
-      "name": "제이웨이브 듀오덤 스팟패치, 1개",
-      "keyword": "제이웨이브 듀오덤 스팟패치, 1개",
       "url": "https://www.coupang.com/np/search?q=%EC%A0%9C%EC%9D%B4%EC%9B%A8%EC%9D%B4%EB%B8%8C%20%EB%93%80%EC%98%A4%EB%8D%A4%20%EC%8A%A4%ED%8C%9F%ED%8C%A8%EC%B9%98%2C%201%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOczFUT1JFRw"
     },
     {
+      "name": "라운드랩 독도 토너",
+      "title": "라운드랩 독도 토너, 500ml, 1개",
+      "category": "뷰티·건강",
       "id": "",
-      "itemId": "",
-      "name": "라운드랩 독도 토너, 500ml, 1개",
-      "keyword": "라운드랩 독도 토너, 500ml, 1개",
       "url": "https://www.coupang.com/np/search?q=%EB%9D%BC%EC%9A%B4%EB%93%9C%EB%9E%A9%20%EB%8F%85%EB%8F%84%20%ED%86%A0%EB%84%88%2C%20500ml%2C%201%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOdWlZdU5zaQ"
     },
     {
+      "name": "졸리마켓 강아지 대용량 육포",
+      "title": "졸리마켓 강아지 대용량 육포, 말랑 닭가슴살 슬라이스, 1kg, 1개",
+      "category": "반려견",
       "id": "",
-      "itemId": "",
-      "name": "졸리마켓 강아지 대용량 육포, 말랑 닭가슴살 슬라이스, 1kg, 1개",
-      "keyword": "졸리마켓 강아지 대용량 육포, 말랑 닭가슴살 슬라이스, 1kg, 1개",
       "url": "https://www.coupang.com/np/search?q=%EC%A1%B8%EB%A6%AC%EB%A7%88%EC%BC%93%20%EA%B0%95%EC%95%84%EC%A7%80%20%EB%8C%80%EC%9A%A9%EB%9F%89%20%EC%9C%A1%ED%8F%AC%2C%20%EB%A7%90%EB%9E%91%20%EB%8B%AD%EA%B0%80%EC%8A%B4%EC%82%B4%20%EC%8A%AC%EB%9D%BC%EC%9D%B4%EC%8A%A4%2C%201kg%2C%201%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOd2RwQUpXdQ"
     },
     {
+      "name": "도비 전연령 강아지 밸런스 건식사료",
+      "title": "도비 전연령 강아지 벨런스 건식사료, 곡물, 5kg, 2개",
+      "category": "반려견",
       "id": "",
-      "itemId": "",
-      "name": "도비 전연령 강아지 벨런스 건식사료, 곡물, 5kg, 2개",
-      "keyword": "도비 전연령 강아지 벨런스 건식사료, 곡물, 5kg, 2개",
       "url": "https://www.coupang.com/np/search?q=%EB%8F%84%EB%B9%84%20%EC%A0%84%EC%97%B0%EB%A0%B9%20%EA%B0%95%EC%95%84%EC%A7%80%20%EB%B2%A8%EB%9F%B0%EC%8A%A4%20%EA%B1%B4%EC%8B%9D%EC%82%AC%EB%A3%8C%2C%20%EA%B3%A1%EB%AC%BC%2C%205kg%2C%202%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOeHpwVnZQTQ"
     },
     {
+      "name": "썬키스트 애사비 제로 스파클링",
+      "title": "썬키스트 애사비 제로 스파클링 탄산음료, 350ml, 6개",
+      "category": "음료",
       "id": "",
-      "itemId": "",
-      "name": "썬키스트 애사비 제로 스파클링 탄산음료, 350ml, 6개",
-      "keyword": "썬키스트 애사비 제로 스파클링 탄산음료, 350ml, 6개",
       "url": "https://www.coupang.com/np/search?q=%EC%8D%AC%ED%82%A4%EC%8A%A4%ED%8A%B8%20%EC%95%A0%EC%82%AC%EB%B9%84%20%EC%A0%9C%EB%A1%9C%20%EC%8A%A4%ED%8C%8C%ED%81%B4%EB%A7%81%20%ED%83%84%EC%82%B0%EC%9D%8C%EB%A3%8C%2C%20350ml%2C%206%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOeThVUGkyMA"
     },
     {
+      "name": "곰곰 신선한 1A 우유",
+      "title": "곰곰 신선한 1A 우유, 900ml, 4개",
+      "category": "먹거리",
       "id": "",
-      "itemId": "",
-      "name": "곰곰 신선한 1A 우유, 900ml, 4개",
-      "keyword": "곰곰 신선한 1A 우유, 900ml, 4개",
       "url": "https://www.coupang.com/np/search?q=%EA%B3%B0%EA%B3%B0%20%EC%8B%A0%EC%84%A0%ED%95%9C%201A%20%EC%9A%B0%EC%9C%A0%2C%20900ml%2C%204%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOQVljSlJSSQ"
     },
     {
+      "name": "풀무원 정통 가쓰오 우동",
+      "title": "풀무원 정통 가쓰오 우동 4인분, 943.2g, 1개",
+      "category": "먹거리",
       "id": "",
-      "itemId": "",
-      "name": "풀무원 정통 가쓰오 우동 4인분, 943.2g, 1개",
-      "keyword": "풀무원 정통 가쓰오 우동 4인분, 943.2g, 1개",
       "url": "https://www.coupang.com/np/search?q=%ED%92%80%EB%AC%B4%EC%9B%90%20%EC%A0%95%ED%86%B5%20%EA%B0%80%EC%93%B0%EC%98%A4%20%EC%9A%B0%EB%8F%99%204%EC%9D%B8%EB%B6%84%2C%20943.2g%2C%201%EA%B0%9C",
-      "link_b64": ""
+      "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOQ2lzcmNLTw"
     }
   ]
 }

@@ -27,7 +27,9 @@ def generateHmac(method, url, secretKey, accessKey):
 
 def normalize(name):
     # 띄어쓰기·쉼표 등 기호를 빼고 비교 (예: "우유, 900ml" == "우유 900ml")
-    return re.sub(r"[\s,.\-_/()\[\]]", "", str(name)).lower()
+    s = re.sub(r"[\s,.\-_/()\[\]]", "", str(name)).lower()
+    # 끝의 "1개"는 있어도 없어도 같은 상품으로 봅니다
+    return re.sub(r"(?<!\d)1개$", "", s)
 
 
 class ApiError(Exception):
@@ -47,15 +49,17 @@ def search(keyword):
     return body.get("data", {}).get("productData", []) or []
 
 
-def find_product(product, results):
+def find_product(product, results, known_id):
     # 정확히 같은 상품일 때만 가격을 기록합니다. (비슷한 다른 상품 가격이 섞이는 문제 방지)
-    # 1) 상품 ID가 있으면 ID로 비교, 2) 없으면 상품명이 완전히 같은지 비교
-    if product.get("id"):
+    # 1) products.json의 id → 2) 지난번에 찾은 상품 ID → 3) 쿠팡 상품명(title)이 완전히 같은지
+    wanted_id = product.get("id") or known_id
+    if wanted_id:
         for p in results:
-            if str(p.get("productId")) == str(product["id"]):
+            if str(p.get("productId")) == str(wanted_id):
                 return p
-        return None
-    target = normalize(product["name"])
+        if product.get("id"):
+            return None
+    target = normalize(product.get("title") or product["name"])
     for p in results:
         if normalize(p.get("productName", "")) == target:
             return p
@@ -68,6 +72,7 @@ def main():
     with open("data/prices.json", "r", encoding="utf-8") as f:
         prices = json.load(f)
     history = prices.setdefault("history", {})
+    meta = prices.setdefault("meta", {})
 
     now = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
 
@@ -80,15 +85,16 @@ def main():
             time.sleep(DELAY_SECONDS)
         print(f"\n조회 중 ({i + 1}/{len(products)}): {product['name']}")
         try:
-            results = search(product["keyword"])
+            results = search(product.get("title") or product["name"])
         except ApiError as e:
             print(f"  ⛔ API 오류로 여기서 멈춥니다 (재시도 안 함): {e}")
             break
 
-        match = find_product(product, results)
+        key = product["name"]
+        match = find_product(product, results, meta.get(key, {}).get("productId"))
         if match is None:
             print("  ❌ 검색 결과에서 같은 상품을 못 찾아서 기록하지 않았어요. 검색 결과 상위 상품:")
-            for p in results[:5]:
+            for p in results:
                 print(f"     - [{p.get('productId')}] {p.get('productName')} / {p.get('productPrice')}원")
             continue
 
@@ -96,9 +102,17 @@ def main():
         if not price:
             print("  ❌ 가격 정보가 없어서 기록하지 않았어요.")
             continue
-        entries = history.setdefault(product["name"], [])
+        entries = history.setdefault(key, [])
         entries.append({"date": now, "price": price})
-        history[product["name"]] = entries[-HISTORY_LIMIT:]
+        history[key] = entries[-HISTORY_LIMIT:]
+        # 상품 사진·ID도 같은 검색 결과에서 저장 (추가 호출 없음)
+        meta[key] = {
+            "productId": match.get("productId"),
+            "productName": match.get("productName"),
+            "image": match.get("productImage"),
+            "rocket": bool(match.get("isRocket")),
+            "freeShipping": bool(match.get("isFreeShipping")),
+        }
         print(f"  ✅ {price:,}원 (상품 ID {match.get('productId')})")
 
     with open("data/prices.json", "w", encoding="utf-8") as f:
