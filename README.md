@@ -51,18 +51,48 @@
 | 주소 | 내용 | 만드는 곳 |
 | --- | --- | --- |
 | `/` | 오늘의 가격 | `index.html` (직접 수정) |
-| `/tips/` | 장보기 노트 목록과 글 | `content/tips/*.md` |
+| `/tips/` | 장보기 노트 목록·검색 | `content/tips/*.md` |
+| `/tips/c/<카테고리>/` | 카테고리별 노트 (쇼핑 팁·재료 고르기·보관·요리·레시피·살림) | 자동 |
+| `/tips/<글 주소>/` | 노트 글 (목차, 관련 상품 가격, 공유 버튼) | `content/tips/<글 주소>.md` |
 | `/about/` | 싸다구 소개·배지 읽는 법·FAQ | `scripts/build_site.py` |
-| `/links/` | SNS·직접 만든 사이트·파트너 사이트 | `content/links.json` |
+| `/links/` | SNS·직접 만든 사이트·공식 정보·레시피·파트너 사이트 | `content/links.json` |
+| `/tips/feed.xml`, `/sitemap.xml` | RSS, 사이트맵 | 자동 |
 
 노트 글을 추가하거나 링크를 바꾼 뒤에는 페이지를 다시 만들어 주세요.
 
 ```bash
 pip install markdown
-python3 scripts/build_site.py
+python3 scripts/build_site.py      # 페이지 만들기
+node scripts/make_og.cjs           # (선택) 새 글의 공유 이미지 만들기 — Playwright 필요
+python3 scripts/build_site.py      # 공유 이미지 연결
 ```
 
-- 노트 글은 `content/tips/`에 마크다운으로 씁니다. 맨 위 `---` 사이에 제목·설명·카테고리(쇼핑 팁 / 재료 고르기 / 보관·요리)·아이콘·날짜·순서·관련 상품을 적습니다.
-- `> **팁**`, `> **주의**`, `> **한 줄 요약**`, `> **참고**`로 시작하는 인용문은 색깔 있는 안내 상자로 바뀝니다.
-- 메뉴와 꼬리말은 모든 페이지가 같은 모양을 쓰며, `index.html`에도 자동으로 맞춰집니다.
-- 공통 디자인은 `assets/site.css`에 있습니다.
+### 노트 글 쓰는 법
+
+`content/tips/`에 마크다운 파일을 만들고 맨 위에 정보를 적어요.
+
+```
+---
+title: 글 제목
+description: 검색 결과와 목록에 보이는 한두 문장 설명
+category: 쇼핑 팁 / 재료 고르기 / 보관·요리 / 레시피 / 살림 중 하나
+icon: 표지 아이콘 이름 (scripts/build_site.py의 NOTE_ICONS 참고)
+date: 2026-09-30
+order: 목록 순서 (숫자)
+related: 싸다구 상품 이름, 쉼표로 여러 개 (없으면 비워두기)
+servings: 2인분          (레시피만)
+time: 20                 (레시피만, 분)
+ingredients: 재료1 | 재료2 (레시피만, 검색엔진 레시피 정보에 쓰여요)
+---
+```
+
+- `> **팁**`, `> **주의**`, `> **한 줄 요약**`, `> **공식**`, `> **참고**`로 시작하는 인용문은 색깔 있는 안내 상자로 바뀝니다.
+- 레시피는 `## 만드는 법` 아래 번호 목록이 조리 순서로 검색엔진에 전달됩니다.
+- 다른 노트는 `[제목](../글-주소/)`, 소개·링크 페이지는 `[링크 모음](../../links/)`처럼 연결합니다.
+- 메뉴와 꼬리말은 모든 페이지가 같은 모양을 쓰며, `index.html`에도 자동으로 맞춰집니다. 공통 디자인은 `assets/site.css`에 있습니다.
+
+## 검색엔진 최적화
+
+- 모든 페이지에 제목·설명·대표 주소(canonical)·공유 미리보기(Open Graph) 정보가 있습니다.
+- 노트는 글(BlogPosting), 레시피는 레시피(Recipe), 소개는 자주 묻는 질문(FAQPage) 구조화 데이터를 담고 있습니다.
+- `sitemap.xml`과 RSS(`tips/feed.xml`)를 제공합니다. 구글 서치 콘솔이나 네이버 서치어드바이저에 사이트맵을 등록하면 더 빨리 검색에 노출됩니다.

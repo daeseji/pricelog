@@ -1,34 +1,686 @@
 {
   "sns": [
-    { "name": "Instagram", "handle": "@wait_secs", "url": "https://www.instagram.com/wait_secs/", "desc": "일상과 개발 사이, 그 어딘가의 기록", "icon": "instagram", "color": "#E1306C" },
-    { "name": "Threads", "handle": "@wait_secs", "url": "https://www.threads.com/@wait_secs/", "desc": "짧고 굵은 단상과 기술 이야기", "icon": "threads", "color": "#101010" },
-    { "name": "X", "handle": "@wait_secs", "url": "https://x.com/wait_secs", "desc": "기술 트렌드, 트레이딩 인사이트, 개발 메모", "icon": "x", "color": "#101010" },
-    { "name": "Bluesky", "handle": "@chart2x.bsky.social", "url": "https://bsky.app/profile/chart2x.bsky.social", "desc": "탈중앙 소셜에서 나누는 기술·금융 이야기", "icon": "bluesky", "color": "#1185FE" },
-    { "name": "YouTube", "handle": "@TRADERSTARCHILD", "url": "https://www.youtube.com/@TRADERSTARCHILD", "desc": "트레이딩 전략, 개발 강의, 금융 인사이트 영상", "icon": "youtube", "color": "#FF0033" },
-    { "name": "Facebook", "handle": "CodexOpenAI", "url": "https://www.facebook.com/CodexOpenAI", "desc": "AI·코드·금융 콘텐츠 아카이브", "icon": "facebook", "color": "#0866FF" },
-    { "name": "GitHub", "handle": "daeseji", "url": "https://github.com/daeseji", "desc": "싸다구를 포함한 프로젝트 저장소", "icon": "github", "color": "#181717" },
-    { "name": "Telegram", "handle": "Starchild_R", "url": "https://t.me/Starchild_R", "desc": "실시간 트레이딩 신호와 시장 분석 채널", "icon": "telegram", "color": "#26A5E4" },
-    { "name": "Pinterest", "handle": "OpenAICodex", "url": "https://kr.pinterest.com/OpenAICodex/", "desc": "AI·디자인·기술 이미지 큐레이션", "icon": "pinterest", "color": "#E60023" },
-    { "name": "SoundCloud", "handle": "aicodex", "url": "https://soundcloud.com/aicodex", "desc": "AI가 만든 음악과 창작 사운드 실험실", "icon": "soundcloud", "color": "#FF5500" },
-    { "name": "LinkedIn", "handle": "라이브러리", "url": "https://www.linkedin.com/in/라이브러리/", "desc": "커리어와 기술 네트워킹", "icon": "", "initial": "in", "color": "#0A66C2" },
-    { "name": "litt.ly", "handle": "trading", "url": "https://litt.ly/trading", "desc": "퍼스널 트레이딩 채널 링크 모음", "icon": "", "initial": "L", "color": "#7C5CFF" }
+    {
+      "name": "Instagram",
+      "handle": "@wait_secs",
+      "url": "https://www.instagram.com/wait_secs/",
+      "desc": "일상과 개발 사이, 그 어딘가의 기록",
+      "icon": "instagram",
+      "color": "#E1306C"
+    },
+    {
+      "name": "Threads",
+      "handle": "@wait_secs",
+      "url": "https://www.threads.com/@wait_secs/",
+      "desc": "짧고 굵은 단상과 기술 이야기",
+      "icon": "threads",
+      "color": "#101010"
+    },
+    {
+      "name": "X",
+      "handle": "@wait_secs",
+      "url": "https://x.com/wait_secs",
+      "desc": "기술 트렌드, 트레이딩 인사이트, 개발 메모",
+      "icon": "x",
+      "color": "#101010"
+    },
+    {
+      "name": "Bluesky",
+      "handle": "@chart2x.bsky.social",
+      "url": "https://bsky.app/profile/chart2x.bsky.social",
+      "desc": "탈중앙 소셜에서 나누는 기술·금융 이야기",
+      "icon": "bluesky",
+      "color": "#1185FE"
+    },
+    {
+      "name": "YouTube",
+      "handle": "@TRADERSTARCHILD",
+      "url": "https://www.youtube.com/@TRADERSTARCHILD",
+      "desc": "트레이딩 전략, 개발 강의, 금융 인사이트 영상",
+      "icon": "youtube",
+      "color": "#FF0033"
+    },
+    {
+      "name": "Facebook",
+      "handle": "CodexOpenAI",
+      "url": "https://www.facebook.com/CodexOpenAI",
+      "desc": "AI·코드·금융 콘텐츠 아카이브",
+      "icon": "facebook",
+      "color": "#0866FF"
+    },
+    {
+      "name": "GitHub",
+      "handle": "daeseji",
+      "url": "https://github.com/daeseji",
+      "desc": "싸다구를 포함한 프로젝트 저장소",
+      "icon": "github",
+      "color": "#181717"
+    },
+    {
+      "name": "Telegram",
+      "handle": "Starchild_R",
+      "url": "https://t.me/Starchild_R",
+      "desc": "실시간 트레이딩 신호와 시장 분석 채널",
+      "icon": "telegram",
+      "color": "#26A5E4"
+    },
+    {
+      "name": "Pinterest",
+      "handle": "OpenAICodex",
+      "url": "https://kr.pinterest.com/OpenAICodex/",
+      "desc": "AI·디자인·기술 이미지 큐레이션",
+      "icon": "pinterest",
+      "color": "#E60023"
+    },
+    {
+      "name": "SoundCloud",
+      "handle": "aicodex",
+      "url": "https://soundcloud.com/aicodex",
+      "desc": "AI가 만든 음악과 창작 사운드 실험실",
+      "icon": "soundcloud",
+      "color": "#FF5500"
+    },
+    {
+      "name": "LinkedIn",
+      "handle": "라이브러리",
+      "url": "https://www.linkedin.com/in/라이브러리/",
+      "desc": "커리어와 기술 네트워킹",
+      "icon": "",
+      "initial": "in",
+      "color": "#0A66C2"
+    },
+    {
+      "name": "litt.ly",
+      "handle": "trading",
+      "url": "https://litt.ly/trading",
+      "desc": "퍼스널 트레이딩 채널 링크 모음",
+      "icon": "",
+      "initial": "L",
+      "color": "#7C5CFF"
+    }
   ],
   "projects": [
-    { "name": "기술 라이브러리", "url": "https://beautifulsoup.dev/", "desc": "개발자를 위한 기술 인사이트와 에세이", "tag": "블로그", "initial": "B", "color": "#10B981" },
-    { "name": "STUDIO 100", "url": "https://creativestudio.kr/", "desc": "복리·BMI·QR·퇴직금까지, 일상 계산과 변환 도구 100가지", "tag": "도구", "initial": "100", "color": "#17171B" },
-    { "name": "해지냥", "url": "https://cancelcat.space/", "desc": "쿠팡·넷플릭스·멜론 등 구독 서비스 취소 방법을 바로 찾아주는 곳", "tag": "구독 관리", "initial": "냥", "color": "#F97316" }
+    {
+      "name": "기술 라이브러리",
+      "url": "https://beautifulsoup.dev/",
+      "desc": "개발자를 위한 기술 인사이트와 에세이",
+      "tag": "블로그",
+      "initial": "B",
+      "color": "#10B981"
+    },
+    {
+      "name": "STUDIO 100",
+      "url": "https://creativestudio.kr/",
+      "desc": "복리·BMI·QR·퇴직금까지, 일상 계산과 변환 도구 100가지",
+      "tag": "도구",
+      "initial": "100",
+      "color": "#17171B"
+    },
+    {
+      "name": "해지냥",
+      "url": "https://cancelcat.space/",
+      "desc": "쿠팡·넷플릭스·멜론 등 구독 서비스 취소 방법을 바로 찾아주는 곳",
+      "tag": "구독 관리",
+      "initial": "냥",
+      "color": "#F97316"
+    }
   ],
   "partners": [
-    { "name": "테크살림", "url": "https://aipages.net/", "desc": "생활 가전과 IT 기기, 똑똑하게 고르고 쓰는 살림 이야기", "tag": "가전·테크" },
-    { "name": "카드팁", "url": "https://cardtip.net/", "desc": "금융 데이터 기반 신용카드 혜택 분석과 맞춤 카드 추천", "tag": "카드·금융" },
-    { "name": "인포 네트워크", "url": "https://late.kr/", "desc": "보험·금융·건강·생활 트렌드를 큐레이션하는 정보 미디어", "tag": "생활 정보" },
-    { "name": "금융리더", "url": "https://capitalize.kr/", "desc": "거시경제·대출·부동산 시장 전망을 다루는 금융 정보 플랫폼", "tag": "금융" },
-    { "name": "세무사랑", "url": "https://taxsarang.com/", "desc": "개인사업자 절세, 부동산세, 상속·증여 세무 가이드", "tag": "세금·절세" },
-    { "name": "비즈서울 법률", "url": "https://bizseoul.net/", "desc": "생활법률·세무노무·비즈니스 판례 중심의 법률 정보 미디어", "tag": "법률" },
-    { "name": "달러 인베스트먼트", "url": "https://dollar.im/", "desc": "달러인덱스로 읽는 외환·경제·금융 시장 흐름", "tag": "외환·금융" },
-    { "name": "제네시스 블록", "url": "https://sanhwabi.com/", "desc": "코인·주식 투자와 매매 기법을 쉽게 풀어주는 블로그", "tag": "투자" },
-    { "name": "이클립스 트레이딩", "url": "https://eclipse.trading/", "desc": "퀀트 투자와 AI 자동매매 실전 인사이트", "tag": "퀀트·트레이딩" },
-    { "name": "사주클래스", "url": "https://sajuclass.com/", "desc": "사주명리학 기초부터 심화까지 전문 강의 블로그", "tag": "운세·명리" },
-    { "name": "판타지라이프", "url": "https://ladeca.tistory.com/", "desc": "마비노기 공략과 IT 트렌드, 생활 정보 블로그", "tag": "게임·IT" }
+    {
+      "name": "테크살림",
+      "url": "https://aipages.net/",
+      "desc": "생활 가전과 IT 기기, 똑똑하게 고르고 쓰는 살림 이야기",
+      "tag": "가전·테크"
+    },
+    {
+      "name": "카드팁",
+      "url": "https://cardtip.net/",
+      "desc": "금융 데이터 기반 신용카드 혜택 분석과 맞춤 카드 추천",
+      "tag": "카드·금융"
+    },
+    {
+      "name": "인포 네트워크",
+      "url": "https://late.kr/",
+      "desc": "보험·금융·건강·생활 트렌드를 큐레이션하는 정보 미디어",
+      "tag": "생활 정보"
+    },
+    {
+      "name": "금융리더",
+      "url": "https://capitalize.kr/",
+      "desc": "거시경제·대출·부동산 시장 전망을 다루는 금융 정보 플랫폼",
+      "tag": "금융"
+    },
+    {
+      "name": "세무사랑",
+      "url": "https://taxsarang.com/",
+      "desc": "개인사업자 절세, 부동산세, 상속·증여 세무 가이드",
+      "tag": "세금·절세"
+    },
+    {
+      "name": "비즈서울 법률",
+      "url": "https://bizseoul.net/",
+      "desc": "생활법률·세무노무·비즈니스 판례 중심의 법률 정보 미디어",
+      "tag": "법률"
+    },
+    {
+      "name": "달러 인베스트먼트",
+      "url": "https://dollar.im/",
+      "desc": "달러인덱스로 읽는 외환·경제·금융 시장 흐름",
+      "tag": "외환·금융"
+    },
+    {
+      "name": "제네시스 블록",
+      "url": "https://sanhwabi.com/",
+      "desc": "코인·주식 투자와 매매 기법을 쉽게 풀어주는 블로그",
+      "tag": "투자"
+    },
+    {
+      "name": "이클립스 트레이딩",
+      "url": "https://eclipse.trading/",
+      "desc": "퀀트 투자와 AI 자동매매 실전 인사이트",
+      "tag": "퀀트·트레이딩"
+    },
+    {
+      "name": "사주클래스",
+      "url": "https://sajuclass.com/",
+      "desc": "사주명리학 기초부터 심화까지 전문 강의 블로그",
+      "tag": "운세·명리"
+    },
+    {
+      "name": "판타지라이프",
+      "url": "https://ladeca.tistory.com/",
+      "desc": "마비노기 공략과 IT 트렌드, 생활 정보 블로그",
+      "tag": "게임·IT"
+    }
+  ],
+  "resources": [
+    {
+      "id": "gov",
+      "title": "식품 안전·표시 공식 사이트",
+      "desc": "먹거리 안전과 원산지, 이력 정보를 확인하는 정부·공공기관",
+      "items": [
+        {
+          "name": "식품의약품안전처",
+          "url": "https://www.mfds.go.kr/",
+          "desc": "식품·의약품 안전 정책과 회수·판매중지 소식",
+          "tag": "정부"
+        },
+        {
+          "name": "식품안전나라",
+          "url": "https://www.foodsafetykorea.go.kr/",
+          "desc": "회수 식품 조회, 식품 표시 정보, 식중독 예방 정보",
+          "tag": "식품안전"
+        },
+        {
+          "name": "농림축산식품부",
+          "url": "https://www.mafra.go.kr/",
+          "desc": "농축산물 수급과 가격 동향, 농식품 정책",
+          "tag": "정부"
+        },
+        {
+          "name": "해양수산부",
+          "url": "https://www.mof.go.kr/",
+          "desc": "수산물 수급과 제철 수산물 정보",
+          "tag": "정부"
+        },
+        {
+          "name": "국립농산물품질관리원",
+          "url": "https://www.naqs.go.kr/",
+          "desc": "농산물 원산지 표시와 품질 인증 안내",
+          "tag": "원산지"
+        },
+        {
+          "name": "국립수산물품질관리원",
+          "url": "https://www.nfqs.go.kr/",
+          "desc": "수산물 원산지 표시와 안전성 검사",
+          "tag": "원산지"
+        },
+        {
+          "name": "축산물품질평가원",
+          "url": "https://www.ekape.or.kr/",
+          "desc": "소·돼지·닭·계란 등급 판정과 축산물 이력 관리",
+          "tag": "등급"
+        },
+        {
+          "name": "축산물이력제",
+          "url": "https://www.mtrace.go.kr/",
+          "desc": "이력번호로 소고기·돼지고기 출생부터 유통까지 조회",
+          "tag": "이력 조회"
+        },
+        {
+          "name": "수산물이력제",
+          "url": "https://www.fishtrace.go.kr/",
+          "desc": "수산물 생산부터 판매까지 이력 정보 조회",
+          "tag": "이력 조회"
+        },
+        {
+          "name": "농촌진흥청",
+          "url": "https://www.rda.go.kr/",
+          "desc": "농업 기술과 농산물, 제철 식재료 정보",
+          "tag": "정부"
+        },
+        {
+          "name": "농식품올바로",
+          "url": "https://koreanfood.rda.go.kr/",
+          "desc": "국가표준식품성분표로 식재료 영양 성분 검색",
+          "tag": "영양 성분"
+        },
+        {
+          "name": "한국소비자원",
+          "url": "https://www.kca.go.kr/",
+          "desc": "제품 비교 시험, 소비자 피해 사례와 안전 정보",
+          "tag": "소비자"
+        },
+        {
+          "name": "소비자24",
+          "url": "https://www.consumer.go.kr/",
+          "desc": "리콜 정보, 제품 비교, 소비자 피해구제를 한곳에서",
+          "tag": "소비자"
+        },
+        {
+          "name": "1372 소비자상담센터",
+          "url": "https://www.ccn.go.kr/",
+          "desc": "온라인 쇼핑 피해 등 소비자 상담 접수",
+          "tag": "상담"
+        },
+        {
+          "name": "제품안전정보센터",
+          "url": "https://www.safetykorea.kr/",
+          "desc": "생활용품 안전 인증과 리콜 제품 조회",
+          "tag": "리콜"
+        }
+      ]
+    },
+    {
+      "id": "price",
+      "title": "가격 정보·가격 비교",
+      "desc": "평소 가격을 알면 싼 날이 보여요",
+      "items": [
+        {
+          "name": "참가격",
+          "url": "https://www.price.go.kr/",
+          "desc": "한국소비자원이 조사한 생필품 판매 가격 비교",
+          "tag": "생필품 가격"
+        },
+        {
+          "name": "KAMIS 농산물유통정보",
+          "url": "https://www.kamis.or.kr/",
+          "desc": "채소·과일·수산물 도소매 가격과 가격 추이",
+          "tag": "농산물 가격"
+        },
+        {
+          "name": "한국농수산식품유통공사 aT",
+          "url": "https://www.at.or.kr/",
+          "desc": "농수산식품 유통과 수급 정보",
+          "tag": "유통"
+        },
+        {
+          "name": "축산유통정보",
+          "url": "https://www.ekapepia.com/",
+          "desc": "소·돼지고기 도매·소비자 가격 동향",
+          "tag": "고기 가격"
+        },
+        {
+          "name": "KOSIS 국가통계포털",
+          "url": "https://kosis.kr/",
+          "desc": "소비자물가지수 등 물가 통계",
+          "tag": "물가 통계"
+        },
+        {
+          "name": "오피넷",
+          "url": "https://www.opinet.co.kr/",
+          "desc": "내 주변 주유소 기름값 비교",
+          "tag": "유가"
+        },
+        {
+          "name": "네이버 쇼핑",
+          "url": "https://shopping.naver.com/",
+          "desc": "여러 쇼핑몰 가격을 한 번에 비교",
+          "tag": "가격 비교"
+        },
+        {
+          "name": "다나와",
+          "url": "https://www.danawa.com/",
+          "desc": "가전·디지털 제품 최저가 비교",
+          "tag": "가격 비교"
+        },
+        {
+          "name": "에누리",
+          "url": "https://www.enuri.com/",
+          "desc": "쇼핑몰별 가격 비교와 가격 변동 그래프",
+          "tag": "가격 비교"
+        },
+        {
+          "name": "폴센트",
+          "url": "https://fallcent.com/",
+          "desc": "쿠팡 등 쇼핑몰 가격 변동 알림 서비스",
+          "tag": "가격 알림"
+        }
+      ]
+    },
+    {
+      "id": "market",
+      "title": "온라인 장보기",
+      "desc": "자주 쓰는 온라인 장보기 사이트",
+      "items": [
+        {
+          "name": "쿠팡",
+          "url": "https://www.coupang.com/",
+          "desc": "로켓배송·로켓프레시 온라인 장보기",
+          "tag": "종합몰"
+        },
+        {
+          "name": "마켓컬리",
+          "url": "https://www.kurly.com/",
+          "desc": "신선식품 새벽배송",
+          "tag": "신선식품"
+        },
+        {
+          "name": "SSG닷컴",
+          "url": "https://www.ssg.com/",
+          "desc": "이마트·신세계 온라인 장보기",
+          "tag": "마트"
+        },
+        {
+          "name": "홈플러스",
+          "url": "https://front.homeplus.co.kr/",
+          "desc": "홈플러스 온라인 마트",
+          "tag": "마트"
+        },
+        {
+          "name": "롯데ON",
+          "url": "https://www.lotteon.com/",
+          "desc": "롯데마트 등 롯데 계열 온라인몰",
+          "tag": "마트"
+        },
+        {
+          "name": "오아시스마켓",
+          "url": "https://www.oasis.co.kr/",
+          "desc": "친환경·신선식품 새벽배송",
+          "tag": "신선식품"
+        },
+        {
+          "name": "11번가",
+          "url": "https://www.11st.co.kr/",
+          "desc": "오픈마켓 종합 쇼핑",
+          "tag": "오픈마켓"
+        },
+        {
+          "name": "G마켓",
+          "url": "https://www.gmarket.co.kr/",
+          "desc": "오픈마켓 종합 쇼핑",
+          "tag": "오픈마켓"
+        }
+      ]
+    },
+    {
+      "id": "korean",
+      "title": "한식 레시피",
+      "desc": "오늘 뭐 먹지? 믿고 따라 하는 한식 레시피",
+      "items": [
+        {
+          "name": "만개의레시피",
+          "url": "https://www.10000recipe.com/",
+          "desc": "국내 최대 규모의 집밥 레시피 모음",
+          "tag": "레시피"
+        },
+        {
+          "name": "우리의식탁",
+          "url": "https://www.wtable.co.kr/",
+          "desc": "사진과 영상으로 따라 하는 요리 레시피",
+          "tag": "레시피"
+        },
+        {
+          "name": "한식진흥원",
+          "url": "https://www.hansik.or.kr/",
+          "desc": "한식 표준 레시피와 한식 문화 정보",
+          "tag": "공식"
+        },
+        {
+          "name": "Maangchi",
+          "url": "https://www.maangchi.com/",
+          "desc": "영어로 배우는 한식, 해외에서 유명한 한식 레시피",
+          "tag": "영문"
+        },
+        {
+          "name": "Korean Bapsang",
+          "url": "https://www.koreanbapsang.com/",
+          "desc": "엄마 손맛 한식 가정식 레시피",
+          "tag": "영문"
+        },
+        {
+          "name": "My Korean Kitchen",
+          "url": "https://mykoreankitchen.com/",
+          "desc": "쉽게 따라 하는 한식 레시피",
+          "tag": "영문"
+        }
+      ]
+    },
+    {
+      "id": "world",
+      "title": "세계 요리·요리 과학",
+      "desc": "요리의 원리부터 알뜰 레시피까지 믿을 만한 해외 사이트",
+      "items": [
+        {
+          "name": "Serious Eats",
+          "url": "https://www.seriouseats.com/",
+          "desc": "실험으로 검증한 요리 과학과 레시피",
+          "tag": "요리 과학"
+        },
+        {
+          "name": "America's Test Kitchen",
+          "url": "https://www.americastestkitchen.com/",
+          "desc": "수십 번 테스트한 레시피와 조리 도구 리뷰",
+          "tag": "검증 레시피"
+        },
+        {
+          "name": "BBC Good Food",
+          "url": "https://www.bbcgoodfood.com/",
+          "desc": "영국 BBC의 쉬운 가정식 레시피",
+          "tag": "레시피"
+        },
+        {
+          "name": "Allrecipes",
+          "url": "https://www.allrecipes.com/",
+          "desc": "사용자 리뷰가 많은 대형 레시피 사이트",
+          "tag": "레시피"
+        },
+        {
+          "name": "NYT Cooking",
+          "url": "https://cooking.nytimes.com/",
+          "desc": "뉴욕타임스의 요리 레시피",
+          "tag": "레시피"
+        },
+        {
+          "name": "Bon Appétit",
+          "url": "https://www.bonappetit.com/",
+          "desc": "요리 잡지의 레시피와 조리법",
+          "tag": "레시피"
+        },
+        {
+          "name": "Food52",
+          "url": "https://food52.com/",
+          "desc": "홈쿡 커뮤니티 레시피와 주방용품",
+          "tag": "레시피"
+        },
+        {
+          "name": "The Kitchn",
+          "url": "https://www.thekitchn.com/",
+          "desc": "주방 살림과 요리 기본기",
+          "tag": "주방 살림"
+        },
+        {
+          "name": "RecipeTin Eats",
+          "url": "https://www.recipetineats.com/",
+          "desc": "실패 없는 인기 가정식 레시피",
+          "tag": "레시피"
+        },
+        {
+          "name": "Just One Cookbook",
+          "url": "https://www.justonecookbook.com/",
+          "desc": "일본 가정식 레시피",
+          "tag": "일식"
+        },
+        {
+          "name": "King Arthur Baking",
+          "url": "https://www.kingarthurbaking.com/",
+          "desc": "베이킹 레시피와 베이킹 원리",
+          "tag": "베이킹"
+        },
+        {
+          "name": "Budget Bytes",
+          "url": "https://www.budgetbytes.com/",
+          "desc": "1인분 비용까지 계산한 알뜰 레시피",
+          "tag": "알뜰 요리"
+        },
+        {
+          "name": "Love Food Hate Waste",
+          "url": "https://www.lovefoodhatewaste.com/",
+          "desc": "음식물 쓰레기 줄이는 보관법과 남은 재료 레시피",
+          "tag": "음식 낭비 줄이기"
+        }
+      ]
+    },
+    {
+      "id": "nutrition",
+      "title": "영양·건강",
+      "desc": "잘 먹기 위해 알아두면 좋은 공식 정보",
+      "items": [
+        {
+          "name": "국가건강정보포털",
+          "url": "https://health.kdca.go.kr/",
+          "desc": "질병관리청의 건강·영양 정보",
+          "tag": "공식"
+        },
+        {
+          "name": "질병관리청",
+          "url": "https://www.kdca.go.kr/",
+          "desc": "감염병·식중독 등 건강 안전 정보",
+          "tag": "정부"
+        },
+        {
+          "name": "대한영양사협회",
+          "url": "https://www.dietitian.or.kr/",
+          "desc": "영양 정보와 식단 가이드",
+          "tag": "영양"
+        },
+        {
+          "name": "한국영양학회",
+          "url": "https://www.kns.or.kr/",
+          "desc": "한국인 영양소 섭취기준",
+          "tag": "영양"
+        },
+        {
+          "name": "WHO 영양",
+          "url": "https://www.who.int/health-topics/nutrition",
+          "desc": "세계보건기구의 영양·건강한 식단 정보",
+          "tag": "국제기구"
+        },
+        {
+          "name": "Harvard Nutrition Source",
+          "url": "https://nutritionsource.hsph.harvard.edu/",
+          "desc": "하버드 보건대학원의 식품·영양 정보",
+          "tag": "영양"
+        },
+        {
+          "name": "MyPlate",
+          "url": "https://www.myplate.gov/",
+          "desc": "미국 농무부의 균형 잡힌 식단 가이드",
+          "tag": "식단"
+        },
+        {
+          "name": "NHS Eat well",
+          "url": "https://www.nhs.uk/live-well/eat-well/",
+          "desc": "영국 국민보건서비스의 건강한 식사 가이드",
+          "tag": "식단"
+        },
+        {
+          "name": "USDA FoodData Central",
+          "url": "https://fdc.nal.usda.gov/",
+          "desc": "미국 농무부 식품 영양 성분 데이터베이스",
+          "tag": "영양 성분"
+        }
+      ]
+    },
+    {
+      "id": "safety",
+      "title": "식품 보관·위생 (해외 공식)",
+      "desc": "보관 기간과 위생 기준을 확인할 때",
+      "items": [
+        {
+          "name": "FoodKeeper",
+          "url": "https://www.foodsafety.gov/keep-food-safe/foodkeeper-app",
+          "desc": "식품별 냉장·냉동 보관 기간을 알려주는 미국 정부 도구",
+          "tag": "보관 기간"
+        },
+        {
+          "name": "USDA FSIS",
+          "url": "https://www.fsis.usda.gov/",
+          "desc": "미국 농무부 식품안전검사국의 조리·보관 안전 수칙",
+          "tag": "식품 안전"
+        },
+        {
+          "name": "FDA Food",
+          "url": "https://www.fda.gov/food",
+          "desc": "미국 식품의약국의 식품 안전 정보",
+          "tag": "식품 안전"
+        },
+        {
+          "name": "Food Standards Agency",
+          "url": "https://www.food.gov.uk/",
+          "desc": "영국 식품기준청의 위생·알레르기 정보",
+          "tag": "식품 안전"
+        }
+      ]
+    },
+    {
+      "id": "home",
+      "title": "살림·생활 안전",
+      "desc": "세제, 가전, 분리배출까지 살림에 필요한 공식 정보",
+      "items": [
+        {
+          "name": "초록누리",
+          "url": "https://ecolife.me.go.kr/",
+          "desc": "세제·섬유유연제 등 생활화학제품 성분과 안전 정보",
+          "tag": "생활화학제품"
+        },
+        {
+          "name": "환경부",
+          "url": "https://me.go.kr/",
+          "desc": "분리배출과 생활 환경 정책",
+          "tag": "정부"
+        },
+        {
+          "name": "한국환경공단",
+          "url": "https://www.keco.or.kr/",
+          "desc": "재활용·분리배출 정보",
+          "tag": "분리배출"
+        },
+        {
+          "name": "에너지효율등급",
+          "url": "https://eep.energy.or.kr/",
+          "desc": "가전제품 에너지효율등급과 전기요금 비교",
+          "tag": "가전"
+        },
+        {
+          "name": "한국가스안전공사",
+          "url": "https://www.kgs.or.kr/",
+          "desc": "부탄가스 등 가스 안전 사용 수칙",
+          "tag": "가스 안전"
+        },
+        {
+          "name": "국민재난안전포털",
+          "url": "https://www.safekorea.go.kr/",
+          "desc": "생활 안전과 재난 대비 행동 요령",
+          "tag": "생활 안전"
+        },
+        {
+          "name": "오늘의집",
+          "url": "https://ohou.se/",
+          "desc": "살림 노하우와 인테리어, 생활용품 쇼핑",
+          "tag": "살림"
+        }
+      ]
+    }
   ]
 }
