@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>PRICELOG · 이동 중</title>
+  <style>
+    body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+           background:#0a0a0f; color:#7070a0; font-family:sans-serif; font-size:13px; text-align:center; padding:0 16px; }
+    a { color:#00ff9d; }
+  </style>
+</head>
+<body>
+  <div id="msg">쿠팡으로 이동 중...</div>
+  <script>
+    // go.html?u=<Base64> 형식의 제휴링크를 풀어서 쿠팡으로 이동합니다
+    // (쿠팡 주소만 허용해서 다른 사이트로 악용되지 않게 막습니다)
+    const ALLOWED = ['link.coupang.com', 'www.coupang.com', 'coupang.com', 'm.coupang.com', 'coupa.ng'];
+    function decode(b64) {
+      let s = b64.trim().replace(/-/g, '+').replace(/_/g, '/');
+      while (s.length % 4) s += '=';
+      return atob(s);
+    }
+    try {
+      const u = new URLSearchParams(location.search).get('u') || '';
+      const target = new URL(decode(u));
+      if (target.protocol !== 'https:' || !ALLOWED.includes(target.hostname)) throw new Error('not allowed');
+      location.replace(target.href);
+    } catch (e) {
+      document.getElementById('msg').innerHTML = '링크가 올바르지 않아요. <a href="./">PRICELOG로 돌아가기</a>';
+    }
+  </script>
+</body>
+</html>
