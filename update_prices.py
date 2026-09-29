@@ -49,19 +49,36 @@ def search(keyword):
     return body.get("data", {}).get("productData", []) or []
 
 
-def find_product(product, results, known_id):
-    # 정확히 같은 상품일 때만 가격을 기록합니다. (비슷한 다른 상품 가격이 섞이는 문제 방지)
-    # 1) products.json의 id → 2) 지난번에 찾은 상품 ID → 3) 쿠팡 상품명(title)이 완전히 같은지
-    wanted_id = product.get("id") or known_id
-    if wanted_id:
+def base_name(title):
+    # "곰곰 신선한 1A 우유, 900ml, 4개" → "곰곰 신선한 1A 우유" (옵션 앞부분)
+    return str(title).split(",")[0].strip()
+
+
+def item_id(p):
+    # 검색 결과 링크에 들어 있는 옵션 번호(itemId)
+    m = re.search(r"[?&]itemId=(\d+)", str(p.get("productUrl", "")))
+    return m.group(1) if m else None
+
+
+def find_product(product, results, saved_item):
+    # 정확히 같은 상품(같은 옵션)일 때만 가격을 기록합니다.
+    # 1) products.json의 item_id 또는 지난번에 찾은 옵션 번호 → 그 옵션만
+    # 2) 옵션까지 똑같은 상품명 (예: "코카콜라 오리지널, 2L, 8개")
+    # 3) 옵션 없이 나오는 대표 상품명이 정확히 같은 것 (예: "곰곰 신선한 1A 우유")
+    wanted = str(product.get("item_id") or saved_item or "")
+    if wanted:
         for p in results:
-            if str(p.get("productId")) == str(wanted_id):
+            if item_id(p) == wanted:
                 return p
-        if product.get("id"):
-            return None
-    target = normalize(product.get("title") or product["name"])
+        return None  # 다른 옵션 가격이 섞이지 않게, 못 찾으면 기록하지 않아요
+    title = product.get("title") or product["name"]
+    full, base = normalize(title), normalize(base_name(title))
     for p in results:
-        if normalize(p.get("productName", "")) == target:
+        if normalize(p.get("productName", "")) == full:
+            return p
+    for p in results:
+        name = str(p.get("productName", ""))
+        if "," not in name and normalize(name) == base:
             return p
     return None
 
@@ -85,17 +102,17 @@ def main():
             time.sleep(DELAY_SECONDS)
         print(f"\n조회 중 ({i + 1}/{len(products)}): {product['name']}")
         try:
-            results = search(product.get("title") or product["name"])
+            results = search(product.get("keyword") or base_name(product.get("title") or product["name"]))
         except ApiError as e:
             print(f"  ⛔ API 오류로 여기서 멈춥니다 (재시도 안 함): {e}")
             break
 
         key = product["name"]
-        match = find_product(product, results, meta.get(key, {}).get("productId"))
+        match = find_product(product, results, meta.get(key, {}).get("itemId"))
         if match is None:
-            print("  ❌ 검색 결과에서 같은 상품을 못 찾아서 기록하지 않았어요. 검색 결과 상위 상품:")
+            print("  ❌ 검색 결과에서 같은 상품(옵션)을 못 찾아서 기록하지 않았어요. 검색 결과:")
             for p in results:
-                print(f"     - [{p.get('productId')}] {p.get('productName')} / {p.get('productPrice')}원")
+                print(f"     - [상품 {p.get('productId')} / 옵션 {item_id(p)}] {p.get('productName')} / {p.get('productPrice')}원")
             continue
 
         price = match.get("productPrice")
@@ -108,6 +125,7 @@ def main():
         # 상품 사진·ID도 같은 검색 결과에서 저장 (추가 호출 없음)
         meta[key] = {
             "productId": match.get("productId"),
+            "itemId": item_id(match),
             "productName": match.get("productName"),
             "image": match.get("productImage"),
             "rocket": bool(match.get("isRocket")),
@@ -115,7 +133,7 @@ def main():
             # 검색 결과의 상품 링크는 내 파트너스 계정의 제휴링크라서 그대로 저장
             "link": match.get("productUrl"),
         }
-        print(f"  ✅ {price:,}원 (상품 ID {match.get('productId')})")
+        print(f"  ✅ {price:,}원 (상품 {match.get('productId')} / 옵션 {item_id(match)}) {match.get('productName')}")
 
     with open("data/prices.json", "w", encoding="utf-8") as f:
         json.dump(prices, f, ensure_ascii=False, indent=2)
