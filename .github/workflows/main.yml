@@ -2,12 +2,19 @@ name: 가격 업데이트
 
 on:
   schedule:
-    - cron: "0 0,12 * * *"
+    # 매일 한 번, 한국 시간 오전 9시 17분 (쿠팡 API 호출을 최소화)
+    - cron: "17 0 * * *"
   workflow_dispatch:
+
+# 수동 실행과 자동 실행이 겹쳐서 API를 두 배로 부르지 않도록 한 번에 하나만 실행
+concurrency:
+  group: price-update
+  cancel-in-progress: false
 
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 150
     permissions:
       contents: write
 
@@ -35,4 +42,5 @@ jobs:
           git config --local user.name "GitHub Actions"
           git add data/prices.json
           git diff --staged --quiet || git commit -m "💰 가격 업데이트"
+          git pull --rebase
           git push

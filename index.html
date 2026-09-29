@@ -293,6 +293,12 @@
     }
     .chart-box { height:90px; }
 
+    .disclosure {
+      max-width:760px; margin:0 auto; padding:24px 20px 40px;
+      text-align:center; font-size:11px; line-height:1.6;
+      color:var(--muted);
+    }
+
     .no-chart {
       border-top:1px solid var(--border);
       padding:20px 28px;
@@ -326,8 +332,16 @@
   </div>
 </main>
 
+<footer class="disclosure">
+  이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.
+</footer>
+
 <script>
-const REPO_BASE = window.location.pathname.replace(/\/$/, '');
+const REPO_BASE = window.location.pathname.replace(/\/[^/]*\.html$/, '').replace(/\/$/, '');
+// GitHub Pages에서는 자동 수집된 최신 데이터를 저장소에서 바로 읽어옵니다
+const DATA_BASE = window.location.hostname.endsWith('.github.io')
+  ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/data'
+  : REPO_BASE + '/data';
 const fmt = p => Number(p).toLocaleString('ko-KR') + '원';
 
 function getSignal(history) {
@@ -419,11 +433,23 @@ function buildGauge(prices, curr) {
     </div>`;
 }
 
+// 제휴링크는 블로그와 같은 방식(go?u=Base64)으로 연결합니다
+function productLink(product) {
+  if (product.link_b64) return REPO_BASE + '/go.html?u=' + encodeURIComponent(product.link_b64);
+  return product.url;
+}
+
 async function load() {
-  const res = await fetch(REPO_BASE + '/data/prices.json?_=' + Date.now());
-  const data = await res.json();
+  const bust = '?_=' + Date.now();
+  const [productsRes, pricesRes] = await Promise.all([
+    fetch(DATA_BASE + '/products.json' + bust),
+    fetch(DATA_BASE + '/prices.json' + bust),
+  ]);
+  const { products } = await productsRes.json();
+  const { history = {} } = await pricesRes.json();
+  products.forEach(p => { p.history = history[p.name] || []; });
   let lastDate = '';
-  data.products.forEach(p => {
+  products.forEach(p => {
     if (p.history.length>0){ const d=p.history[p.history.length-1].date; if(d>lastDate)lastDate=d; }
   });
   if (lastDate) document.getElementById('updated-at').textContent = lastDate;
@@ -431,7 +457,7 @@ async function load() {
   const container = document.getElementById('cards');
   container.innerHTML = '';
 
-  data.products.forEach((product, i) => {
+  products.forEach((product, i) => {
     const h = product.history;
     const hasData = h.length > 0;
     const curr = hasData ? h[h.length-1].price : null;
@@ -494,7 +520,7 @@ async function load() {
         ` : `<div style="padding:16px 0;color:var(--muted);font-size:13px">첫 데이터 수집 중이에요...</div>`}
       </div>
       <div class="cta-wrap">
-        <a class="cta-btn" href="${product.url}" target="_blank">🛍 쿠팡에서 보기 →</a>
+        <a class="cta-btn" href="${productLink(product)}" target="_blank" rel="sponsored nofollow noopener">🛍 쿠팡에서 보기 →</a>
       </div>
       ${h.length>=2
         ? `<div class="chart-section"><div class="chart-title">가격 추이</div><div class="chart-box"><canvas id="${cid}"></canvas></div></div>`
