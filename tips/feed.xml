@@ -1,0 +1,817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>싸다구 장보기 노트</title>
+  <link>https://daeseji.github.io/pricelog/tips/</link>
+  <description>쿠팡 싸게 사는 습관, 재료 고르는 법, 보관, 레시피, 살림 이야기</description>
+  <language>ko</language>
+  <item>
+    <title>쿠팡에서 같은 물건, 더 싸게 사는 7가지 습관</title>
+    <link>https://daeseji.github.io/pricelog/tips/coupang-save-habits/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/coupang-save-habits/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>가격은 매일 바뀌어요. 필요한 순간에 급하게 사지 않고, 싼 날 사는 사람이 되는 작은 습관들.</description>
+  </item>
+  <item>
+    <title>진짜 싼 건 &#x27;100g당 가격&#x27;이 알려줘요</title>
+    <link>https://daeseji.github.io/pricelog/tips/unit-price/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/unit-price/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>2L 18병과 500ml 20병, 어느 쪽이 쌀까? 단위 가격으로 헷갈림 없이 비교하는 법과 자주 속는 함정 5가지.</description>
+  </item>
+  <item>
+    <title>대용량, 살까 말까? 3분이면 답 나와요</title>
+    <link>https://daeseji.github.io/pricelog/tips/bulk-buying/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/bulk-buying/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>싸다고 샀다가 반은 버린 적 있다면. 다 쓰는 속도와 기한, 보관 공간으로 판단하는 대용량 체크리스트.</description>
+  </item>
+  <item>
+    <title>싱싱한 채소 고르는 법, 그리고 오래 두고 먹는 법</title>
+    <link>https://daeseji.github.io/pricelog/tips/vegetables/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/vegetables/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>잎채소·뿌리채소·열매채소별로 신선도 보는 포인트와, 사 온 채소를 냉장고에서 오래 살리는 보관 요령.</description>
+  </item>
+  <item>
+    <title>생선·해산물, 실패 없이 고르는 법</title>
+    <link>https://daeseji.github.io/pricelog/tips/fish-seafood/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/fish-seafood/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>눈과 아가미, 살의 탄력만 봐도 절반은 성공이에요. 생물 생선부터 냉동 해산물, 조개·새우·오징어까지.</description>
+  </item>
+  <item>
+    <title>고기 고르는 법, 색깔·지방·부위만 알면 끝</title>
+    <link>https://daeseji.github.io/pricelog/tips/meat/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/meat/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>소·돼지·닭 신선도 보는 법, 진공포장 고기 색이 어두운 이유, 그리고 용도별 가성비 부위까지.</description>
+  </item>
+  <item>
+    <title>계절별 제철 장보기 달력</title>
+    <link>https://daeseji.github.io/pricelog/tips/seasonal/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/seasonal/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>제철 재료는 맛있고, 많이 나와서 값도 착해요. 봄·여름·가을·겨울에 뭘 사면 좋은지 한 장으로 정리했어요.</description>
+  </item>
+  <item>
+    <title>냉동실 200% 활용법, 소분·냉동·해동</title>
+    <link>https://daeseji.github.io/pricelog/tips/freezer/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/freezer/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>대용량으로 싸게 사서 끝까지 맛있게 먹는 법. 납작 냉동과 이름표, 재료별 요령, 그리고 올바른 해동까지.</description>
+  </item>
+  <item>
+    <title>소비기한, 제대로 읽으면 덜 버려요</title>
+    <link>https://daeseji.github.io/pricelog/tips/expiry-date/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/expiry-date/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>유통기한과 소비기한은 뭐가 다를까? 날짜 표시 읽는 법과 개봉 후 꼭 알아둘 점을 정리했어요.</description>
+  </item>
+  <item>
+    <title>장 한 번 보고 일주일 버티는 식단 짜기</title>
+    <link>https://daeseji.github.io/pricelog/tips/weekly-meal-prep/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/weekly-meal-prep/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>재료를 겹쳐 쓰면 장보기도 줄고 버리는 것도 줄어요. 1인 가구 기준 장보기 리스트와 5일 식단, 일요일 1시간 준비 순서.</description>
+  </item>
+  <item>
+    <title>폭신한 뚝배기 계란찜, 실패 없는 비율</title>
+    <link>https://daeseji.github.io/pricelog/tips/gyeran-jjim/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/gyeran-jjim/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>계란과 물을 1:1로 맞추고 약불만 지키면 식당처럼 부풀어 오르는 계란찜이 돼요. 전자레인지 버전까지.</description>
+  </item>
+  <item>
+    <title>신김치 하나로 끝내는 돼지고기 김치찌개</title>
+    <link>https://daeseji.github.io/pricelog/tips/kimchi-jjigae/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/kimchi-jjigae/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>김치를 먼저 충분히 볶는 것만으로 맛이 확 깊어져요. 김치찌개 기본 레시피와 김치 상태별 맛 조절법.</description>
+  </item>
+  <item>
+    <title>구수한 된장찌개, 육수부터 넣는 순서까지</title>
+    <link>https://daeseji.github.io/pricelog/tips/doenjang-jjigae/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/doenjang-jjigae/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>멸치 육수에 된장을 풀고 단단한 채소부터 넣으면 끝. 집에 있는 채소로 끓이는 기본 된장찌개.</description>
+  </item>
+  <item>
+    <title>불맛 나는 제육볶음, 양념 황금 비율</title>
+    <link>https://daeseji.github.io/pricelog/tips/jeyuk-bokkeum/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/jeyuk-bokkeum/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>고추장 2 : 간장 2 : 고춧가루 1 : 설탕 1. 이 비율 하나면 식당 제육볶음이 집에서 나와요.</description>
+  </item>
+  <item>
+    <title>5분 완성 간장계란밥, 제대로 맛있게</title>
+    <link>https://daeseji.github.io/pricelog/tips/ganjang-gyeran-bap/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/ganjang-gyeran-bap/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>가장 쉬운 한 끼지만 반숙 정도와 버터 한 조각이 맛을 가릅니다. 기본과 응용 4가지.</description>
+  </item>
+  <item>
+    <title>분식집 맛 떡볶이, 집에서 20분</title>
+    <link>https://daeseji.github.io/pricelog/tips/tteokbokki/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/tteokbokki/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>국물이 자작하게 졸아들 때 떡에 양념이 배요. 고추장과 고춧가루를 함께 쓰는 기본 떡볶이.</description>
+  </item>
+  <item>
+    <title>멸치 육수 잔치국수, 면 삶는 법이 반이에요</title>
+    <link>https://daeseji.github.io/pricelog/tips/janchi-guksu/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/janchi-guksu/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>따뜻한 멸치 육수에 탱글한 소면. 면을 퍼지지 않게 삶고 헹구는 요령과 기본 양념장.</description>
+  </item>
+  <item>
+    <title>김치볶음밥, 간장을 태우면 맛이 달라져요</title>
+    <link>https://daeseji.github.io/pricelog/tips/kimchi-fried-rice/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/kimchi-fried-rice/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>파기름을 내고 김치를 먼저 볶은 뒤 간장을 팬에 살짝 태우는 게 비법. 남은 김치 처리에도 최고예요.</description>
+  </item>
+  <item>
+    <title>소고기 미역국, 참기름에 오래 볶는 게 비결</title>
+    <link>https://daeseji.github.io/pricelog/tips/miyeok-guk/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/miyeok-guk/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>불린 미역과 소고기를 참기름에 충분히 볶고 푹 끓이면 국물이 뽀얗게 우러나요. 생일이 아니어도 좋은 국.</description>
+  </item>
+  <item>
+    <title>밥도둑 두부조림, 두부를 먼저 굽는 이유</title>
+    <link>https://daeseji.github.io/pricelog/tips/dubu-jorim/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/dubu-jorim/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>두부를 노릇하게 부친 뒤 양념에 졸이면 부서지지 않고 양념이 쏙 배요. 10분 반찬.</description>
+  </item>
+  <item>
+    <title>윤기 나는 감자조림, 전분 빼기부터</title>
+    <link>https://daeseji.github.io/pricelog/tips/gamja-jorim/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/gamja-jorim/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>감자를 찬물에 담가 전분을 빼면 부서지지 않고 쫀득하게 졸여져요. 도시락 반찬으로도 좋은 감자조림.</description>
+  </item>
+  <item>
+    <title>시금치나물, 30초 데치기가 전부예요</title>
+    <link>https://daeseji.github.io/pricelog/tips/sigeumchi-namul/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/sigeumchi-namul/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>끓는 소금물에 짧게 데치고 물기를 꼭 짜야 아삭하고 고소해요. 기본 나물 무침법 하나로 여러 나물까지.</description>
+  </item>
+  <item>
+    <title>비린내 없는 콩나물무침, 뚜껑 규칙만 지키세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/kongnamul-muchim/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/kongnamul-muchim/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>뚜껑을 닫고 삶았다면 끝까지 닫고, 열었다면 끝까지 열어두세요. 아삭한 콩나물무침 기본과 빨간 무침.</description>
+  </item>
+  <item>
+    <title>도톰한 계란말이, 약불과 세 번 나눠 붓기</title>
+    <link>https://daeseji.github.io/pricelog/tips/gyeran-mari/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/gyeran-mari/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>계란물을 한 번에 붓지 않고 세 번에 나눠 말면 두툼하고 모양 예쁜 계란말이가 돼요.</description>
+  </item>
+  <item>
+    <title>달콤짭짤 소불고기, 배 대신 이걸 넣어도 돼요</title>
+    <link>https://daeseji.github.io/pricelog/tips/bulgogi/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/bulgogi/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>간장 4 : 설탕 1.5 : 과일 3 비율로 재우면 연하고 달콤한 불고기가 돼요. 재우는 시간과 굽는 요령까지.</description>
+  </item>
+  <item>
+    <title>냉동 우동면으로 볶음우동, 15분 컷</title>
+    <link>https://daeseji.github.io/pricelog/tips/stir-fried-udon/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/stir-fried-udon/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>우동면은 데쳐서 풀어주고, 소스는 간장·굴소스·설탕 한 번에. 국물 우동 제품 면으로도 만들 수 있어요.</description>
+  </item>
+  <item>
+    <title>새콤달콤 비빔국수, 양념장 한 번에 만들기</title>
+    <link>https://daeseji.github.io/pricelog/tips/bibim-guksu/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/bibim-guksu/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>고추장 2 : 식초 2 : 설탕 1.5 비율의 양념장에 차갑게 헹군 소면을 비비면 끝. 여름 별미.</description>
+  </item>
+  <item>
+    <title>참치마요덮밥, 편의점보다 맛있게</title>
+    <link>https://daeseji.github.io/pricelog/tips/tuna-mayo-bowl/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/tuna-mayo-bowl/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>참치캔 하나와 계란, 양파만 있으면 10분 한 그릇. 간장 양파가 맛의 핵심이에요.</description>
+  </item>
+  <item>
+    <title>양배추전, 남은 양배추로 오코노미야키처럼</title>
+    <link>https://daeseji.github.io/pricelog/tips/cabbage-pancake/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/cabbage-pancake/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>양배추를 가늘게 채 썰어 계란과 부침가루만 넣고 도톰하게 부치면 오코노미야키 느낌이 나요.</description>
+  </item>
+  <item>
+    <title>애호박전, 소금 10분이 식감을 바꿔요</title>
+    <link>https://daeseji.github.io/pricelog/tips/hobak-jeon/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/hobak-jeon/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>애호박에 소금을 뿌려 물기를 빼면 부칠 때 계란옷이 벗겨지지 않고 촉촉해요. 기본 전 부치는 법.</description>
+  </item>
+  <item>
+    <title>냉동 블루베리 요거트볼, 5분 아침</title>
+    <link>https://daeseji.github.io/pricelog/tips/blueberry-yogurt-bowl/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/blueberry-yogurt-bowl/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>냉동 블루베리를 살짝 녹여 요거트에 올리면 과즙이 퍼져 색도 맛도 예뻐요. 전자레인지 블루베리 콩포트까지.</description>
+  </item>
+  <item>
+    <title>소갈비살 집에서 굽기, 팬 온도가 전부예요</title>
+    <link>https://daeseji.github.io/pricelog/tips/galbisal-gui/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/galbisal-gui/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>고기를 실온에 잠깐 두고, 물기를 닦고, 충분히 달군 팬에 한 번만 뒤집기. 집에서도 고깃집처럼.</description>
+  </item>
+  <item>
+    <title>허브솔트 채소구이, 에어프라이어에 넣고 끝</title>
+    <link>https://daeseji.github.io/pricelog/tips/herb-salt-roast-veg/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/herb-salt-roast-veg/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>채소를 크게 썰어 올리브유와 허브솔트만 버무려 구우면 달큰한 채소구이 완성. 고기 곁들이기에도 좋아요.</description>
+  </item>
+  <item>
+    <title>참소스 양파절임, 고기 먹을 때 필수 곁들이</title>
+    <link>https://daeseji.github.io/pricelog/tips/chamsauce-onion/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/chamsauce-onion/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>양파를 얇게 썰어 찬물에 매운맛을 빼고 참소스를 부으면 끝. 고깃집 양파절임을 집에서.</description>
+  </item>
+  <item>
+    <title>삼겹살 숙주볶음, 숙주는 30초만</title>
+    <link>https://daeseji.github.io/pricelog/tips/samgyeop-sukju/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/samgyeop-sukju/</guid>
+    <category>레시피</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>삼겹살 기름에 숙주를 센불로 짧게 볶으면 아삭한 한 접시가 돼요. 굴소스 하나로 간단하게.</description>
+  </item>
+  <item>
+    <title>계란 고르는 법, 껍데기 숫자 10자리를 읽어요</title>
+    <link>https://daeseji.github.io/pricelog/tips/eggs/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/eggs/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>계란 껍데기에 찍힌 숫자에는 낳은 날짜와 농장, 닭을 키운 환경이 들어 있어요. 난각번호와 등급·크기 읽는 법.</description>
+  </item>
+  <item>
+    <title>사과·배 고르는 법과 오래 두는 보관법</title>
+    <link>https://daeseji.github.io/pricelog/tips/apple-pear/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/apple-pear/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>묵직하고 꼭지가 싱싱한 게 맛있어요. 사과는 다른 과일과 따로 보관해야 하는 이유까지.</description>
+  </item>
+  <item>
+    <title>귤·오렌지 고르는 법, 껍질이 말해줘요</title>
+    <link>https://daeseji.github.io/pricelog/tips/citrus/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/citrus/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>껍질이 얇고 알맹이와 딱 붙어 있으면 달고 싱싱해요. 박스로 산 귤 오래 두는 법까지.</description>
+  </item>
+  <item>
+    <title>수박·참외 고르는 법, 실패 확률 줄이기</title>
+    <link>https://daeseji.github.io/pricelog/tips/watermelon-melon/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/watermelon-melon/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>줄무늬와 꼭지, 두드리는 소리, 배꼽 크기. 여름 과일을 고를 때 볼 곳과 자른 수박 보관법.</description>
+  </item>
+  <item>
+    <title>딸기·블루베리 고르기, 씻는 타이밍이 중요해요</title>
+    <link>https://daeseji.github.io/pricelog/tips/strawberry-berries/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/strawberry-berries/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>베리류는 물에 약해요. 신선한 걸 고르는 법과, 먹기 직전에만 씻어야 하는 이유, 냉동 베리 고르는 법까지.</description>
+  </item>
+  <item>
+    <title>두부·콩나물 고르는 법, 용도부터 정하세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/tofu-sprouts/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/tofu-sprouts/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>부침용·찌개용·연두부는 쓰임이 달라요. 콩 원산지 표시 읽는 법과 싱싱한 콩나물 고르기, 남은 두부 보관법.</description>
+  </item>
+  <item>
+    <title>쌀 고르는 법, 도정일자가 제일 중요해요</title>
+    <link>https://daeseji.github.io/pricelog/tips/rice/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/rice/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>쌀 포대에는 품종, 생산연도, 도정일자, 등급이 적혀 있어요. 맛있는 쌀 고르는 법과 벌레 안 생기는 보관법.</description>
+  </item>
+  <item>
+    <title>사 먹는 김치 고르는 법과 익힘 조절</title>
+    <link>https://daeseji.github.io/pricelog/tips/kimchi-choose/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/kimchi-choose/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>원산지와 원재료, 숙성 정도를 보고 골라요. 김치를 빨리 또는 천천히 익히는 보관 요령까지.</description>
+  </item>
+  <item>
+    <title>우유 고르는 법, &#x27;1A&#x27;와 살균 방식 읽기</title>
+    <link>https://daeseji.github.io/pricelog/tips/milk-yogurt/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/milk-yogurt/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>우유 팩의 1A 등급은 세균수 기준이에요. 초고온 살균과 저온 살균의 차이, 요거트 고르는 법까지.</description>
+  </item>
+  <item>
+    <title>치즈·버터 고르는 법, &#x27;가공&#x27;이라는 글자를 보세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/cheese-butter/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/cheese-butter/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>자연치즈와 가공치즈, 버터와 가공버터는 이름이 비슷해도 달라요. 원재료 표시 읽는 법과 보관법.</description>
+  </item>
+  <item>
+    <title>냉동식품 고르는 법, 뒷면 세 줄만 읽어요</title>
+    <link>https://daeseji.github.io/pricelog/tips/frozen-foods/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/frozen-foods/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>만두·볶음밥·튀김 같은 냉동 간편식은 원재료 함량, 1회 분량, 조리법을 보면 실패가 줄어요.</description>
+  </item>
+  <item>
+    <title>간장·된장·고추장 고르는 법, 종류부터 알아요</title>
+    <link>https://daeseji.github.io/pricelog/tips/sauces-jang/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/sauces-jang/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>양조간장, 국간장, 혼합간장은 쓰임이 달라요. 장류 라벨 읽는 법과 개봉 후 보관법.</description>
+  </item>
+  <item>
+    <title>식용유 고르는 법, 요리 온도에 맞추세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/cooking-oil/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/cooking-oil/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>튀김·볶음·드레싱마다 어울리는 기름이 달라요. 올리브유, 카놀라유, 참기름·들기름 쓰임과 보관법.</description>
+  </item>
+  <item>
+    <title>면 고르는 법, 소면부터 파스타까지</title>
+    <link>https://daeseji.github.io/pricelog/tips/noodles/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/noodles/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>굵기와 재료에 따라 삶는 시간과 어울리는 요리가 달라요. 건면·생면·냉동면 보관 차이까지.</description>
+  </item>
+  <item>
+    <title>멸치 고르는 법, 크기마다 쓰임이 달라요</title>
+    <link>https://daeseji.github.io/pricelog/tips/dried-anchovy/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/dried-anchovy/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>볶음용 잔멸치부터 육수용 대멸까지. 은빛이 도는 좋은 멸치 고르는 법과 눅눅해지지 않는 보관법.</description>
+  </item>
+  <item>
+    <title>감자·고구마 고르는 법, 포슬 vs 촉촉</title>
+    <link>https://daeseji.github.io/pricelog/tips/potato-sweet-potato/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/potato-sweet-potato/</guid>
+    <category>재료 고르기</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>감자는 포슬한 것과 쫀득한 것, 고구마는 밤고구마와 호박고구마로 나뉘어요. 고르는 법과 보관 온도.</description>
+  </item>
+  <item>
+    <title>냉장고 정리법, 칸마다 온도가 달라요</title>
+    <link>https://daeseji.github.io/pricelog/tips/fridge-organizing/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/fridge-organizing/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>냉장고는 칸마다 온도가 달라요. 어디에 무엇을 둘지, 얼마나 채울지만 알아도 음식이 덜 상해요.</description>
+  </item>
+  <item>
+    <title>밥 맛있게 짓기, 불리기와 뜸이 절반이에요</title>
+    <link>https://daeseji.github.io/pricelog/tips/cooking-rice/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/cooking-rice/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>쌀을 가볍게 씻고 30분 불린 뒤 물은 쌀보다 조금 더. 냄비밥 짓는 법과 남은 밥 맛있게 얼리는 법.</description>
+  </item>
+  <item>
+    <title>빵 보관법, 냉장고에 넣으면 안 돼요</title>
+    <link>https://daeseji.github.io/pricelog/tips/bread-storage/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/bread-storage/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>빵은 냉장고에서 오히려 빨리 딱딱해져요. 2~3일 안에 먹을 건 실온, 그 이상은 냉동이 정답.</description>
+  </item>
+  <item>
+    <title>채소 미리 손질해두기, 평일 저녁이 쉬워져요</title>
+    <link>https://daeseji.github.io/pricelog/tips/vegetable-prep/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/vegetable-prep/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>주말에 30분만 투자해서 채소를 씻고 썰어두면 평일 요리 시간이 절반으로 줄어요. 채소별 손질·보관 요령.</description>
+  </item>
+  <item>
+    <title>마늘·생강·파 보관법, 냉동이 답이에요</title>
+    <link>https://daeseji.github.io/pricelog/tips/garlic-ginger-scallion/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/garlic-ginger-scallion/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>요리에 조금씩 들어가는 향신 채소는 늘 남아서 버리게 되죠. 다지고 썰어 냉동해두면 몇 주 동안 바로 써요.</description>
+  </item>
+  <item>
+    <title>고기 굽기 기본, 예열·물기·한 번 뒤집기</title>
+    <link>https://daeseji.github.io/pricelog/tips/pan-searing/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/pan-searing/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>비싼 고기가 아니어도 굽는 법만 바꾸면 맛이 달라져요. 팬 예열, 물기 제거, 뒤집는 타이밍, 쉬게 하기.</description>
+  </item>
+  <item>
+    <title>칼질 기본, 썰기 이름만 알아도 레시피가 쉬워요</title>
+    <link>https://daeseji.github.io/pricelog/tips/knife-basics/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/knife-basics/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>채썰기, 어슷썰기, 송송썰기, 깍둑썰기. 레시피에 나오는 썰기 용어 정리와 안전하게 칼 쓰는 법.</description>
+  </item>
+  <item>
+    <title>계량 기본, 1큰술·1컵은 얼마일까?</title>
+    <link>https://daeseji.github.io/pricelog/tips/measuring/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/measuring/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>한국 레시피의 1큰술은 15ml, 1작은술은 5ml, 1컵은 200ml예요. 계량스푼이 없을 때 밥숟가락·종이컵으로 맞추는 법.</description>
+  </item>
+  <item>
+    <title>멸치다시마 육수 기본, 한 번에 넉넉히</title>
+    <link>https://daeseji.github.io/pricelog/tips/anchovy-broth/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/anchovy-broth/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>찬물에서 시작해 다시마는 일찍 건지고 멸치는 10~15분. 한식 국물 요리의 바탕이 되는 기본 육수와 보관법.</description>
+  </item>
+  <item>
+    <title>간 맞추는 법, 짠맛·단맛·신맛의 균형</title>
+    <link>https://daeseji.github.io/pricelog/tips/seasoning-basics/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/seasoning-basics/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>간은 마지막에, 조금씩, 맛보면서. 소금·간장·액젓의 차이와 너무 짜거나 싱거울 때 되살리는 법.</description>
+  </item>
+  <item>
+    <title>에어프라이어 제대로 쓰기, 예열과 흔들기</title>
+    <link>https://daeseji.github.io/pricelog/tips/airfryer-tips/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/airfryer-tips/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>겹치지 않게 넣고, 중간에 한 번 흔들고, 종이호일은 음식과 함께. 냉동식품부터 채소구이까지 실패 없는 요령.</description>
+  </item>
+  <item>
+    <title>음식물 쓰레기 줄이는 법, 사는 것부터</title>
+    <link>https://daeseji.github.io/pricelog/tips/food-waste-reduce/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/food-waste-reduce/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>버리는 음식은 결국 버린 돈이에요. 장보기 전 냉장고 확인부터 남은 재료 리메이크, 음식물 쓰레기 버리는 요령까지.</description>
+  </item>
+  <item>
+    <title>도마·행주 위생, 날고기용은 따로 써요</title>
+    <link>https://daeseji.github.io/pricelog/tips/cutting-board-hygiene/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/cutting-board-hygiene/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>날고기를 썬 도마에 바로 채소를 썰면 세균이 옮겨가요. 도마 나눠 쓰기와 도마·행주·수세미 관리법.</description>
+  </item>
+  <item>
+    <title>도시락 싸는 법, 식혀서 담는 게 첫째예요</title>
+    <link>https://daeseji.github.io/pricelog/tips/lunchbox/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/lunchbox/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>뜨거운 채로 뚜껑을 닫으면 수증기가 맺혀 쉽게 상해요. 상하지 않는 도시락 반찬 고르기와 여름철 요령.</description>
+  </item>
+  <item>
+    <title>여름철 식중독 예방, 6가지 수칙</title>
+    <link>https://daeseji.github.io/pricelog/tips/summer-food-safety/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/summer-food-safety/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>손 씻기, 익혀 먹기, 끓여 먹기, 세척·소독, 구분 사용, 보관 온도. 식품의약품안전처가 권하는 기본 수칙을 생활에 맞게 정리했어요.</description>
+  </item>
+  <item>
+    <title>프라이팬 관리법, 코팅·스테인리스·무쇠</title>
+    <link>https://daeseji.github.io/pricelog/tips/pan-care/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/pan-care/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>코팅팬은 센불에 빈 팬 금지, 스테인리스는 충분히 예열, 무쇠는 기름칠. 팬을 오래 쓰는 소재별 요령.</description>
+  </item>
+  <item>
+    <title>전자레인지 똑똑하게 쓰기, 용기와 데우는 법</title>
+    <link>https://daeseji.github.io/pricelog/tips/microwave-tips/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/microwave-tips/</guid>
+    <category>보관·요리</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>전자레인지용 용기, 가운데 비우기, 중간에 저어주기. 골고루 데우는 요령과 넣으면 안 되는 것들.</description>
+  </item>
+  <item>
+    <title>가격 기록, 왜 해야 할까? 온라인 가격이 움직이는 이유</title>
+    <link>https://daeseji.github.io/pricelog/tips/price-tracking-basics/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/price-tracking-basics/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>온라인 가격은 수요와 재고, 경쟁, 할인 행사에 따라 수시로 바뀌어요. 가격을 기록하면 &#x27;싼 날&#x27;이 보이기 시작해요.</description>
+  </item>
+  <item>
+    <title>할인율 착시 구별법, 진짜 싼 건지 확인하기</title>
+    <link>https://daeseji.github.io/pricelog/tips/fake-discount/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/fake-discount/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>50% 할인이 꼭 반값이라는 뜻은 아니에요. 기준 가격, 묶음 구성, 옵션 가격을 확인해 진짜 할인을 구별하는 법.</description>
+  </item>
+  <item>
+    <title>카드 할인·쿠폰·적립, 결제 전 체크리스트</title>
+    <link>https://daeseji.github.io/pricelog/tips/card-coupon-order/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/card-coupon-order/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>쿠폰 조건, 카드 즉시할인, 적립까지 결제 직전에 한 번만 확인해도 몇천 원이 달라져요. 할인 수단 똑똑하게 쓰는 법.</description>
+  </item>
+  <item>
+    <title>장바구니 설계법, 최소 주문 금액에 끌려가지 않기</title>
+    <link>https://daeseji.github.io/pricelog/tips/cart-design/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/cart-design/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>무료배송·최소 주문 금액을 맞추려다 필요 없는 걸 사는 일이 많아요. 장바구니를 미리 설계하는 법.</description>
+  </item>
+  <item>
+    <title>정기결제·멤버십 점검하기, 새는 돈 막기</title>
+    <link>https://daeseji.github.io/pricelog/tips/subscription-audit/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/subscription-audit/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>한두 번 쓰고 잊어버린 구독이 매달 빠져나가고 있을지 몰라요. 카드 명세서로 구독을 점검하고 정리하는 법.</description>
+  </item>
+  <item>
+    <title>장보기 목록 쓰는 법, 냉장고부터 열어요</title>
+    <link>https://daeseji.github.io/pricelog/tips/shopping-list/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/shopping-list/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>목록 없이 장을 보면 이미 있는 걸 또 사고, 필요한 걸 빼먹어요. 냉장고 확인부터 식단, 목록까지 10분 루틴.</description>
+  </item>
+  <item>
+    <title>한 달 식비 예산 짜기, 영수증 3개월이면 충분해요</title>
+    <link>https://daeseji.github.io/pricelog/tips/food-budget/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/food-budget/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>이상적인 숫자보다 내 실제 지출에서 시작하세요. 지난 3개월 식비로 주간 예산을 정하고 지키는 방법.</description>
+  </item>
+  <item>
+    <title>PB 상품 잘 고르는 법, 제조원을 보세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/pb-brands/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/pb-brands/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>유통사가 자체 브랜드로 파는 PB 상품은 싸고 품질도 괜찮은 게 많아요. 제조원 확인하는 법과 PB가 잘 맞는 품목.</description>
+  </item>
+  <item>
+    <title>상품 리뷰 제대로 읽는 법, 별점보다 중요한 것</title>
+    <link>https://daeseji.github.io/pricelog/tips/review-reading/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/review-reading/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>평균 별점은 같아도 속사정은 달라요. 별점 분포, 최신 리뷰, 사진 리뷰, 광고 표시까지 리뷰를 읽는 순서.</description>
+  </item>
+  <item>
+    <title>식품 원재료 표시 읽는 법, 앞에 있을수록 많아요</title>
+    <link>https://daeseji.github.io/pricelog/tips/ingredient-label/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/ingredient-label/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>원재료명은 많이 들어간 순서로 적혀 있어요. 식품 유형, 원산지, 알레르기 표시까지 식품 뒷면 읽는 법.</description>
+  </item>
+  <item>
+    <title>영양성분표 읽는 법, 기준량부터 확인해요</title>
+    <link>https://daeseji.github.io/pricelog/tips/nutrition-label/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/nutrition-label/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>영양성분이 총 내용량 기준인지, 100g 기준인지, 1회 섭취량 기준인지에 따라 숫자가 완전히 달라져요.</description>
+  </item>
+  <item>
+    <title>반려견 사료·간식 살 때 체크할 것</title>
+    <link>https://daeseji.github.io/pricelog/tips/pet-food-choice/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/pet-food-choice/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>생애 단계, 원재료, 급여량 표, 봉지 크기. 반려견 사료를 고르고 바꿀 때 알아두면 좋은 기본 체크리스트.</description>
+  </item>
+  <item>
+    <title>온라인 판매자 확인하기, 누가 파는지 먼저 봐요</title>
+    <link>https://daeseji.github.io/pricelog/tips/seller-check/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/seller-check/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>같은 상품도 누가 파는지에 따라 배송, 교환, 반품 조건이 달라요. 판매자 정보와 해외 구매대행 표시 확인하는 법.</description>
+  </item>
+  <item>
+    <title>온라인 장보기 교환·환불 잘 받는 법</title>
+    <link>https://daeseji.github.io/pricelog/tips/return-refund/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/return-refund/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>받자마자 확인하고, 사진을 남기고, 기한 안에 신청하기. 신선식품과 공산품의 교환·환불 요령.</description>
+  </item>
+  <item>
+    <title>1년 세일 시즌 달력, 언제 사면 쌀까?</title>
+    <link>https://daeseji.github.io/pricelog/tips/sale-calendar/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/sale-calendar/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>명절 전후, 연말, 새 학기, 계절이 바뀔 때. 물건마다 싸지는 시기를 알면 기다릴지 살지 판단이 쉬워요.</description>
+  </item>
+  <item>
+    <title>생수 고르는 법, &#x27;먹는샘물&#x27;과 수원지를 보세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/bottled-water/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/bottled-water/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>생수 병의 식품 유형과 수원지 표시, 무라벨 생수 정보 확인법, 단위 가격 비교와 보관법까지.</description>
+  </item>
+  <item>
+    <title>생필품, 얼마나 쟁여둘까? 적정 비축량 정하기</title>
+    <link>https://daeseji.github.io/pricelog/tips/stockpile/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/stockpile/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>싸다고 너무 많이 쟁이면 자리와 돈이 묶여요. 생필품별 적정 비축량과 재고 관리하는 법.</description>
+  </item>
+  <item>
+    <title>충동구매 줄이는 법, 장바구니와 거리 두기</title>
+    <link>https://daeseji.github.io/pricelog/tips/impulse-buying/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/impulse-buying/</guid>
+    <category>쇼핑 팁</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>할인 알림, 타임딜, 추천 상품. 사고 싶은 마음이 들 때 한 번 멈추는 실전 규칙 7가지.</description>
+  </item>
+  <item>
+    <title>세탁 세제 고르는 법, 드럼용과 양이 중요해요</title>
+    <link>https://daeseji.github.io/pricelog/tips/laundry-detergent/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/laundry-detergent/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>액체·가루·캡슐 중 무엇을 고를지, 드럼세탁기용 표시는 왜 봐야 하는지, 세제를 많이 넣으면 생기는 문제까지.</description>
+  </item>
+  <item>
+    <title>섬유유연제 제대로 쓰기, 수건과 운동복엔 조금만</title>
+    <link>https://daeseji.github.io/pricelog/tips/fabric-softener/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/fabric-softener/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>섬유유연제는 마지막 헹굼에 넣고, 수건과 기능성 의류엔 줄이거나 빼는 게 좋아요. 올바른 사용법과 향 고르기.</description>
+  </item>
+  <item>
+    <title>실내건조 냄새 없애는 법, 빨리 말리는 게 전부예요</title>
+    <link>https://daeseji.github.io/pricelog/tips/indoor-drying/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/indoor-drying/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>빨래 쉰내는 마르는 동안 세균이 늘어서 생겨요. 세탁 후 바로 꺼내기, 간격 넓히기, 바람과 제습까지.</description>
+  </item>
+  <item>
+    <title>세탁 기호 읽는 법, 옷 안쪽 라벨 해독하기</title>
+    <link>https://daeseji.github.io/pricelog/tips/laundry-symbols/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/laundry-symbols/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>대야, 손, 삼각형, 다리미, 동그라미. 옷 라벨의 세탁 기호만 읽을 줄 알면 아끼는 옷을 망치지 않아요.</description>
+  </item>
+  <item>
+    <title>수건 관리법, 뽀송하고 냄새 없게</title>
+    <link>https://daeseji.github.io/pricelog/tips/towel-care/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/towel-care/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>유연제는 빼고, 세제는 적당히, 완전히 말리기. 수건 쉰내를 없애고 오래 쓰는 법.</description>
+  </item>
+  <item>
+    <title>샴푸 고르는 법, 두피 타입부터 알아요</title>
+    <link>https://daeseji.github.io/pricelog/tips/shampoo-choice/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/shampoo-choice/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>지성·건성·민감성 두피에 맞는 샴푸 고르기, 비듬 케어 샴푸 쓰는 법, 대용량·묶음 살 때 단가 비교.</description>
+  </item>
+  <item>
+    <title>주방 청소, 베이킹소다·구연산·과탄산 구분법</title>
+    <link>https://daeseji.github.io/pricelog/tips/kitchen-cleaning/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/kitchen-cleaning/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>기름때엔 베이킹소다, 물때엔 구연산, 행주엔 과탄산소다. 그리고 절대 섞으면 안 되는 조합까지.</description>
+  </item>
+  <item>
+    <title>욕실 곰팡이·물때 청소, 환기가 절반이에요</title>
+    <link>https://daeseji.github.io/pricelog/tips/bathroom-cleaning/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/bathroom-cleaning/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>곰팡이는 락스로, 물때는 구연산으로, 그리고 무엇보다 환기와 물기 제거. 안전하게 청소하는 법과 예방 습관.</description>
+  </item>
+  <item>
+    <title>설거지 잘하는 법, 순서와 세제 양</title>
+    <link>https://daeseji.github.io/pricelog/tips/dishwashing/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/dishwashing/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>기름은 먼저 닦아내고, 덜 더러운 것부터, 세제는 조금만. 빠르고 깨끗한 설거지 순서.</description>
+  </item>
+  <item>
+    <title>냉장고 냄새 없애는 법, 원인부터 찾아요</title>
+    <link>https://daeseji.github.io/pricelog/tips/fridge-smell/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/fridge-smell/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>탈취제보다 먼저 냄새의 원인을 찾아 치우는 게 우선이에요. 청소 순서와 냄새를 줄이는 보관 습관.</description>
+  </item>
+  <item>
+    <title>부탄가스 안전하게 쓰기, 큰 불판은 금물</title>
+    <link>https://daeseji.github.io/pricelog/tips/butane-safety/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/butane-safety/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>버너보다 큰 불판, 여러 버너 붙여 쓰기, 햇볕 드는 곳 보관은 사고로 이어질 수 있어요. 휴대용 가스레인지 안전 수칙.</description>
+  </item>
+  <item>
+    <title>분리배출 기본, 비우고 헹구고 분리하고 섞지 않기</title>
+    <link>https://daeseji.github.io/pricelog/tips/recycling/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/recycling/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>투명 페트병, 종이팩, 스티로폼, 택배 상자까지. 장보기 후 쏟아지는 포장재를 제대로 버리는 법.</description>
+  </item>
+  <item>
+    <title>가전 전기요금 줄이기, 냉장고·에어컨·대기전력</title>
+    <link>https://daeseji.github.io/pricelog/tips/electricity-saving/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/electricity-saving/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>전기요금은 쓰는 양이 늘수록 단가가 올라가요. 오래 켜두는 가전부터 점검하는 생활 속 절전 요령.</description>
+  </item>
+  <item>
+    <title>장마철 곰팡이·습기 관리, 습도 60%를 넘기지 마세요</title>
+    <link>https://daeseji.github.io/pricelog/tips/rainy-season-mold/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/rainy-season-mold/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>장마철엔 집 안 습도가 쉽게 올라가요. 제습기와 에어컨 제습, 환기 타이밍, 옷장·신발장 관리까지.</description>
+  </item>
+  <item>
+    <title>반려견 사료 보관과 급여, 봉지째 밀폐가 좋아요</title>
+    <link>https://daeseji.github.io/pricelog/tips/pet-food-storage/</link>
+    <guid>https://daeseji.github.io/pricelog/tips/pet-food-storage/</guid>
+    <category>살림</category>
+    <pubDate>Wed, 30 Sep 2026 09:00:00 +0900</pubDate>
+    <description>사료는 원래 봉지째 밀폐용기에 넣으면 신선하게 오래가요. 급여량 맞추는 법, 간식 비율, 물 관리까지.</description>
+  </item>
+</channel>
+</rss>
