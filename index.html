@@ -270,6 +270,9 @@
   .w-help { margin: 12px 0 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); padding: 14px 16px; font-size: 13px; color: var(--ink-2); line-height: 1.65; }
   .w-help b { color: var(--ink); }
   .w-help .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .backup { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .backup p { margin: 2px 0 0; color: var(--muted); font-size: 12.5px; }
+  .backup button:disabled { opacity: .45; cursor: default; }
   .toast {
     position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 20px); z-index: 50;
     background: var(--ink); color: var(--bg); font-size: 14px; font-weight: 700; padding: 11px 18px; border-radius: 999px;
@@ -404,6 +407,7 @@
 </dialog>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="backup-file" accept="application/json,.json" hidden>
 
 <script src="assets/alerts.js?v=dfd8490f"></script>
 <script>
@@ -782,6 +786,66 @@ function saveWatch() {
   try { localStorage.setItem(WATCH_KEY, JSON.stringify(WATCH)); } catch (e) {}
   syncState();
   setupBackground();
+  if (Object.keys(WATCH).length) keepStorage(true);
+}
+
+// 브라우저가 디스크 정리할 때 싸다구 데이터는 지우지 않도록 요청해요
+let keepState = 'unknown';
+async function keepStorage(ask) {
+  if (!navigator.storage || !navigator.storage.persist) { keepState = 'unsupported'; return renderHelp(); }
+  try {
+    let ok = await navigator.storage.persisted();
+    if (!ok && ask) ok = await navigator.storage.persist();
+    keepState = ok ? 'yes' : 'no';
+  } catch (e) { keepState = 'unsupported'; }
+  renderHelp();
+}
+const KEEP_TEXT = {
+  yes: '보호 중 · 브라우저가 공간 정리할 때도 지우지 않아요',
+  no: '아직 보호 전 · 알림을 허용하거나 앱으로 설치하면 브라우저가 보호해 줘요',
+  unsupported: '이 브라우저는 보호 요청을 지원하지 않아요 · 백업을 받아 두세요',
+  unknown: '확인 중',
+};
+
+function exportBackup() {
+  const data = { app: 'sadagu', v: 1, saved: new Date().toISOString(), watch: WATCH };
+  readState().then(st => {
+    data.sent = st.sent || {};
+    const blob = new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' });
+    const a = document.createElement('a');
+    const d = new Date();
+    a.href = URL.createObjectURL(blob);
+    a.download = `sadagu-backup-${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    toast('백업 파일을 저장했어요');
+  });
+}
+
+const cleanCond = (c, def) => ({ on: !!(c && c.on), v: Math.max(0, Number(c && c.v) || def) });
+async function importBackup(file) {
+  let data;
+  try { data = JSON.parse(await file.text()); } catch (e) { return toast('백업 파일을 읽지 못했어요'); }
+  if (!data || data.app !== 'sadagu' || typeof data.watch !== 'object' || !data.watch) return toast('싸다구 백업 파일이 아니에요');
+  let n = 0;
+  for (const [name, w] of Object.entries(data.watch)) {
+    if (!w || typeof w !== 'object') continue;
+    const r = w.rule;
+    WATCH[name] = {
+      fav: !!w.fav,
+      ...(r ? { rule: { on: !!r.on, target: cleanCond(r.target, 0), avg: cleanCond(r.avg, 10), low: { on: !!(r.low && r.low.on), v: [0, 7, 14, 30, 90].includes(Number(r.low && r.low.v)) ? Number(r.low.v) : 30 } } } : {}),
+    };
+    n++;
+  }
+  if (data.sent && typeof data.sent === 'object') {
+    const st = await readState();
+    st.sent = { ...(st.sent || {}), ...data.sent };
+    await writeState(st);
+  }
+  saveWatch();
+  renderWatch(); renderChips(); renderGrid(); renderTiming();
+  if (openKey) { const box = document.querySelector('#d-body .watch'); if (box) box.outerHTML = watchPanelHTML(PRODUCTS.find(x => x.name === openKey)); }
+  toast(`관심 상품 ${n}개를 불러왔어요`);
 }
 
 function starHTML(p) {
@@ -859,7 +923,7 @@ function refreshWatchPanel() {
 
 let installEvt = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEvt = e; renderHelp(); });
-window.addEventListener('appinstalled', () => { installEvt = null; setupBackground(); });
+window.addEventListener('appinstalled', () => { installEvt = null; setupBackground(); keepStorage(true); });
 let bgStatus = '확인 중';
 
 function renderHelp() {
@@ -872,14 +936,25 @@ function renderHelp() {
     ③ 가격은 매일 아침 한 번 기록되니, 하루 한 번만 확인돼도 놓치지 않아요.<br>
     <span style="color:var(--muted)">알림이 안 뜨면 윈도우 설정 → 시스템 → 알림에서 Chrome(또는 Edge)이 켜져 있는지, 방해 금지가 꺼져 있는지 확인해 주세요.</span>
     <div class="perm">${permHTML()}</div>
-    <div class="perm"><span>알림 켠 상품 ${alerts}개 · 창을 닫아도 확인: ${bgStatus}</span>${installEvt ? '<button type="button" data-install>앱으로 설치하기</button>' : ''}</div>`;
+    <div class="perm"><span>알림 켠 상품 ${alerts}개 · 창을 닫아도 확인: ${bgStatus}</span>${installEvt ? '<button type="button" data-install>앱으로 설치하기</button>' : ''}</div>
+    <div class="perm"><span>데이터 보관: ${KEEP_TEXT[keepState]}</span></div>
+    <div class="backup">
+      <b>백업</b>
+      <p>관심 상품과 알림 설정은 이 브라우저에만 저장돼요. 다른 PC로 옮기거나 방문 기록을 지운 뒤에는 백업 파일로 그대로 되살릴 수 있어요.</p>
+      <div class="row"><button type="button" data-export${Object.keys(WATCH).length ? '' : ' disabled'}>백업 내보내기</button><button type="button" data-import>백업 불러오기</button></div>
+    </div>`;
 }
 
 function renderWatch() {
   const sec = document.getElementById('watch-sec');
   const list = PRODUCTS.filter(p => isFav(p.name));
-  sec.hidden = !list.length;
-  if (!list.length) return;
+  sec.hidden = !PRODUCTS.length;
+  if (!list.length) {
+    document.getElementById('watch-sub').textContent = '별을 누른 상품이 여기 모여요';
+    document.getElementById('watch').innerHTML = '<div class="empty-note"><b>아직 관심 상품이 없어요.</b> 상품 사진 오른쪽 위 ☆를 누르면 여기 모이고, 가격 알림도 켤 수 있어요.<br>다른 PC에서 쓰던 백업 파일이 있다면 <b>알림 설정</b>에서 불러오세요.</div>';
+    if (!document.getElementById('w-help').hidden) renderHelp();
+    return;
+  }
   const on = list.filter(p => SDGAlerts.hasActive(ruleOf(p.name))).length;
   const hit = list.filter(p => alertHits(p).length).length;
   document.getElementById('watch-sub').textContent = hit
@@ -911,7 +986,7 @@ async function notify(title, body, name) {
 async function askPermission() {
   if (!('Notification' in window)) return false;
   if (Notification.permission === 'default') { try { await Notification.requestPermission(); } catch (e) {} }
-  refreshWatchPanel(); renderHelp(); setupBackground();
+  refreshWatchPanel(); renderHelp(); setupBackground(); keepStorage(true);
   return Notification.permission === 'granted';
 }
 
@@ -1022,7 +1097,16 @@ document.addEventListener('click', async e => {
   if (e.target.closest('[data-perm]')) return askPermission();
   if (e.target.closest('[data-test]')) { await notify('싸다구 알림이 잘 와요', '조건에 맞는 가격이 기록되면 이렇게 알려 드릴게요.'); return toast('테스트 알림을 보냈어요'); }
   if (e.target.closest('[data-install]') && installEvt) { installEvt.prompt(); installEvt = null; return; }
+  if (e.target.closest('[data-export]')) return exportBackup();
+  if (e.target.closest('[data-import]')) return document.getElementById('backup-file').click();
 }, true);
+
+document.getElementById('backup-file').addEventListener('change', e => {
+  const f = e.target.files && e.target.files[0];
+  if (f) importBackup(f);
+  e.target.value = '';
+});
+keepStorage(false);
 
 // 탭을 열어 두면 30분마다 새 가격을 확인해요 (저장소의 JSON만 읽어요)
 setInterval(() => { load(true).catch(() => {}); }, 30 * 60 * 1000);
