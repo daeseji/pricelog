@@ -50,12 +50,6 @@
         "price": 20430.0
       }
     ],
-    "곰곰 신선한 1A 우유": [
-      {
-        "date": "2026-09-30 04:21",
-        "price": 19120
-      }
-    ],
     "풀무원 정통 가쓰오 우동": [
       {
         "date": "2026-09-30 04:21",
@@ -199,16 +193,6 @@
       "freeShipping": false,
       "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=7104723957&itemId=17743956512&vendorItemId=3123166512&traceid=V0-153-37d61372075ed0e0&requestid=20260930151507597090024501&token=31850C%7CMIXED&pt=0&slot=6",
       "localImage": "img/17743956512.jpg"
-    },
-    "곰곰 신선한 1A 우유": {
-      "productId": 7784292756,
-      "itemId": "19223681989",
-      "productName": "곰곰 신선한 1A 우유",
-      "image": "https://ads-partners.coupang.com/image1/oRlWFvYH8flUdMBPoV2bedcuRJSmCMSyQKR9zA0nQWblnJiQSiLpV47ILFxb4DbBuriNkO7fbg7ImBV09RGFbDqTWpH8u1Vgkq3JdSJGft4NN24wA28zYMKclZFSnFQJJfbXyRO2EaoRvlTowjI7sVnsWzMpF4GnDvYUioHV4B86fD1dT_Qw3dAcFoUJSAPN5aNO-hI-3Z7_AE55AsdOQDuKNeNzWBk8Gy2qhx8fEakTBvehVCD4byMjR9eWA2NumiUX1GL8k7mqKsoxOQsbVU5yWTsKZK0O4737NBEOS5GE7YUUOpcl_zb1xRPD6Rn4IYibmaAvXBpd7fRRnF-rYGlzV8uQyQ-fxUVdCk7A627w--zfpZTmL6ZSBfuwR0oU7ADG9NuYlHfg9QMxSVBZExbQ4IvvftaHibXhD1jk6UTGjYUVe5ol_QaCGW4P2Vp1meS0zd7rtEPPzSfH1pyaJ-sWqjxnnMU48PSBl9qg5JA2ZKYwKBga2KikdGe-maATHYF6b2JysAzUSX-cjnSdAMNyGA==",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=7784292756&itemId=19223681989&vendorItemId=86340366880&traceid=V0-153-9beb131760f5460c&requestid=20260930051521248036881785&token=31850C%7CMIXED&pt=0&slot=7",
-      "localImage": "img/19223681989.jpg"
     },
     "풀무원 정통 가쓰오 우동": {
       "productId": 1371175596,
