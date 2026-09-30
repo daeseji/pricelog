@@ -29,6 +29,7 @@ DATA_REMOTE = "https://raw.githubusercontent.com/daeseji/pricelog/main/data"
 AUTHOR = "스타차일드"
 # 디자인 파일이 바뀔 때마다 주소 뒤 버전이 바뀌어서, 브라우저가 예전 파일을 쓰지 않아요
 CSS_VER = hashlib.md5((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:8]
+ALERTS_VER = hashlib.md5((ROOT / "assets" / "alerts.js").read_bytes()).hexdigest()[:8]
 
 # 카테고리: 이름 → (주소·색 이름, 소개, 대표 아이콘)
 CATS = {
@@ -768,10 +769,14 @@ def update_index(notes, links, icons):
     path = ROOT / "index.html"
     s = path.read_text(encoding="utf-8")
     s = re.sub(r'href="assets/site\.css(\?v=\w+)?"', f'href="assets/site.css?v={CSS_VER}"', s)
+    s = re.sub(r'src="assets/alerts\.js(\?v=\w+)?"', f'src="assets/alerts.js?v={ALERTS_VER}"', s)
     s = re.sub(r"<!-- @seo -->.*?<!-- /@seo -->", lambda m: "<!-- @seo -->\n" + home_seo() + "<!-- /@seo -->", s, flags=re.S)
     s = re.sub(r"<!-- @header -->.*?<!-- /@header -->", lambda m: "<!-- @header -->\n" + header("", "home") + "\n<!-- /@header -->", s, flags=re.S)
     s = re.sub(r"<!-- @footer -->.*?<!-- /@footer -->", lambda m: "<!-- @footer -->\n" + footer("", notes, links, icons) + "\n<!-- /@footer -->", s, flags=re.S)
     path.write_text(s, encoding="utf-8")
+    # 서비스 워커도 같은 판단 로직 버전을 불러오게 맞춰요
+    sw = ROOT / "sw.js"
+    sw.write_text(re.sub(r"importScripts\('assets/alerts\.js(\?v=\w+)?'\)", f"importScripts('assets/alerts.js?v={ALERTS_VER}')", sw.read_text(encoding="utf-8")), encoding="utf-8")
 
 
 def write(rel, content):

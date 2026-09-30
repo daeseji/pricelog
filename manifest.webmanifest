@@ -1,0 +1,16 @@
+{
+  "name": "싸다구 · 쌀 때 사다구",
+  "short_name": "싸다구",
+  "description": "자주 사는 쿠팡 상품 가격을 매일 기록하고, 쌀 때만 알려주는 개인 장보기 노트.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F5F0",
+  "theme_color": "#FFD84D",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
