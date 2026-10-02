@@ -64,7 +64,8 @@ def find_product(product, results, saved_item):
     # 정확히 같은 상품(같은 옵션)일 때만 가격을 기록합니다.
     # 1) products.json의 item_id 또는 지난번에 찾은 옵션 번호 → 그 옵션만
     # 2) 옵션까지 똑같은 상품명 (예: "코카콜라 오리지널, 2L, 8개")
-    # 3) 옵션 없이 나오는 대표 상품명이 정확히 같은 것 (예: "곰곰 신선한 1A 우유")
+    # 옵션 없이 나오는 대표 상품명("제주삼다수 그린 무라벨")은 어느 용량·수량인지 알 수 없어서
+    # 받지 않아요. 다른 옵션 가격이 기록되는 것보다 기록을 건너뛰는 게 나아요.
     wanted = str(product.get("item_id") or saved_item or "")
     if wanted:
         for p in results:
@@ -72,13 +73,9 @@ def find_product(product, results, saved_item):
                 return p
         return None  # 다른 옵션 가격이 섞이지 않게, 못 찾으면 기록하지 않아요
     title = product.get("title") or product["name"]
-    full, base = normalize(title), normalize(base_name(title))
+    full = normalize(title)
     for p in results:
         if normalize(p.get("productName", "")) == full:
-            return p
-    for p in results:
-        name = str(p.get("productName", ""))
-        if "," not in name and normalize(name) == base:
             return p
     return None
 

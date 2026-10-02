@@ -64,24 +64,6 @@
         "price": 14500
       }
     ],
-    "도비 전연령 강아지 밸런스 건식사료": [
-      {
-        "date": "2026-09-30 04:21",
-        "price": 20430
-      },
-      {
-        "date": "2026-09-30 14:35",
-        "price": 20430.0
-      },
-      {
-        "date": "2026-10-01 14:58",
-        "price": 20430
-      },
-      {
-        "date": "2026-10-02 14:40",
-        "price": 20430
-      }
-    ],
     "풀무원 정통 가쓰오 우동": [
       {
         "date": "2026-09-30 04:21",
@@ -116,20 +98,6 @@
       {
         "date": "2026-10-02 14:40",
         "price": 16990
-      }
-    ],
-    "제주삼다수 그린 무라벨": [
-      {
-        "date": "2026-09-30 04:21",
-        "price": 14900
-      },
-      {
-        "date": "2026-09-30 14:35",
-        "price": 12930
-      },
-      {
-        "date": "2026-10-01 14:58",
-        "price": 12810
       }
     ],
     "액츠 퍼펙트 실내건조 액상세제": [
@@ -310,16 +278,6 @@
       "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8129382339&itemId=24024896806&vendorItemId=91045371333&traceid=V0-153-280649b62cb6d0ed&clickBeacon=72535830-be28-11f1-bacf-ad08f1a95012%7E3&requestid=20261002151354966018653875&token=31850C%7CMIXED&pt=1&slot=1",
       "localImage": "img/24024896806.jpg"
     },
-    "도비 전연령 강아지 밸런스 건식사료": {
-      "productId": 7104723957,
-      "itemId": "17743956512",
-      "productName": "도비 전연령 강아지 밸런스 건식사료",
-      "image": "https://ads-partners.coupang.com/image1/Z7Xe8cWzf_2zlzWhZ0fIs9BCEkWMK-BYsHTc3sSaXwTySX79MtAHXuJSqRMTDqbqXZg_xHwutf8q-qZDpBXzMuiP8Bs2dkyXrKx9dcKgKNVZgukWrVdPc8x6wilnMMViW7-yAwNuSe5dNc5eqkbo44UOCfTkRPV3G5ASjEG3-HJJb5v2mTzYb2Mqdi9JFOcVkXQ6VRxfdTvCAvUVIdeI0auLLuloFPX49ee0Tz_MMEnpca4pqdQLrPPu-B_1KlFVx2W61_2wGyvo7O_1k6VqPxOfgVagt_qR9n0BDdRzJjq5IujuC1mwMQlwWKryvjThmic6nVQCTWqFNUx3MwY-oB-EORW9vao-wZFTUFBx2ZHfujgqOQeVtmxZEicbZeTcPljqAdbPxX3hgRsKEau8rT7c8RcMGUE5mokOh-3wDvfR0jCakIU-zpLUKdeNC6PrRkk_NBgclO2-ixUcMLELQILmGtHEH4BKDug5J9DUbjpEQomdgwqQlU7leJdV48qcdFFQL6MVzqFU6tVX0scrcZo8",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=7104723957&itemId=17743956512&vendorItemId=3123166512&traceid=V0-153-37d61372075ed0e0&requestid=20261002152035531003853097&token=31850C%7CMIXED&pt=0&slot=6",
-      "localImage": "img/17743956512.jpg"
-    },
     "풀무원 정통 가쓰오 우동": {
       "productId": 1371175596,
       "itemId": "2403791276",
@@ -339,16 +297,6 @@
       "freeShipping": false,
       "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8538186683&itemId=24718036579&vendorItemId=91727336120&traceid=V0-153-12efbe7b30860683&requestid=20261002160039087175337191&token=31850C%7CGM&pt=0&slot=1",
       "localImage": "img/24718036579.jpg"
-    },
-    "제주삼다수 그린 무라벨": {
-      "productId": 9725928327,
-      "itemId": "29105043010",
-      "productName": "제주삼다수 그린 무라벨",
-      "image": "https://ads-partners.coupang.com/image1/wcAShfNHIZkHa7gEwSlz9hJ59TXzppCTo20w-KOwmIq0GHYXeOEv9YnTzA5k_LjOEgoR0KwMTZcMba0FPzma3lWJnqN6dPo1kXZT9Ge3Xl7U4gAKi87Mttm_5DzCbFSmghun1gOrlaBGmmxI4ZIDVlxIdGOyHtIDfmMK6sgzMlLtEzaC07js0mJc0stMq6uZtbrXFPiLGgZIJN5DF-4gJpDfRo4fVhdT4N-scU3uMuUA0LJ71uiZnKVuPz8ixNAOImDxzCVz4xD7XyjeJd4XadnSQvGCYD0q6myt3QE0UebdFVnJuTqyV8QAMdPZOvHNSt6Pr-JVEVEzC16zisfOy35RCWVJGIUQy1tLPuxMO7gyPvaWf_om_qNCs0Py5-xQssTTr1VnLbXpprZsBL8CJIDh6CzT0atjBcaLj8m_aOjJWSHmWzouHgvKiFXT9URShKs208BgFQ2q9lBJM-bO2lbndlxvufQwTwMqTGUQ-ocd7TOHlpoQodDRFQTBVl6X_sgjlorp3G89C9-p8pZMLsZ9ZykrczTLfErdaCWx8ptZcG8=",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=9725928327&itemId=29105043010&vendorItemId=86478559145&traceid=V0-153-586f4f926c107687&requestid=20261001162453824317257097&token=31850C%7CMIXED&pt=0&slot=9",
-      "localImage": "img/29105043010.jpg"
     },
     "액츠 퍼펙트 실내건조 액상세제": {
       "productId": 9744236856,
