@@ -1,23 +1,5 @@
 {
   "history": {
-    "코카콜라 오리지널": [
-      {
-        "date": "2026-09-30 04:21",
-        "price": 18500
-      },
-      {
-        "date": "2026-09-30 14:35",
-        "price": 18500
-      },
-      {
-        "date": "2026-10-01 14:58",
-        "price": 18500
-      },
-      {
-        "date": "2026-10-02 14:40",
-        "price": 18500
-      }
-    ],
     "티젠 파인애플 콤부차": [
       {
         "date": "2026-09-30 04:21",
@@ -100,24 +82,6 @@
         "price": 16990
       }
     ],
-    "액츠 퍼펙트 실내건조 액상세제": [
-      {
-        "date": "2026-09-30 04:21",
-        "price": 39500
-      },
-      {
-        "date": "2026-09-30 14:35",
-        "price": 39500
-      },
-      {
-        "date": "2026-10-01 14:58",
-        "price": 39500
-      },
-      {
-        "date": "2026-10-02 14:40",
-        "price": 39500
-      }
-    ],
     "청정원 허브맛솔트 마늘&양파": [
       {
         "date": "2026-09-30 04:21",
@@ -134,24 +98,6 @@
       {
         "date": "2026-10-02 14:40",
         "price": 2700
-      }
-    ],
-    "참 저당 참소스": [
-      {
-        "date": "2026-09-30 04:21",
-        "price": 9900
-      },
-      {
-        "date": "2026-09-30 14:35",
-        "price": 9900
-      },
-      {
-        "date": "2026-10-01 14:58",
-        "price": 9900.0
-      },
-      {
-        "date": "2026-10-02 14:40",
-        "price": 9900
       }
     ],
     "샤프란 섬유유연제 코튼 베이비파우더": [
@@ -204,12 +150,6 @@
         "price": 10900
       }
     ],
-    "동원참치 라이트 스탠다드": [
-      {
-        "date": "2026-09-30 14:35",
-        "price": 19420
-      }
-    ],
     "썬키스트 애사비 제로 스파클링": [
       {
         "date": "2026-10-01 14:58",
@@ -238,16 +178,6 @@
     ]
   },
   "meta": {
-    "코카콜라 오리지널": {
-      "productId": 8114968257,
-      "itemId": "23870012336",
-      "productName": "코카콜라 오리지널",
-      "image": "https://ads-partners.coupang.com/image1/2Hd2aHtpTSPLN-Qj2CrAUG7eqvLI28WgCpOahVDESG3lYvD1vKJ3nsQiJ_3Yls2stORDmqDLGZqQ-znEIIXs18lWVS4JhIomkfKgICJA6653BDBP4wXuvR4EKzuzuGFyOSbDmEaLEYbfRzAIxDW1bA5JF_cdFcw_ximzZxX8ti0atgEkfR0VLeG4V9PU__Fy_I7TbCM15Hum1q6324ptyxG7jjyiwOLcl8C1LglRwTUuHMiiZQm4d2mDcEKdPFfTyMu1hnTDMzbS3tUHrCVAXYQJ___8nNtrqJtsvpL9xVKCCYNmxhoddSEizNTVyhDRcwVWzMq5hZJsROmg1sHYOpFHGpqdHMxdLCUNinzWr8a8NjCNuNyNW9Ist-lSF-g7UZ1I3OU8zv3fUCTcLpFWjOkm1AKFonWP40D4E8TC2jLbLtSGUeQHuQvTkxRVO-qCckhVWufqPFHQ6Ty7DJh81Ghz0M4Sq1OySSJkThnLjEBZmA8lWU1Zv8P7xTV8vsPfTrp_N99QdWI2S94K608kFsI=",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8114968257&itemId=23870012336&vendorItemId=3001012632&traceid=V0-153-8366823466797979&requestid=20261002144713101051979788&token=31850C%7CMIXED&pt=0&slot=9",
-      "localImage": "img/23870012336.jpg"
-    },
     "티젠 파인애플 콤부차": {
       "productId": 6456346159,
       "itemId": "18170876257",
@@ -298,16 +228,6 @@
       "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8538186683&itemId=24718036579&vendorItemId=91727336120&traceid=V0-153-12efbe7b30860683&requestid=20261002160039087175337191&token=31850C%7CGM&pt=0&slot=1",
       "localImage": "img/24718036579.jpg"
     },
-    "액츠 퍼펙트 실내건조 액상세제": {
-      "productId": 9744236856,
-      "itemId": "18927565581",
-      "productName": "액츠 퍼펙트 실내건조 드럼용 프레시 플로럴향 액상세제 본품",
-      "image": "https://ads-partners.coupang.com/image1/LacKrFcDN1BtCIyVLdZxjqSrB0zbYJ8kubyLPQY6jfvysrCS9QeeSh1kk9-wisplEY2PpTNeFmpT5s2-zSz-9RVEhLObZkI4hdRCONymurJwkZ5JBEhwDPWY7tllR1GmKX3llqdjyQFnNlenm4AeqQbv1DeElYanPRVuXdRAvw9BHnqIJuvlDeYfUN4MRCyemr_9Zv3x54br-BHnH65A7bqj6TdB7371xb5wAvunHLkEAiCnhWJTJvR5NVaHscaA71lejBNDXyw4iBtL3GbGG1Z87gwK70p11_31ZJ6Wvn7QxDwI8mNlsim2orYQTzTJjMac2QWr_A49O1geHQtBc6wuQnD8IF4G_DVqAoVJ5PV5Qz-SOK8PiZyCuft6nlRQAQ5iXtoOLgvYc1dNTuv2FM56EGCAy1cOsapy_XBtyGcf4BEtFtrLDjF56nCDyofB6PN0FMH1oc_KhJJiS4lUj3MHifnslt-g3j0fz01XISBWD8u92ZQmwv5pV6GYF7EYUOA8Owmgm9oBtAPqxZXX",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=9744236856&itemId=18927565581&vendorItemId=70754773542&traceid=V0-153-96121a1c63f6c893&requestid=20261002162040259282737293&token=31850C%7CGM&pt=0&slot=4",
-      "localImage": "img/18927565581.jpg"
-    },
     "청정원 허브맛솔트 마늘&양파": {
       "productId": 9101343857,
       "itemId": "19680030508",
@@ -317,16 +237,6 @@
       "freeShipping": false,
       "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=9101343857&itemId=19680030508&vendorItemId=86785425027&traceid=V0-153-f00dbafacbcf6fdb&requestid=20261002162720805272250966&token=31850C%7CGM&pt=0&slot=1",
       "localImage": "img/19680030508.jpg"
-    },
-    "참 저당 참소스": {
-      "productId": 8262511662,
-      "itemId": "28694592167",
-      "productName": "참 저당 참소스",
-      "image": "https://ads-partners.coupang.com/image1/Zi6PvgwQkQF_FS2IZmxhnQomwX7WZ1u312o_NcCrBITVlY0w8UKSOZpqQLLipfcMNJxfHm4lLYYMWAxzjGWmkSqnC7DP1vfL0Js-la8KweUkXtU2BGcDupP6Nkrk0I6VTsbk_gXKagI5YD60qh2Q3po-hrhzR21byCdnfn47f59nFqL922rMvprstR9ZV8mMZDge8oWm4__3-AygIs1Jrn-UmteZBSoRh5X3nn2ph2Xw3o3Tk_qitGGwUPjaZXYD2bJfKmv7rppRx-HbFTPmhnI5STwNkC2K_-1jUuSSX0Hxzlk6-KJU2GAskhJNw4HXFYhD5n0gGF1j-bubEUXWz_vWWQiFfuYcdMTB0gIXX1DpXljHDJYw7Cw4xqww0oBKqhbt2wyqHBeGUKaw0oII4Qnjpb264o59m1DdAvBjsJNlZKE5MFrqHGAMK9_pr747ZZwMnU1V9_-dMC75DenaFUGWn3FHlS2VbE58V11Ynh2XmlYd0izmZuukDqJwokhRs95-5wC_lPcAjbtwbAH_wRVj9Q==",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8262511662&itemId=28694592167&vendorItemId=95050059088&traceid=V0-153-a04b0afe2fdcf0e1&requestid=20261002163401232244583632&token=31850C%7CMIXED&pt=0&slot=7",
-      "localImage": "img/28694592167.jpg"
     },
     "샤프란 섬유유연제 코튼 베이비파우더": {
       "productId": 8049883644,
@@ -357,16 +267,6 @@
       "freeShipping": false,
       "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=5380364304&itemId=24613159810&vendorItemId=91624424493&traceid=V0-153-98ef42268baf0bb2&requestid=20261002155358450159385311&token=31850C%7CMIXED&pt=0&slot=6",
       "localImage": "img/24613159810.jpg"
-    },
-    "동원참치 라이트 스탠다드": {
-      "productId": 9392677909,
-      "itemId": "20047758182",
-      "productName": "동원참치 라이트 스탠다드",
-      "image": "https://ads-partners.coupang.com/image1/4D4skmHYYDrEz57u4Jnv-nUPf-Ha3YnWc_pTNvU9gC-P6jQFBPmDuRFS0JUZilUbNZqOUjLchglA-wmEdpzgA96p71jaJ0Q3-VBFflpuw8IL67e1Npqi7vTEgWc4kMK9S_JQi5Z7oUmVKbacnDYGH7EZCyrx1swZ8t9q0eGgRb6Hx2xxepS0Vc9PMsYhG-FAzfXMkYe3y0WjnyXxX33_pc-WuCjhGIM2STp3XV87BwI2WAusgkLOqTK9DJ0Os4qxMVO2-hsNthAmx27gcu2Syd3D3I7BhK3rNaIeVXIg-7B-zjcXfq9Z-EyOdEk5F5Y1ptlBljuMCdjH4HIvZw_JeR2th2WBekiZcW5FOZBIuGC9dmmMd-lPo1084rJ6EKR6MidWXCPXO7JTIMKMYcu-kJ_OiHHy2PPytJARTHh51cn5S-eo083lUuy_sJVDs4xlvAg5n6RLMuqyTatNK9A18bzUJ7QYykvDOCyETfon9eLEomir4duSszYNFIFqnIYdLjcsVP5xQNYYsSdx7g1o9Qo=",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=9392677909&itemId=20047758182&vendorItemId=3013141169&traceid=V0-153-59bda52d6a9bed69&requestid=20260930160831834244272238&token=31850C%7CMIXED&pt=0&slot=6",
-      "localImage": "img/20047758182.jpg"
     },
     "썬키스트 애사비 제로 스파클링": {
       "productId": 8854355846,
