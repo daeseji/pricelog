@@ -49,11 +49,6 @@ def search(keyword):
     return body.get("data", {}).get("productData", []) or []
 
 
-def base_name(title):
-    # "곰곰 신선한 1A 우유, 900ml, 4개" → "곰곰 신선한 1A 우유" (옵션 앞부분)
-    return str(title).split(",")[0].strip()
-
-
 def item_id(p):
     # 검색 결과 링크에 들어 있는 옵션 번호(itemId)
     m = re.search(r"[?&]itemId=(\d+)", str(p.get("productUrl", "")))
@@ -99,7 +94,8 @@ def main():
             time.sleep(DELAY_SECONDS)
         print(f"\n조회 중 ({i + 1}/{len(products)}): {product['name']}")
         try:
-            results = search(product.get("keyword") or base_name(product.get("title") or product["name"]))
+            # 쿠팡 파트너스에서 검색하듯 상품명(옵션까지) 그대로 검색해요
+            results = search(product.get("keyword") or product.get("title") or product["name"])
         except ApiError as e:
             print(f"  ⛔ API 오류로 여기서 멈춥니다 (재시도 안 함): {e}")
             break
