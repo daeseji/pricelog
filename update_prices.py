@@ -37,6 +37,7 @@ class ApiError(Exception):
 
 
 def search(keyword):
+    keyword = str(keyword)[:50]  # 쿠팡 검색어는 50자까지 (넘으면 오류로 그날 수집이 멈춰요)
     qs = urllib.parse.urlencode({"keyword": keyword, "limit": SEARCH_LIMIT}, quote_via=urllib.parse.quote)
     url = SEARCH_PATH + "?" + qs
     auth = generateHmac("GET", url, SECRET_KEY, ACCESS_KEY)
