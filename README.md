@@ -2,7 +2,7 @@
 
 쌀 때 사다구. 자주 사는 쿠팡 상품의 가격을 매일 한 번 기록하는 개인용 가격 추적 페이지.
 
-사이트: https://daeseji.github.io/pricelog/
+사이트: https://sadagu.pages.dev/ (예전 주소 daeseji.github.io/pricelog 는 새 주소 안내 띠를 보여 줘요)
 
 - `data/products.json` — 추적할 상품 목록 (직접 수정)
 - `data/prices.json` — 매일 자동으로 쌓이는 가격 기록과 상품 사진 (수정하지 않기)

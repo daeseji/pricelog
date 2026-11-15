@@ -22,8 +22,8 @@ import markdown
 from markdown.extensions.toc import slugify_unicode
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SITE_URL = "https://daeseji.github.io/pricelog/"
-SITE_BASE = "/pricelog/"  # 404 페이지처럼 주소가 정해지지 않은 곳에서 쓰는 절대 경로
+SITE_URL = "https://sadagu.pages.dev/"
+SITE_BASE = "/"  # 404 페이지처럼 주소가 정해지지 않은 곳에서 쓰는 절대 경로
 FONT_CSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
 DATA_REMOTE = "https://raw.githubusercontent.com/daeseji/pricelog/main/data"
 AUTHOR = "싸다구"
@@ -35,6 +35,8 @@ def _ver(name):
     data = (ROOT / "assets" / name).read_bytes().replace(b"\r\n", b"\n")
     return hashlib.md5(data).hexdigest()[:8]
 
+
+MOVED_JS = '<script>if(location.hostname.endsWith(\'.github.io\')){addEventListener(\'DOMContentLoaded\',function(){var u=\'https://sadagu.pages.dev\'+location.pathname.replace(/^\\/pricelog/,\'\')+location.search+location.hash;var b=document.createElement(\'div\');b.setAttribute(\'role\',\'note\');b.style.cssText=\'position:sticky;top:0;z-index:999;background:#17171B;color:#fff;padding:11px 16px;text-align:center;font-size:14px;line-height:1.5\';b.innerHTML=\'싸다구가 새 주소로 옮겼어요. <a href="\'+u+\'" style="color:#FFD84D;font-weight:800">sadagu.pages.dev로 가기</a><br><span style="opacity:.75;font-size:12.5px">관심 상품과 내 상품은 각 화면의 백업 받기로 옮길 수 있어요.</span>\';document.body.prepend(b);});}</script>\n'
 
 CSS_VER = _ver("site.css")
 ALERTS_VER = _ver("alerts.js")
@@ -199,7 +201,7 @@ def page_head(title, desc, path, root, image="og.png", extra="", og_type="websit
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>{esc(title)}</title>
-<meta name="description" content="{esc(desc)}">
+{MOVED_JS}<meta name="description" content="{esc(desc)}">
 <link rel="canonical" href="{SITE_URL}{path}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#F6F5F0" media="(prefers-color-scheme: light)">
@@ -827,7 +829,7 @@ def build_feed(notes):
 
 
 def home_seo():
-    return ld({
+    return MOVED_JS + ld({
         "@context": "https://schema.org", "@type": "WebSite", "name": "싸다구", "alternateName": "쌀 때 사다구",
         "url": SITE_URL, "inLanguage": "ko-KR",
         "description": "자주 사는 쿠팡 상품 가격을 매일 기록하고, 쌀 때만 알려주는 개인 장보기 노트.",

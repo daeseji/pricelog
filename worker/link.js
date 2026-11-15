@@ -13,7 +13,7 @@
  *   LINKS (선택)  KV 네임스페이스 바인딩. 만든 링크를 오래 저장해 API 호출을 줄여요
  */
 
-const ALLOWED_ORIGINS = ["https://daeseji.github.io"];
+const ALLOWED_ORIGINS = ["https://sadagu.pages.dev", "https://daeseji.github.io"];
 const PRODUCT_HOSTS = new Set(["www.coupang.com", "coupang.com", "m.coupang.com"]);
 const API = "https://api-gateway.coupang.com";
 const DEEPLINK = "/v2/providers/affiliate_open_api/apis/openapi/v1/deeplink";
