@@ -292,6 +292,15 @@
   .lowline { margin-top: 2px; font-size: 12px; color: var(--muted); }
   .more-note { margin: 18px 0 0; font-size: 13.5px; color: var(--muted); text-align: center; }
   .more-note a { color: var(--ink); font-weight: 700; }
+  /* 내 상품 / 싸다구 추천 전환 */
+  .view-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px 14px; flex-wrap: wrap; margin: 0 0 14px; }
+  .view-switch { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+  .view-switch button { border: 0; background: none; padding: 9px 16px; border-radius: 999px; font: inherit; font-size: 14.5px; font-weight: 700; color: var(--ink-2); cursor: pointer; }
+  .view-switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .view-switch .cnt { opacity: .6; margin-left: 5px; font-weight: 600; }
+  .view-note { margin: 0; font-size: 13.5px; color: var(--muted); line-height: 1.5; }
+  .view-note a { color: var(--ink); font-weight: 700; }
+  .view-note.solo { padding: 12px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); width: 100%; }
   .grid-empty { grid-column: 1 / -1; padding: 28px 12px; text-align: center; color: var(--muted); font-size: 14px; }
   .grid-empty a { color: var(--ink); font-weight: 700; }
 </style>
@@ -321,6 +330,13 @@
 <!-- /@header -->
 
 <main class="wrap">
+  <div class="view-bar" id="view-bar" hidden>
+    <div class="view-switch" id="view-switch" role="group" aria-label="보는 목록" hidden>
+      <button type="button" data-view="mine" aria-pressed="true">내 상품<span class="cnt num" id="cnt-mine"></span></button>
+      <button type="button" data-view="all" aria-pressed="false">싸다구 추천<span class="cnt num" id="cnt-all"></span></button>
+    </div>
+    <p class="view-note" id="view-note"></p>
+  </div>
   <div class="hero">
     <div class="hero-main">
       <div class="hero-eyebrow" id="hero-eyebrow">오늘의 장보기 브리핑</div>
@@ -362,7 +378,7 @@
     <div class="sec-head">
       <div>
         <h2 id="h-all">전체 상품</h2>
-        <p>눌러서 가격 그래프를 볼 수 있어요</p>
+        <p id="all-sub">눌러서 가격 그래프를 볼 수 있어요</p>
       </div>
     </div>
     <div class="toolbar">
@@ -378,7 +394,7 @@
       </select>
     </div>
     <div class="grid" id="grid" aria-live="polite"></div>
-    <p class="more-note">찾는 상품이 없나요? <a href="mine/">내 상품</a>에 쿠팡 주소를 붙여 넣으면 나만의 가격 기록을 시작할 수 있어요.</p>
+    <p class="more-note" id="more-note">찾는 상품이 없나요? <a href="mine/">내 상품</a>에 쿠팡 주소를 붙여 넣으면 나만의 가격 기록을 시작할 수 있어요.</p>
   </section>
 
 </main>
@@ -451,7 +467,8 @@ function parseDate(s) { const [d, t = '00:00'] = s.split(' '); const [y, m, dd] 
 function dateLabel(s, withTime) {
   const p = parseDate(s);
   const base = `${p.m}월 ${p.d}일`;
-  if (!withTime) return base;
+  // '매일 확인' 기록처럼 날짜만 있는 기록은 시각을 붙이지 않아요
+  if (!withTime || !String(s).includes(' ')) return base;
   const ampm = p.h < 12 ? '오전' : '오후';
   const h12 = p.h % 12 || 12;
   return `${base} ${ampm} ${h12}:${String(p.mi).padStart(2, '0')}`;
@@ -547,12 +564,19 @@ function cardHTML(p) {
   return `<div class="cw">${starHTML(p)}<button class="card" data-key="${esc(p.name)}" aria-label="${esc(p.name)} 가격 자세히 보기">
     ${thumbHTML(p)}
     <div class="meta">
-      <div class="cat">${esc(p.category || '')}</div>
+      <div class="cat">${esc(catLine(p))}</div>
       <div class="name">${esc(p.name)}</div>
       ${priceRow}
       ${extra}
     </div>
   </button></div>`;
+}
+
+// 카드 위 작은 줄: 카테고리, 내 상품이면 쿠팡에서 산 횟수
+function catLine(p) {
+  const buys = p.buys ? `쿠팡에서 ${p.buys}번 구매` : '';
+  if (!p.mine) return p.category || '';
+  return [p.category, buys].filter(Boolean).join(' · ') || '내 상품';
 }
 
 let PRODUCTS = [];
@@ -569,9 +593,20 @@ function sorted(list) {
   return [...list].sort(by);
 }
 
+// 내 상품은 카테고리가 비어 있는 경우가 많아서, 기록 방식으로 나눠 보여 줘요
+const AUTO_CAT = '매일 기록';
+const MANUAL_CAT = '직접 기록';
+function inCat(p, c) {
+  if (c === '전체') return true;
+  if (c === FAV_CAT) return isFav(p.name);
+  if (c === AUTO_CAT) return !!p.mine && p.source !== 'manual';
+  if (c === MANUAL_CAT) return !!p.mine && p.source === 'manual';
+  return p.category === c;
+}
+
 function renderGrid() {
   const q = squash(state.q);
-  const list = PRODUCTS.filter(p => (state.cat === '전체' || (state.cat === FAV_CAT ? isFav(p.name) : p.category === state.cat))
+  const list = PRODUCTS.filter(p => inCat(p, state.cat)
     && (!q || squash(p.name + p.title + p.category).includes(q)));
   document.getElementById('grid').innerHTML = list.length
     ? sorted(list).map(cardHTML).join('')
@@ -581,8 +616,11 @@ function renderGrid() {
 function renderChips() {
   const favs = PRODUCTS.filter(p => isFav(p.name)).length;
   if (!favs && state.cat === FAV_CAT) state.cat = '전체';
-  const cats = ['전체', ...(favs ? [FAV_CAT] : []), ...new Set(PRODUCTS.map(p => p.category).filter(Boolean))];
-  const count = c => c === '전체' ? PRODUCTS.length : c === FAV_CAT ? favs : PRODUCTS.filter(p => p.category === c).length;
+  const cats = view === 'mine'
+    ? ['전체', ...(favs ? [FAV_CAT] : []), ...[AUTO_CAT, MANUAL_CAT].filter(c => PRODUCTS.some(p => inCat(p, c)))]
+    : ['전체', ...(favs ? [FAV_CAT] : []), ...new Set(PRODUCTS.map(p => p.category).filter(Boolean))];
+  if (!cats.includes(state.cat)) state.cat = '전체';
+  const count = c => c === '전체' ? PRODUCTS.length : PRODUCTS.filter(p => inCat(p, c)).length;
   document.getElementById('chips').innerHTML = cats.map(c =>
     `<button class="chip" data-cat="${esc(c)}" aria-pressed="${c === state.cat}">${esc(c)}<span class="cnt num">${count(c)}</span></button>`
   ).join('');
@@ -599,7 +637,9 @@ function renderHero() {
   const desc = document.getElementById('hero-desc');
   if (!judged) {
     title.innerHTML = '가격 기록,<br>이제 막 시작했어요';
-    desc.textContent = '매일 아침 9시쯤 가격을 적어둬요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.';
+    desc.textContent = view === 'mine'
+      ? '매일 확인을 켠 상품은 하루 한 번 가격이 쌓여요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.'
+      : '하루 한 번 가격을 적어둬요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.';
   } else if (timing) {
     title.innerHTML = `지금 사면 좋은 상품<br><em class="num">${timing}개</em> 있어요`;
     desc.textContent = low ? `그중 ${low}개는 기록 중 가장 싼 가격이에요. 필요한 거면 지금이 기회!` : '기록된 가격 중 싼 쪽에 있어요. 필요한 거면 지금 담아두세요.';
@@ -607,7 +647,7 @@ function renderHero() {
     title.innerHTML = '오늘은<br>존버하는 날';
     desc.textContent = '지금은 평소보다 싼 상품이 없어요. 내일 아침에 다시 확인할게요.';
   }
-  if (last) document.getElementById('hero-eyebrow').textContent = `${dateLabel(last)} 장보기 브리핑`;
+  document.getElementById('hero-eyebrow').textContent = `${last ? dateLabel(last) + ' ' : ''}${view === 'mine' ? '내 상품 브리핑' : '장보기 브리핑'}`;
 
   const dds = document.querySelectorAll('#hero-stats dd');
   dds[0].innerHTML = `${total}<small>개</small>`;
@@ -688,9 +728,16 @@ function drawChart(box, history) {
   svg.addEventListener('pointerleave', hide);
 }
 
-function verdictText(a) {
-  if (a.key === 'old') return `<b>${dateLabel(a.last)}</b> 이후로 가격을 확인하지 못했어요. 쿠팡 검색 결과에서 이 상품이 잠시 안 보여서 그래요. <b>지금 가격과 다를 수 있으니</b> 쿠팡에서 확인해 주세요.`;
-  if (a.key === 'none') return '아직 기록이 없어요. <b>매일 오전 9시쯤</b> 가격을 적어둘게요.';
+function verdictText(a, p = {}) {
+  if (a.key === 'old') return p.source === 'manual'
+    ? `마지막 기록이 <b>${dateLabel(a.last)}</b>이에요. <b>지금 가격과 다를 수 있으니</b> 쿠팡에서 확인해 주세요.`
+    : `<b>${dateLabel(a.last)}</b> 이후로 가격을 확인하지 못했어요. 쿠팡 검색 결과에서 이 상품이 잠시 안 보여서 그래요. <b>지금 가격과 다를 수 있으니</b> 쿠팡에서 확인해 주세요.`;
+  if (a.key === 'none') {
+    if (!p.mine) return '아직 기록이 없어요. <b>하루 한 번</b> 가격을 적어둘게요.';
+    return p.track
+      ? '매일 확인을 신청했어요. <b>하루 안에</b> 첫 가격이 기록돼요.'
+      : '아직 기록이 없어요. <a href="mine/">내 상품</a>에서 <b>매일 확인</b>을 켜거나 살 때 본 가격을 적어 보세요.';
+  }
   if (a.key === 'rec') return `기록 <b>${a.n}번</b>째예요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.`;
   if (a.key === 'flat') return `기록하는 동안 <b>가격이 한 번도 안 바뀌었어요.</b> 급하면 그냥 사도 돼요.`;
   const rank = Math.round(a.pos * 100);
@@ -717,7 +764,8 @@ function productLink(p) {
 
 let openKey = null;
 function openDetail(key, push = true) {
-  const p = PRODUCTS.find(x => x.name === key);
+  // 공유받은 주소(#상품이름)는 지금 보고 있지 않은 목록의 상품일 수도 있어요
+  const p = PRODUCTS.find(x => x.name === key) || CATALOG.find(x => x.name === key) || MINE.find(x => x.name === key);
   if (!p) return;
   openKey = key;
   const a = p.a, h = p.history;
@@ -746,7 +794,7 @@ function openDetail(key, push = true) {
     <div class="d-top">
       ${thumbHTML(p, false)}
       <div>
-        <div class="cat">${esc(p.category || '')}${p.meta.rocket ? ' · 로켓배송' : ''}</div>
+        <div class="cat">${esc(catLine(p))}${p.meta.rocket ? ' · 로켓배송' : ''}</div>
         <h2 class="d-title" id="d-title">${esc(p.name)}</h2>
         <div class="d-sub">${esc(p.title || '')}</div>
         <div class="d-price num">${a.n ? won(a.curr) : '-'}</div>
@@ -754,7 +802,7 @@ function openDetail(key, push = true) {
       </div>
     </div>
     ${watchPanelHTML(p)}
-    <div class="verdict"><span class="v-badge">${badgeHTML(a.key)}</span><p>${verdictText(a)}</p></div>
+    <div class="verdict"><span class="v-badge">${badgeHTML(a.key)}</span><p>${verdictText(a, p)}</p></div>
     ${a.n >= 2 && a.max > a.min ? `
       <div class="range">
         <div class="range-track"><div class="range-dot" style="left:${(a.pos * 100).toFixed(1)}%"></div></div>
@@ -772,7 +820,9 @@ function openDetail(key, push = true) {
     </ol></div>` : ''}
     <a class="cta" href="${esc(link.href)}" target="_blank" rel="${link.affiliate ? 'sponsored nofollow noopener' : 'noopener'}">쿠팡에서 보기
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 13 13 5M7 5h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    <p class="fine">${fine}<br>가격은 매일 오전 9시쯤 쿠팡 파트너스에서 확인한 <b>쿠폰 적용 전</b> 가격이에요. 쿠팡 화면에서는 쿠폰·카드 할인이 더해져 더 쌀 수 있어요.</p>`;
+    <p class="fine">${fine}<br>${p.source === 'manual'
+      ? '직접 적었거나 쿠팡 다시 구매 화면에서 가져온 가격이에요. 쿠폰이나 회원 할인이 들어간 가격일 수 있어요.'
+      : '가격은 하루 한 번 쿠팡 파트너스에서 확인한 <b>쿠폰 적용 전</b> 가격이에요. 쿠팡 화면에서는 쿠폰·카드 할인이 더해져 더 쌀 수 있어요.'}${p.mine ? ' <a href="mine/">내 상품에서 관리하기</a>' : ''}</p>`;
 
   const dlg = document.getElementById('detail');
   if (!dlg.open) dlg.showModal();
@@ -1150,23 +1200,123 @@ keepStorage(false);
 setInterval(() => { load(true).catch(() => {}); }, 30 * 60 * 1000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden && PRODUCTS.length) checkAlerts(); });
 
-function renderAll() { renderHero(); renderWatch(); renderTiming(); renderChips(); renderGrid(); }
+function renderAll() { renderViewBar(); renderHero(); renderWatch(); renderTiming(); renderChips(); renderGrid(); }
+
+/* ───────── 내 상품을 첫 화면에 ─────────
+   '내 상품'(이 브라우저에만 저장된 목록, assets/mine.js)이 있으면 첫 화면에 내 상품을 먼저 보여 줘요.
+   가격 기록은 싸다구 추천 상품과 겹치면 그 기록, '매일 확인' 기록(data/pool.json)이 있으면 그 기록,
+   둘 다 없으면 직접 적은 가격을 써요. 위의 전환 버튼으로 '싸다구 추천'도 볼 수 있어요. */
+const MINE_KEY = 'sadagu:mine:v1';
+const VIEW_KEY = 'sdg:view';
+let CATALOG = [], MINE = [], POOL = {};
+let view = 'all';
+
+function readMine() {
+  try {
+    const d = JSON.parse(localStorage.getItem(MINE_KEY) || 'null');
+    return d && Array.isArray(d.items) ? d.items : [];
+  } catch (e) { return []; }
+}
+function idsOf(url) {
+  const s = String(url || '');
+  const m = s.match(/\/products\/(\d+)/);
+  const it = s.match(/[?&]itemId=(\d+)/);
+  return m ? { pid: m[1], item: it ? it[1] : '' } : null;
+}
+const COUPANG_IMG = /^https:\/\/thumbnail\d*\.coupangcdn\.com\/[\w\/.%-]+$/;
+function buildMine() {
+  const byKey = {};
+  CATALOG.forEach(p => {
+    const k = idsOf(p.url);
+    const item = String(p.item_id || (k && k.item) || '');
+    if (k && item) byKey[`${k.pid}:${item}`] = p;
+  });
+  const used = new Set();
+  MINE = readMine().map(it => {
+    const k = idsOf(it.url);
+    const key = k && k.item ? `${k.pid}:${k.item}` : '';
+    const cat = key ? byKey[key] : null;
+    const pl = key ? POOL[key] : null;
+    const img = COUPANG_IMG.test(it.img || '') ? it.img : '';
+    let history, meta, source;
+    if (cat && cat.history.length) {
+      history = cat.history; meta = { ...cat.meta }; source = 'catalog';
+    } else if (pl && Array.isArray(pl.h) && pl.h.length) {
+      history = pl.h.map(([d, p]) => ({ date: String(d), price: Number(p) }));
+      meta = { image: img || pl.img || '', link: pl.link || it.link || '', rocket: !!pl.r }; source = 'daily';
+    } else {
+      history = (it.prices || []).map(x => ({ date: String(x.d), price: Number(x.p) })).filter(x => x.price > 0);
+      meta = { image: img || (pl && pl.img) || '', link: (pl && pl.link) || it.link || '' };
+      // 싸다구 추천 상품과 같은데 아직 기록이 없으면 그 상품의 사진·링크를 함께 써요
+      if (cat) meta = { ...cat.meta, ...Object.fromEntries(Object.entries(meta).filter(([, v]) => v)) };
+      source = 'manual';
+    }
+    if (!pic(meta) && img) meta.image = img;
+    let name = String(it.name || '').trim() || '이름 없는 상품';
+    for (let n = 2; used.has(name); n++) name = `${String(it.name || '').trim()} (${n})`;
+    used.add(name);
+    return {
+      name, title: it.title || it.name || '', category: cat ? cat.category : '', url: it.url,
+      link_b64: cat ? cat.link_b64 : '', buys: Number(it.buys) || 0, mine: true, track: it.track === true,
+      source, history, meta, a: analyze(history),
+    };
+  });
+}
+function pickView() {
+  let pref = '';
+  try { pref = localStorage.getItem(VIEW_KEY) || ''; } catch (e) {}
+  view = pref === 'all' || !MINE.length ? 'all' : 'mine';
+  if (pref === 'mine' && MINE.length) view = 'mine';
+  PRODUCTS = view === 'mine' ? MINE : CATALOG;
+}
+function renderViewBar() {
+  const bar = document.getElementById('view-bar');
+  const sw = document.getElementById('view-switch');
+  const note = document.getElementById('view-note');
+  bar.hidden = false;
+  sw.hidden = !MINE.length;
+  note.classList.toggle('solo', !MINE.length);
+  document.getElementById('cnt-mine').textContent = MINE.length;
+  document.getElementById('cnt-all').textContent = CATALOG.length;
+  sw.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+  note.innerHTML = !MINE.length
+    ? '자주 사는 쿠팡 상품을 <a href="mine/">내 상품</a>에 담으면, 이 화면에 내 상품의 가격이 바로 떠요.'
+    : view === 'mine'
+      ? '<a href="mine/">내 상품 관리</a>에서 더 담거나 빼고, 매일 확인을 켤 수 있어요.'
+      : '싸다구가 직접 사는 상품을 매일 기록한 목록이에요.';
+  document.getElementById('h-all').textContent = view === 'mine' ? '내 상품 전체' : '전체 상품';
+  document.getElementById('more-note').innerHTML = view === 'mine'
+    ? '상품을 더 담거나 매일 확인을 켜려면 <a href="mine/">내 상품</a>으로 가세요. PC에서는 쿠팡 다시 구매 목록을 한 번에 가져올 수 있어요.'
+    : '찾는 상품이 없나요? <a href="mine/">내 상품</a>에 쿠팡 주소를 붙여 넣으면 나만의 가격 기록을 시작할 수 있어요.';
+}
+function setView(v) {
+  view = v === 'mine' && MINE.length ? 'mine' : 'all';
+  try { localStorage.setItem(VIEW_KEY, view); } catch (e) {}
+  PRODUCTS = view === 'mine' ? MINE : CATALOG;
+  state.cat = '전체';
+  renderAll();
+}
 
 async function load(silent = false) {
   if (!silent) document.getElementById('grid').innerHTML = Array.from({ length: 8 }, () =>
     '<div class="skel"><div class="thumb"></div><div class="sk" style="width:40%"></div><div class="sk"></div><div class="sk" style="width:60%"></div></div>').join('');
   const bust = '?_=' + Date.now();
-  const [pr, hr] = await Promise.all([
+  const [pr, hr, pl] = await Promise.all([
     fetch(DATA_BASE + '/products.json' + bust),
     fetch(DATA_BASE + '/prices.json' + bust),
+    fetch(DATA_BASE + '/pool.json' + bust).catch(() => null),
   ]);
   if (!pr.ok || !hr.ok) throw new Error('load failed');
   const { products } = await pr.json();
   const { history = {}, meta = {} } = await hr.json();
-  PRODUCTS = products.map(p => {
+  POOL = pl && pl.ok ? ((await pl.json().catch(() => null)) || {}).items || {} : {};
+  CATALOG = products.map(p => {
     const h = history[p.name] || [];
     return { ...p, history: h, meta: meta[p.name] || {}, a: analyze(h) };
   });
+  buildMine();
+  if (silent) PRODUCTS = view === 'mine' && MINE.length ? MINE : CATALOG;
+  else pickView();
   renderAll();
   if (silent) {
     if (openKey) refreshWatchPanel();
@@ -1179,6 +1329,8 @@ async function load(silent = false) {
 
 const dlg = document.getElementById('detail');
 document.addEventListener('click', e => {
+  const vb = e.target.closest('[data-view]');
+  if (vb) return setView(vb.dataset.view);
   const card = e.target.closest('.card');
   if (card) return openDetail(card.dataset.key);
   const chip = e.target.closest('.chip');
@@ -1203,6 +1355,14 @@ window.addEventListener('resize', () => {
 });
 const topEl = document.getElementById('top');
 window.addEventListener('scroll', () => topEl.classList.toggle('scrolled', scrollY > 4), { passive: true });
+// 다른 탭의 '내 상품'에서 담거나 빼면 첫 화면에도 바로 반영해요
+window.addEventListener('storage', e => {
+  if (e.key !== MINE_KEY || !CATALOG.length) return;
+  buildMine();
+  if (view === 'mine' && !MINE.length) view = 'all';
+  PRODUCTS = view === 'mine' ? MINE : CATALOG;
+  renderAll();
+});
 
 load().catch(() => {
   document.getElementById('grid').innerHTML = '<div class="err" style="grid-column:1/-1">가격 데이터를 불러오지 못했어요.<br><button onclick="location.reload()">다시 시도</button></div>';

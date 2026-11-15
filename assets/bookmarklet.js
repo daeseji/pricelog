@@ -1,5 +1,5 @@
 /* 싸다구로 보내기 (북마크 버튼)
-   쿠팡 '다시 구매' 화면(www.coupang.com/np/fbi)에 이미 떠 있는 상품 카드만 읽어서
+   쿠팡 '다시 구매' 화면(www.coupang.com/np/fbi)에 이미 떠 있는 상품 카드만 읽어서 (상품 번호, 옵션, 이름, 가격, 구매 횟수, 썸네일 주소)
    이 브라우저 안에서 싸다구 '내 상품' 탭으로 바로 넘겨요.
    쿠팡 서버에 따로 요청하지 않고, 로그인 정보나 주문·배송·결제 정보는 읽지 않아요.
    싸다구 서버로도 보내지 않아요 (탭끼리 postMessage로만 주고받아요).
@@ -26,7 +26,7 @@
         var key = d.id + '-' + (d.vendorItemId || '');
         if (!seen[key]) {
           seen[key] = 1;
-          out.push([String(d.id), String(d.itemId || ''), String(d.vendorItemId || ''), String(d.title).slice(0, 100), parseInt(String(d.salesPrice || '').replace(/[^0-9]/g, ''), 10) || 0, d.purchaseCount | 0, (d.soldOut || d.temporaryOos) ? 1 : 0]);
+          out.push([String(d.id), String(d.itemId || ''), String(d.vendorItemId || ''), String(d.title).slice(0, 100), parseInt(String(d.salesPrice || '').replace(/[^0-9]/g, ''), 10) || 0, d.purchaseCount | 0, (d.soldOut || d.temporaryOos) ? 1 : 0, String(d.thumbnailSquare || '')]);
         }
         break;
       }

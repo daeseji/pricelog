@@ -280,7 +280,8 @@ def main(search_fn=search, clock=None, sleep=time.sleep):
         h = [e for e in it.get("h", []) if e[0] != today]
         h.append([today, price])
         it["h"] = h[-POOL_HISTORY_LIMIT:]
-        it.update(ok=today, miss=0, name=str(match.get("productName") or "")[:100], link=match.get("productUrl") or "")
+        it.update(ok=today, miss=0, name=str(match.get("productName") or "")[:100], link=match.get("productUrl") or "",
+                  img=match.get("productImage") or it.get("img", ""), r=bool(match.get("isRocket")))
         print(f"  ✅ [매일 확인] {it.get('t', key)}: {price:,}원")
         return True
 

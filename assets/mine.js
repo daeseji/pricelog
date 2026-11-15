@@ -79,7 +79,13 @@
       title: String(x.title || '').replace(/\s+/g, ' ').trim().slice(0, 100),
       // '매일 확인'을 켰는지
       track: x.track === true,
+      // 쿠팡 '다시 구매'에서 가져온 썸네일 (첫 화면 카드에 써요)
+      img: thumb(x.img),
     };
+  }
+  function thumb(v) {
+    const s = String(v || '').replace(/^\/\//, 'https://').replace(/^http:\/\//, 'https://');
+    return /^https:\/\/thumbnail\d*\.coupangcdn\.com\/[\w/.%-]+$/.test(s) ? s : '';
   }
   function load() {
     try {
@@ -508,7 +514,7 @@
       if (!name || seen.has(url)) continue;
       seen.add(url);
       const title = String(r[3] ?? '').replace(/\s+/g, ' ').trim().slice(0, 100);
-      const row = { url, name, title, price: toNum(r[4]), buys: Math.min(9999, Math.max(0, Number(r[5]) | 0)), oos: !!r[6] };
+      const row = { url, name, title, price: toNum(r[4]), buys: Math.min(9999, Math.max(0, Number(r[5]) | 0)), oos: !!r[6], img: thumb(r[7]) };
       row.have = state.items.find((x) => sameItem(x, row)) || null;
       // 새 상품은 품절이 아니면 골라 두고, 이미 담은 상품은 가격이 있으면 오늘 가격만 기록해요
       row.pick = row.have ? !!row.price : !row.oos;
@@ -624,11 +630,14 @@
       item.prices = (item.prices || []).filter((x) => x.d !== d).concat({ d, p: r.price }).slice(-180);
       if (r.buys) item.buys = r.buys;
       if (!item.title) item.title = r.title;
+      if (r.img) item.img = r.img;
       if (daily) item.track = true;
       touched.push(item);
       logged++;
     }
-    const fresh = add.map((r) => clean({ url: r.url, name: r.name, title: r.title, added: d, buys: r.buys, track: daily, prices: r.price ? [{ d, p: r.price }] : [] })).filter(Boolean);
+    // 고르지 않은 상품도 이미 담은 것이면 썸네일만은 채워 둬요
+    for (const r of incoming) if (r.have && r.img && !r.have.img) r.have.img = r.img;
+    const fresh = add.map((r) => clean({ url: r.url, name: r.name, title: r.title, img: r.img, added: d, buys: r.buys, track: daily, prices: r.price ? [{ d, p: r.price }] : [] })).filter(Boolean);
     state.items = [...fresh, ...state.items];
     if (!save()) return;
     closeImport();
