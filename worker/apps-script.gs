@@ -9,6 +9,11 @@
  *   프로젝트 설정 > 스크립트 속성: COUPANG_ACCESS_KEY, COUPANG_SECRET_KEY
  *   배포 > 새 배포 > 웹 앱 (실행 사용자: 나, 액세스 권한: 모든 사용자)
  *
+ * 매일 확인 목록 (pool)
+ *   방문자가 '내 상품'에서 '매일 확인'을 켜면 상품 번호, 옵션 번호, 판매 옵션 번호, 상품 이름만 받아 모아 둬요.
+ *   누가 보냈는지는 남기지 않아요. GitHub Actions(update_prices.py)가 ?action=pool로 목록을 받아 가격을 확인해요.
+ *   POOL_DAYS 동안 아무도 다시 신청하지 않은 상품은 빠지고, 최대 POOL_MAX개까지만 모아요.
+ *
  * 안전장치
  *   - 쿠팡 상품 페이지 주소만 받아요. 줄인 주소는 열어 보지 않아요 (열면 그 링크의 클릭으로 잡힐 수 있어요).
  *   - 새 링크는 전체 합쳐 시간당 PER_HOUR개, 하루 PER_DAY개까지만 만들어요.
@@ -22,8 +27,13 @@ const PER_HOUR = 20;
 const PER_DAY = 150;
 const PRODUCT_HOSTS = ['www.coupang.com', 'coupang.com', 'm.coupang.com'];
 const LINK_RE = /^https:\/\/(link\.coupang\.com|coupa\.ng)\/[A-Za-z0-9/_?=&.-]+$/;
+const POOL_MAX = 1000;
+const POOL_DAYS = 60;
+const POOL_CHUNK = 8000; // 스크립트 속성 한 칸은 9KB까지라서 나눠 담아요
 
-function doGet() {
+function doGet(e) {
+  const p = (e && e.parameter) || {};
+  if (p.action === 'pool') return out_({ items: loadPool_() });
   return out_({ ok: true, service: 'sadagu-link' });
 }
 
@@ -34,8 +44,104 @@ function doPost(e) {
   } catch (err) {
     body = null;
   }
+  if (body && body.action === 'track') return out_(track_(body.items));
   if (!body || typeof body.url !== 'string') return out_({ error: 'bad_request' });
   return out_(handle_(body.url));
+}
+
+/** '매일 확인' 신청을 받아요. 상품 번호, 옵션 번호, 판매 옵션 번호, 이름만 남겨요 */
+function track_(items) {
+  if (!Array.isArray(items)) return { error: 'bad_request' };
+  const today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
+  const got = [];
+  items.slice(0, 300).forEach(function (r) {
+    if (!Array.isArray(r)) return;
+    const pid = String(r[0] || '');
+    const item = String(r[1] || '');
+    const vid = String(r[2] || '');
+    const title = String(r[3] || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+    if (!/^\d{3,15}$/.test(pid) || !/^\d{1,15}$/.test(item) || (vid && !/^\d{1,15}$/.test(vid)) || !title) return;
+    got.push([pid, item, vid, title]);
+  });
+  if (!got.length) return { error: 'no_items' };
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(10000)) return { error: 'busy' };
+  try {
+    const pool = loadPool_();
+    const at = {};
+    pool.forEach(function (r, i) {
+      at[r[0] + ':' + r[1]] = i;
+    });
+    let added = 0;
+    got.forEach(function (g) {
+      const k = g[0] + ':' + g[1];
+      if (k in at) {
+        const r = pool[at[k]];
+        r[2] = g[2] || r[2];
+        r[3] = g[3];
+        r[5] = today;
+      } else {
+        at[k] = pool.length;
+        pool.push([g[0], g[1], g[2], g[3], today, today]);
+        added++;
+      }
+    });
+    // 오래 신청이 없던 상품을 빼고, 많으면 최근에 신청된 순서로 POOL_MAX개만 남겨요
+    const cutoff = Utilities.formatDate(new Date(Date.now() - POOL_DAYS * 864e5), 'Asia/Seoul', 'yyyy-MM-dd');
+    let kept = pool.filter(function (r) {
+      return String(r[5]) >= cutoff;
+    });
+    if (kept.length > POOL_MAX) {
+      kept.sort(function (a, b) {
+        return String(b[5]).localeCompare(String(a[5]));
+      });
+      kept = kept.slice(0, POOL_MAX);
+    }
+    savePool_(kept);
+    return { ok: true, added: added, total: kept.length };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function loadPool_() {
+  const all = PropertiesService.getScriptProperties().getProperties();
+  const n = Number(all.POOL_N || 0);
+  let out = [];
+  for (let i = 0; i < n; i++) {
+    try {
+      out = out.concat(JSON.parse(all['POOL_' + i] || '[]'));
+    } catch (err) {
+      // 깨진 칸은 건너뛰어요
+    }
+  }
+  return out;
+}
+
+function savePool_(pool) {
+  const props = PropertiesService.getScriptProperties();
+  const chunks = [];
+  let cur = [];
+  let size = 2;
+  pool.forEach(function (r) {
+    const s = JSON.stringify(r);
+    const b = Utilities.newBlob(s).getBytes().length + 1;
+    if (cur.length && size + b > POOL_CHUNK) {
+      chunks.push(cur);
+      cur = [];
+      size = 2;
+    }
+    cur.push(r);
+    size += b;
+  });
+  if (cur.length) chunks.push(cur);
+  const old = Number(props.getProperty('POOL_N') || 0);
+  const data = { POOL_N: String(chunks.length) };
+  chunks.forEach(function (c, i) {
+    data['POOL_' + i] = JSON.stringify(c);
+  });
+  props.setProperties(data);
+  for (let i = chunks.length; i < old; i++) props.deleteProperty('POOL_' + i);
 }
 
 function handle_(raw) {
@@ -167,4 +273,5 @@ function checkSetup() {
   const props = PropertiesService.getScriptProperties();
   Logger.log('키 설정: access %s, secret %s', props.getProperty('COUPANG_ACCESS_KEY') ? '있음' : '없음', props.getProperty('COUPANG_SECRET_KEY') ? '있음' : '없음');
   Logger.log('오늘 사용량: %s', props.getProperty('QUOTA') || '없음');
+  Logger.log('매일 확인 목록: %s개', loadPool_().length);
 }

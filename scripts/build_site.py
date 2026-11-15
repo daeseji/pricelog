@@ -717,13 +717,14 @@ def build_mine(notes, links, icons):
     root = "../"
     steps = [
         ("상품 담기", "쿠팡 상품 주소를 붙여 넣거나, PC에서는 쿠팡 다시 구매 목록을 한 번에 가져와요. 뺄 상품은 고를 때 체크만 풀면 돼요."),
-        ("가격 쌓기", "살 때 본 가격을 적거나, 다시 구매 화면에서 북마크를 다시 누르면 오늘 가격이 한꺼번에 기록돼요. 싸다구가 매일 기록하는 상품이면 자동으로 채워져요."),
+        ("가격 쌓기", "'매일 확인'을 켜 두면 싸다구가 하루에 한 번씩 가격을 확인해 기록해요. 살 때 본 가격을 직접 적어 둘 수도 있어요."),
         ("목표가에 닿으면 사기", "사고 싶은 가격을 정해 두면, 그 가격 이하가 기록됐을 때 목록에 '목표가 도달'이 붙어요."),
     ]
     steps_html = "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in steps)
     faq = [
         ("담은 상품은 어디에 저장돼요?", "지금 쓰는 기기의 브라우저에만 저장돼요. 싸다구 서버로 목록을 보내지 않아요. 다른 기기에서 보려면 '백업 받기'로 파일을 저장해 그 기기에서 '백업 불러오기'를 눌러 주세요. 방문 기록을 지우면 목록도 지워질 수 있으니 가끔 백업해 두면 좋아요."),
-        ("가격은 자동으로 바뀌나요?", "싸다구가 매일 아침 기록하는 상품과 같은 상품(옵션까지 같은 경우)이면 그 기록이 자동으로 보여요. 그 밖의 상품은 기록된 가격만 보여요. PC에서 쿠팡 다시 구매 화면의 '싸다구로 보내기'를 다시 누르면, 담아 둔 상품의 그날 가격이 한꺼번에 기록돼요. 쿠팡 파트너스 API는 호출 횟수 제한이 있어서 모든 상품을 매일 자동으로 확인할 수는 없어요."),
+        ("가격은 자동으로 쌓이나요?", "'매일 확인'을 켠 상품은 싸다구가 하루에 한 번씩 쿠팡 파트너스 API로 가격을 확인해 기록해요. 쿠팡 API는 1시간에 부를 수 있는 횟수가 정해져 있어서, 30분마다 조금씩 나눠 확인해요. 신청한 상품이 아주 많아지면 이틀에 한 번꼴로 확인될 수 있고, 쿠팡 검색에서 옵션까지 같은 상품을 찾지 못하면 그날은 기록하지 않아요. 싸다구 첫 화면에 있는 상품과 같은 상품이면 그 기록이 바로 보여요."),
+        ("'매일 확인'을 켜면 무엇을 보내나요?", "상품 번호, 옵션 번호, 판매 옵션 번호, 쿠팡 상품 이름만 싸다구의 제휴 링크 서버(Google Apps Script)로 보내요. 누가 보냈는지, 담은 목록 전체, 직접 적은 가격, 목표가는 보내지 않아요. 일주일에 한 번 다시 보내서, 60일 동안 아무도 신청하지 않은 상품은 확인 목록에서 빠져요. 상품 카드의 '매일 확인 끄기'로 언제든 끌 수 있어요."),
         ("쿠팡 '다시 구매' 목록을 한 번에 가져올 수 있나요?", "PC에서는 돼요. '싸다구로 보내기' 버튼을 북마크바에 끌어다 놓고, 쿠팡에 로그인한 상태로 다시 구매 화면에서 그 북마크를 누르면 목록이 이 화면으로 넘어와요. 담을 상품만 골라 담을 수 있고, 이미 담은 상품은 그날 가격만 기록돼요. 쿠팡 화면에 떠 있는 상품 이름, 상품 번호, 가격, 구매 횟수만 읽고, 로그인 정보나 주문·배송·결제 정보는 읽지 않아요. 휴대폰 쿠팡 앱에서는 쓸 수 없어서, PC에서 담은 뒤 '백업 받기'로 옮겨 주세요."),
         ("어떤 주소를 넣어야 하나요?", "주소에 coupang.com/vp/products/ 가 들어 있는 상품 페이지 주소면 돼요. 옵션(용량, 수량)을 고른 뒤 주소를 복사하면 그 옵션으로 담겨요. 쿠팡 앱의 줄인 공유 링크는 바로 읽을 수 없어서, 링크를 한 번 연 뒤 상품 페이지 주소를 복사해 주세요."),
         ("'쿠팡에서 보기'는 어떤 링크인가요?", "쿠팡 파트너스 링크예요. 이 링크로 구매하면 싸다구가 일정액의 수수료를 받을 수 있고, 구매하시는 가격은 똑같아요. 쿠팡은 버튼을 누를 때만 열리고, 자동으로 쿠팡 페이지를 띄우지 않아요. 링크를 만들 때는 상품 주소(상품 번호와 옵션 번호)만 쓰고, 목록이나 가격 기록은 보내지 않아요. 제휴 링크를 원하지 않으면 목록 아래의 '제휴 링크 끄기'를 켜 두세요."),
@@ -747,6 +748,7 @@ def build_mine(notes, links, icons):
       </div>
       <ul class="imp-list" id="imp-list"></ul>
       <p class="no-result imp-none" id="imp-none" hidden>찾는 상품이 없어요</p>
+      <label class="mine-check imp-daily" for="imp-track"><input type="checkbox" id="imp-track" checked><span><b>고른 상품을 싸다구가 매일 가격 확인하기</b><span>상품 번호, 옵션 번호, 상품 이름만 보내요. 누가 보냈는지, 목록 전체, 가격 기록은 보내지 않아요.</span></span></label>
       <p class="mine-error" id="imp-error" role="alert" hidden></p>
       <div class="imp-cta">
         <button type="button" class="btn" id="imp-ok">담기</button>
@@ -762,6 +764,7 @@ def build_mine(notes, links, icons):
       <label class="mine-field wide" for="m-name">상품 이름<input id="m-name" type="text" maxlength="60" autocomplete="off" placeholder="예: 생수 2L 12병"></label>
       <label class="mine-field" for="m-price"><span>오늘 본 가격 <small>(선택)</small></span><input id="m-price" type="text" inputmode="numeric" autocomplete="off" placeholder="원"></label>
       <label class="mine-field" for="m-target"><span>목표 가격 <small>(선택)</small></span><input id="m-target" type="text" inputmode="numeric" autocomplete="off" placeholder="원"></label>
+      <label class="mine-check wide" for="m-daily"><input type="checkbox" id="m-daily" checked><span><b>싸다구가 매일 가격 확인하기</b><span>상품 번호, 옵션 번호, 상품 이름만 보내요. 옵션까지 고른 주소여야 해요.</span></span></label>
       <p class="mine-error" id="m-error" role="alert" hidden></p>
       <button class="btn" type="submit">목록에 담기</button>
     </form>

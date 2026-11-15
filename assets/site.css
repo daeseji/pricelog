@@ -427,3 +427,9 @@ a { color: inherit; }
 .imp-cta .btn:first-child { flex: 1; }
 .imp-cta .btn.ghost { border: 1px solid var(--line); }
 .imp-cta .btn:disabled { opacity: .45; cursor: not-allowed; }
+.mine-check { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--ink-2); cursor: pointer; line-height: 1.55; }
+.mine-check.wide { grid-column: 1 / -1; }
+.mine-check input { flex: none; width: 19px; height: 19px; margin: 1px 0 0; accent-color: var(--ink); cursor: pointer; }
+.mine-check b { display: block; font-size: 14px; color: var(--ink); }
+.mine-check span span { display: block; margin-top: 2px; font-size: 12.5px; color: var(--muted); }
+.imp-daily { margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: var(--surface-2); }

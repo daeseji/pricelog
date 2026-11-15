@@ -52,7 +52,7 @@
     if (itemId) q.set('itemId', itemId);
     if (vendorItemId) q.set('vendorItemId', vendorItemId);
     const qs = q.toString();
-    return { productId: id, itemId, url: `https://www.coupang.com/vp/products/${id}${qs ? '?' + qs : ''}` };
+    return { productId: id, itemId, vendorItemId, url: `https://www.coupang.com/vp/products/${id}${qs ? '?' + qs : ''}` };
   }
 
   /* ---------- 저장 ---------- */
@@ -75,6 +75,10 @@
       link: LINK_RE.test(x.link || '') ? x.link : '',
       // 쿠팡 '다시 구매'에서 가져온 상품이면 쿠팡에서 산 횟수를 함께 적어 둬요
       buys: Math.min(9999, Math.max(0, Number(x.buys) | 0)) || 0,
+      // 쿠팡에 적힌 원래 이름 (이름을 바꿔도 매일 확인할 때는 이 이름으로 찾아요)
+      title: String(x.title || '').replace(/\s+/g, ' ').trim().slice(0, 100),
+      // '매일 확인'을 켰는지
+      track: x.track === true,
     };
   }
   function load() {
@@ -99,14 +103,20 @@
   /* ---------- 싸다구가 매일 기록하는 상품과 맞춰 보기 ---------- */
   let catalog = [];
   let history = {};
+  let pool = {};
   async function loadCatalog() {
     try {
       const bust = '?_=' + Math.floor(Date.now() / 600000);
-      const [p, h] = await Promise.all([
+      const [p, h, pl] = await Promise.all([
         fetch(DATA + '/products.json' + bust).then((r) => r.json()),
         fetch(DATA + '/prices.json' + bust).then((r) => r.json()),
+        // '매일 확인' 상품의 가격 기록 (update_prices.py가 만들어요)
+        fetch(DATA + '/pool.json' + bust)
+          .then((r) => (r.ok ? r.json() : null))
+          .catch(() => null),
       ]);
       history = (h && h.history) || {};
+      pool = (pl && pl.items) || {};
       catalog = ((p && p.products) || [])
         .map((x) => {
           const q = parse(x.url);
@@ -117,12 +127,63 @@
       catalog = [];
     }
     render();
+    syncTracks(false);
   }
   // 옵션 번호까지 같아야 같은 상품으로 봐요 (다른 용량·수량의 가격이 섞이지 않게)
   function tracked(item) {
     const p = parse(item.url);
     if (!p || p.short) return null;
     return catalog.find((c) => c.productId === p.productId && (c.itemId ? c.itemId === p.itemId : true)) || null;
+  }
+
+  /* ---------- 매일 확인 ----------
+     '매일 확인'을 켠 상품은 상품 번호, 옵션 번호, 판매 옵션 번호, 쿠팡 상품 이름만 제휴 링크 서버(Apps Script)로 보내요.
+     누가 보냈는지, 가격 기록, 목록 전체는 보내지 않아요. 싸다구가 30분마다 쿠팡 파트너스 API 한도 안에서 나눠 확인하고
+     data/pool.json에 기록해요. 일주일에 한 번 다시 보내서, 아무도 안 보는 상품은 60일 뒤 목록에서 빠져요. */
+  const SYNC = 'sadagu:mine:sync';
+  // 옵션 번호가 있어야 같은 상품(옵션)만 골라 기록할 수 있어요
+  const canTrack = (item) => {
+    const p = parse(item.url);
+    return !!(p && !p.short && p.itemId) && !tracked(item);
+  };
+  function poolOf(item) {
+    const p = parse(item.url);
+    return p && p.itemId ? pool[`${p.productId}:${p.itemId}`] || null : null;
+  }
+  async function sendTrack(items) {
+    if (!LINK_API) return false;
+    const rows = items
+      .map((x) => {
+        const p = parse(x.url);
+        return p && p.itemId ? [p.productId, p.itemId, p.vendorItemId || '', x.title || x.name] : null;
+      })
+      .filter(Boolean);
+    let ok = true;
+    for (let i = 0; i < rows.length; i += 300) {
+      try {
+        const r = await fetch(LINK_API, { method: 'POST', body: JSON.stringify({ action: 'track', items: rows.slice(i, i + 300) }) });
+        const d = await r.json().catch(() => null);
+        ok = ok && !!(d && d.ok);
+      } catch {
+        ok = false;
+      }
+    }
+    return ok && rows.length > 0;
+  }
+  function syncTracks(force) {
+    const items = state.items.filter((x) => x.track && canTrack(x));
+    if (!items.length) return;
+    let last = 0;
+    try {
+      last = Number(localStorage.getItem(SYNC) || 0);
+    } catch {}
+    if (!force && Date.now() - last < 6 * 864e5) return;
+    sendTrack(items).then((ok) => {
+      if (!ok) return;
+      try {
+        localStorage.setItem(SYNC, String(Date.now()));
+      } catch {}
+    });
   }
 
   /* ---------- 제휴 링크 ---------- */
@@ -154,20 +215,42 @@
   // '제휴 링크 끄기'를 켠 브라우저에서는 일반 쿠팡 상품 주소로 열어요 (assets/noaff.js)
   const noAff = () => !!(window.SDG_NOAFF && window.SDG_NOAFF());
 
+  // 매일 확인할 때 받은 링크는 싸다구 파트너스 계정의 제휴 링크예요 (따로 만들 필요가 없어요)
+  const poolLink = (item) => {
+    const it = poolOf(item);
+    return it && /^https:\/\/link\.coupang\.com\/re\/AFFSDP\?/.test(it.link || '') ? it.link : '';
+  };
+
   function buyHref(item) {
     if (noAff()) return item.url;
     const t = tracked(item);
     if (t && t.link_b64) return `${ROOT}go.html?u=${t.link_b64}`;
     if (item.link) return go(item.link);
+    const pl = poolLink(item);
+    if (pl) return go(pl);
     return go(item.url);
   }
-  const needsLink = (item) => !!LINK_API && !noAff() && !item.link && !tracked(item);
+  const needsLink = (item) => !!LINK_API && !noAff() && !item.link && !tracked(item) && !poolLink(item);
 
   /* ---------- 화면 ---------- */
   function seriesOf(item) {
     const t = tracked(item);
     const auto = t ? (history[t.name] || []).map((x) => ({ d: String(x.date).slice(0, 10), p: Number(x.price) })).filter((x) => x.p > 0) : [];
-    return auto.length ? { auto: true, list: auto } : { auto: false, list: item.prices || [] };
+    if (auto.length) return { auto: 'catalog', list: auto };
+    // 매일 확인 기록이 있으면 그 기록만 써요 (직접 적은 가격은 쿠폰·회원가가 섞여 기준이 달라요)
+    const it = poolOf(item);
+    const daily = it && Array.isArray(it.h) ? it.h.map((x) => ({ d: String(x[0]), p: Number(x[1]) })).filter((x) => x.p > 0) : [];
+    if (daily.length) return { auto: 'pool', list: daily };
+    return { auto: false, list: item.prices || [] };
+  }
+
+  function dailyNote(item, count) {
+    if (!item.track || !canTrack(item)) return '';
+    const it = poolOf(item);
+    if (!it) return '매일 확인을 신청했어요 · 하루 안에 첫 기록이 보여요';
+    if ((it.miss || 0) >= 3) return '쿠팡 검색에서 같은 상품을 찾기 어려워서 일주일에 한 번 다시 찾아요';
+    if (it.miss) return '쿠팡 검색에서 아직 같은 상품을 못 찾아 다른 검색어로 다시 찾는 중이에요';
+    return count ? '' : '매일 확인을 신청했어요 · 하루 안에 첫 기록이 보여요';
   }
 
   function spark(list) {
@@ -190,12 +273,18 @@
     if (last != null && item.target && last <= item.target) badge = '<span class="badge deal">목표가 도달</span>';
     else if (last != null && list.length >= 3 && last === min && max > min) badge = '<span class="badge good">기록 중 최저</span>';
     else if (auto) badge = '<span class="badge mute">매일 기록</span>';
+    const it = auto === 'pool' ? poolOf(item) : null;
+    const stale = it && it.ok && it.ok < new Date(Date.now() + 9 * 3600e3 - 864e5).toISOString().slice(0, 10) ? ` · 마지막 확인 ${it.ok.slice(5).replace('-', '.')}` : '';
+    const note = auto ? '' : dailyNote(item, list.length);
     const meta =
       (auto
-        ? `싸다구가 매일 아침 기록해요 · ${list.length}번 기록`
+        ? `싸다구가 매일 확인해요 · ${list.length}번 기록${stale}`
         : tracked(item)
           ? `싸다구가 곧 매일 기록을 시작해요 · 직접 기록 ${list.length}번`
-          : `직접 기록 ${list.length}번 · ${esc(item.added)}에 담음`) + (item.buys ? ` · 쿠팡에서 ${item.buys}번 구매` : '');
+          : note
+            ? `${note} · 직접 기록 ${list.length}번`
+            : `직접 기록 ${list.length}번 · ${esc(item.added)}에 담음`) + (item.buys ? ` · 쿠팡에서 ${item.buys}번 구매` : '');
+    const daily = canTrack(item) ? `<button class="mine-txt" type="button" data-daily="${esc(item.id)}">${item.track ? '매일 확인 끄기' : '매일 확인 켜기'}</button>` : '';
     const price =
       last == null
         ? '<b class="none">아직 기록이 없어요</b><span>살 때 본 가격을 적어 보세요</span>'
@@ -211,7 +300,7 @@
       : `<form class="mine-log" data-log="${id}"><label class="sr" for="log-${id}">${esc(item.name)} 오늘 본 가격</label><input id="log-${id}" type="text" inputmode="numeric" autocomplete="off" placeholder="오늘 본 가격(원)"><button class="btn ghost" type="submit">기록</button></form>`;
     return `<article class="mine-item" data-id="${id}">
       <div class="mine-top"><div><h3>${esc(item.name)}</h3><p class="mine-meta">${meta}</p>
-        <div class="mine-manage"><button class="mine-txt" type="button" data-target="${id}">목표가 정하기</button><button class="mine-txt" type="button" data-rename="${id}">이름 바꾸기</button><button class="mine-txt" type="button" data-del="${id}">목록에서 빼기</button></div></div>${badge}</div>
+        <div class="mine-manage">${daily}<button class="mine-txt" type="button" data-target="${id}">목표가 정하기</button><button class="mine-txt" type="button" data-rename="${id}">이름 바꾸기</button><button class="mine-txt" type="button" data-del="${id}">목록에서 빼기</button></div></div>${badge}</div>
       <div class="mine-body"><div class="mine-price">${price}</div>${spark(list)}</div>
       ${log}
       <div class="mine-cta">${buy}</div>
@@ -252,18 +341,25 @@
     if (state.items.length >= MAX) return showError(`상품은 ${MAX}개까지 담을 수 있어요. 안 쓰는 상품을 지운 뒤 다시 담아 주세요.`);
     showError('');
     const price = toNum($('m-price').value);
+    const daily = $('m-daily');
     const item = clean({
       url: p.url,
       name,
       added: today(),
       target: toNum($('m-target').value),
       prices: price ? [{ d: today(), p: price }] : [],
+      track: !!(daily && daily.checked),
     });
     state.items.unshift(item);
     if (!save()) return;
     ev.target.reset();
     render();
-    toast(tracked(item) ? '담았어요. 싸다구가 매일 기록하는 상품이에요' : '목록에 담았어요');
+    if (tracked(item)) return toast('담았어요. 싸다구가 매일 기록하는 상품이에요');
+    if (item.track && canTrack(item)) {
+      sendTrack([item]);
+      return toast('담았어요. 하루 안에 첫 기록이 보여요');
+    }
+    toast(item.track && !canTrack(item) ? '담았어요. 옵션 번호가 없는 주소라 매일 확인은 못 해요' : '목록에 담았어요');
   });
 
   /* ---------- 가격 기록 ---------- */
@@ -293,6 +389,20 @@
       save();
       render();
       return toast(item.target ? `목표가를 ${won(item.target)}으로 정했어요` : '목표가를 지웠어요');
+    }
+    const dly = ev.target.closest('[data-daily]');
+    if (dly) {
+      const item = state.items.find((x) => x.id === dly.dataset.daily);
+      if (!item) return;
+      item.track = !item.track;
+      save();
+      render();
+      if (item.track) {
+        sendTrack([item]).then((ok) => toast(ok ? '매일 확인을 켰어요. 하루 안에 첫 기록이 보여요' : '지금은 신청하지 못했어요. 잠시 뒤 다시 켜 주세요'));
+      } else {
+        toast('매일 확인을 껐어요. 지금까지의 기록은 그대로 보여요');
+      }
+      return;
     }
     const ren = ev.target.closest('[data-rename]');
     if (ren) {
@@ -397,7 +507,8 @@
       const name = String(r[3] ?? '').replace(/\s+/g, ' ').trim().slice(0, 60);
       if (!name || seen.has(url)) continue;
       seen.add(url);
-      const row = { url, name, price: toNum(r[4]), buys: Math.min(9999, Math.max(0, Number(r[5]) | 0)), oos: !!r[6] };
+      const title = String(r[3] ?? '').replace(/\s+/g, ' ').trim().slice(0, 100);
+      const row = { url, name, title, price: toNum(r[4]), buys: Math.min(9999, Math.max(0, Number(r[5]) | 0)), oos: !!r[6] };
       row.have = state.items.find((x) => sameItem(x, row)) || null;
       // 새 상품은 품절이 아니면 골라 두고, 이미 담은 상품은 가격이 있으면 오늘 가격만 기록해요
       row.pick = row.have ? !!row.price : !row.oos;
@@ -504,21 +615,28 @@
       e.hidden = false;
       return;
     }
+    const daily = !!($('imp-track') && $('imp-track').checked);
     let logged = 0;
+    const touched = [];
     for (const r of upd) {
       const item = state.items.find((x) => x === r.have);
       if (!item) continue;
       item.prices = (item.prices || []).filter((x) => x.d !== d).concat({ d, p: r.price }).slice(-180);
       if (r.buys) item.buys = r.buys;
+      if (!item.title) item.title = r.title;
+      if (daily) item.track = true;
+      touched.push(item);
       logged++;
     }
-    const fresh = add.map((r) => clean({ url: r.url, name: r.name, added: d, buys: r.buys, prices: r.price ? [{ d, p: r.price }] : [] })).filter(Boolean);
+    const fresh = add.map((r) => clean({ url: r.url, name: r.name, title: r.title, added: d, buys: r.buys, track: daily, prices: r.price ? [{ d, p: r.price }] : [] })).filter(Boolean);
     state.items = [...fresh, ...state.items];
     if (!save()) return;
     closeImport();
     render();
+    if (daily) sendTrack([...fresh, ...touched].filter(canTrack));
     $('h-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    toast(fresh.length && logged ? `${fresh.length}개를 담고 ${logged}개의 오늘 가격을 기록했어요` : fresh.length ? `${fresh.length}개를 담았어요` : `${logged}개의 오늘 가격을 기록했어요`);
+    const msg = fresh.length && logged ? `${fresh.length}개를 담고 ${logged}개의 오늘 가격을 기록했어요` : fresh.length ? `${fresh.length}개를 담았어요` : `${logged}개의 오늘 가격을 기록했어요`;
+    toast(daily ? `${msg}. 하루 안에 첫 기록이 보여요` : msg);
   });
 
   function listenCoupang() {

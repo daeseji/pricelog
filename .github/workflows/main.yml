@@ -2,8 +2,9 @@ name: 가격 업데이트
 
 on:
   schedule:
-    # 매일 한 번, 한국 시간 오전 9시 17분 (쿠팡 API 호출을 최소화)
-    - cron: "17 0 * * *"
+    # 30분마다 (한국 시간 매시 17분, 47분). 쿠팡 검색 API는 1시간에 약 10회까지라서
+    # 한 번에 몰아 부르지 않고 update_prices.py가 직전 62분의 호출 수를 보고 남은 만큼만 불러요.
+    - cron: "17,47 * * * *"
   workflow_dispatch:
 
 # 수동 실행과 자동 실행이 겹쳐서 API를 두 배로 부르지 않도록 한 번에 하나만 실행
@@ -14,7 +15,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 20
     permissions:
       contents: write
 
@@ -30,20 +31,39 @@ jobs:
       - name: 라이브러리 설치
         run: pip install requests pillow
 
-      - name: 가격 업데이트 실행
+      - name: 가격 확인
+        id: prices
         env:
           COUPANG_ACCESS_KEY: ${{ secrets.COUPANG_ACCESS_KEY }}
           COUPANG_SECRET_KEY: ${{ secrets.COUPANG_SECRET_KEY }}
+          # '내 상품'에서 '매일 확인'을 켠 상품 목록 (worker/README.md의 Apps Script 웹 앱)
+          SADAGU_POOL_URL: https://script.google.com/macros/s/AKfycbzWNp5tkBDJdaHOgaTs_LHKNCTsT6GMJLM_kCRRCTgJvxATpkM6i8ITHESp99WTc0W2/exec?action=pool
         run: python update_prices.py
 
       - name: 상품 사진 저장 (API 호출 없음)
+        if: steps.prices.outputs.publish == 'true'
         run: python save_images.py
 
+      # 매 실행 결과는 저장소에 올리고, 사이트 빌드(Cloudflare Pages)는 12시간에 한 번만 해요.
+      # 무료 플랜의 월 빌드 한도를 넘지 않게, 반영하지 않는 커밋에는 [CF-Pages-Skip]을 붙여요.
       - name: 커밋 & 푸시
+        env:
+          PUBLISH: ${{ steps.prices.outputs.publish }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Actions"
-          git add -A data/prices.json img
-          git diff --staged --quiet || git commit -m "💰 가격 업데이트"
-          git pull --rebase
-          git push
+          git add -A data/prices.json data/pool.json data/state.json img
+          if git diff --staged --quiet; then
+            echo "바뀐 것이 없어요."
+            exit 0
+          fi
+          if [ "$PUBLISH" = "true" ]; then
+            git commit -m "💰 가격 업데이트"
+          else
+            git commit -m "💰 가격 확인 [CF-Pages-Skip]"
+          fi
+          for i in 1 2 3; do
+            git pull --rebase && git push && exit 0
+            sleep 5
+          done
+          exit 1
