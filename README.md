@@ -4,9 +4,9 @@
 
 사이트: https://sadagu.pages.dev/ (예전 주소 daeseji.github.io/pricelog 는 새 주소 안내 띠를 보여 줘요)
 
-- `data/products.json` — 추적할 상품 목록 (직접 수정)
-- `data/prices.json` — 매일 자동으로 쌓이는 가격 기록과 상품 사진 (수정하지 않기)
-- `update_prices.py` — GitHub Actions가 매일 오전 9시쯤 실행
+- `data/products.json`: 추적할 상품 목록 (직접 수정)
+- `data/prices.json`: 매일 자동으로 쌓이는 가격 기록과 상품 사진 (수정하지 않기)
+- `update_prices.py`: GitHub Actions가 매일 오전 9시쯤 실행
 
 ## 상품 추가하기
 
@@ -79,7 +79,7 @@
 ```bash
 pip install markdown
 python3 scripts/build_site.py      # 페이지 만들기
-node scripts/make_og.cjs           # (선택) 새 글의 공유 이미지 만들기 — Playwright 필요
+node scripts/make_og.cjs           # (선택) 새 글의 공유 이미지 만들기 (Playwright 필요)
 python3 scripts/build_site.py      # 공유 이미지 연결
 ```
 
