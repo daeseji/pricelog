@@ -6,7 +6,10 @@
       "category": "먹거리",
       "url": "https://www.coupang.com/vp/products/7166996396?itemId=18047953609&vendorItemId=85202117443",
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOa0FaUmh2Mg",
-      "item_id": "18047953609"
+      "item_id": "18047953609",
+      "fallback_keywords": [
+        "미국산 소갈비살 리테일팩 원육"
+      ]
     },
     {
       "name": "코카콜라 오리지널",
@@ -24,8 +27,7 @@
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOcEQxTlROSQ",
       "item_id": "18170876257",
       "fallback_keywords": [
-        "티젠 콤부차 파인애플",
-        "티젠 콤부차"
+        "티젠 콤부차 파인애플"
       ]
     },
     {
@@ -36,8 +38,7 @@
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOczFUT1JFRw",
       "item_id": "25367401878",
       "fallback_keywords": [
-        "듀오덤 스팟패치",
-        "제이웨이브 듀오덤"
+        "듀오덤 스팟패치"
       ]
     },
     {
@@ -163,7 +164,6 @@
       "item_id": "20339928917",
       "keyword": "샤프란 섬유유연제 코튼 베이비파우더 본품",
       "fallback_keywords": [
-        "샤프란 코튼 베이비파우더 3.1L",
         "샤프란 섬유유연제"
       ]
     },
@@ -176,7 +176,6 @@
       "item_id": "13660115060",
       "keyword": "헤드앤숄더 클리니컬 스트렝스 댄드러프 디펜스 인텐시브 앤 쿨링 이치 릴리프 샴푸",
       "fallback_keywords": [
-        "헤드앤숄더 클리니컬 스트렝스 샴푸",
         "헤드앤숄더 클리니컬"
       ]
     }

@@ -286,6 +286,14 @@
   .err button { margin-top: 12px; border: 1px solid var(--line); background: var(--surface); padding: 9px 16px; border-radius: 999px; cursor: pointer; font-weight: 600; }
 
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  .toolbar .search { flex: 1 1 180px; min-width: 0; max-width: 260px; height: 38px; padding: 0 14px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: inherit; font-size: 14px; }
+  .toolbar .search::placeholder { color: var(--muted); }
+  .since { display: inline-flex; align-items: center; margin-left: 6px; padding: 2px 7px; border-radius: 6px; font-size: 11.5px; font-weight: 700; color: var(--deal); background: var(--deal-bg); white-space: nowrap; }
+  .lowline { margin-top: 2px; font-size: 12px; color: var(--muted); }
+  .more-note { margin: 18px 0 0; font-size: 13.5px; color: var(--muted); text-align: center; }
+  .more-note a { color: var(--ink); font-weight: 700; }
+  .grid-empty { grid-column: 1 / -1; padding: 28px 12px; text-align: center; color: var(--muted); font-size: 14px; }
+  .grid-empty a { color: var(--ink); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -359,6 +367,8 @@
     </div>
     <div class="toolbar">
       <div class="chips" id="chips" role="group" aria-label="카테고리"></div>
+      <label class="sr" for="q">상품 검색</label>
+      <input class="search" id="q" type="search" placeholder="상품 이름으로 찾기" autocomplete="off" spellcheck="false">
       <label class="sr" for="sort">정렬</label>
       <select class="sort" id="sort">
         <option value="rec">추천순</option>
@@ -368,6 +378,7 @@
       </select>
     </div>
     <div class="grid" id="grid" aria-live="polite"></div>
+    <p class="more-note">찾는 상품이 없나요? <a href="mine/">내 상품</a>에 쿠팡 주소를 붙여 넣으면 나만의 가격 기록을 시작할 수 있어요.</p>
   </section>
 
 </main>
@@ -481,6 +492,13 @@ function analyze(history) {
   else if (a.pos <= 0.3) a.key = 'buy';
   else if (a.pos >= 0.7) a.key = 'wait';
   else a.key = 'mid';
+  // 지금 가격 이하였던 가장 최근 기록을 찾아, 그로부터 며칠 만인지 계산해요 (역대 최저면 비워 둬요)
+  if (n >= 2) {
+    const dayOf = (e) => { const q = parseDate(e.date); return new Date(q.y, q.m - 1, q.d).getTime(); };
+    let j = n - 2;
+    while (j >= 0 && prices[j] > a.curr) j--;
+    if (j >= 0 && j < n - 2) a.sinceDays = Math.round((dayOf(history[n - 1]) - dayOf(history[j])) / 864e5);
+  }
   const lp = parseDate(history[n - 1].date);
   a.last = history[n - 1].date;
   a.ageDays = (Date.now() - new Date(lp.y, lp.m - 1, lp.d, lp.h || 0, lp.mi || 0).getTime()) / 864e5;
@@ -523,7 +541,7 @@ function thumbHTML(p, withBadge = true) {
 function cardHTML(p) {
   const a = p.a;
   const priceRow = a.n
-    ? `<div class="price-line"><span class="price num">${won(a.curr)}</span>${deltaHTML(a)}</div>`
+    ? `<div class="price-line"><span class="price num">${won(a.curr)}</span>${deltaHTML(a)}${!a.stale && a.sinceDays >= 7 && (a.change ?? 0) < 0 ? `<span class="since">${a.sinceDays}일 만에 최저</span>` : ''}</div>${a.n >= 3 && !a.stale ? `<div class="lowline num">역대 최저 ${won(a.min)}</div>` : ''}`
     : `<div class="price-line"><span class="price none">첫 기록 대기 중</span></div>`;
   const extra = a.n >= 2 ? sparkSVG(a.prices) : a.n === 1 ? `<div class="hint">두 번째 기록부터 그래프가 그려져요</div>` : '';
   return `<div class="cw">${starHTML(p)}<button class="card" data-key="${esc(p.name)}" aria-label="${esc(p.name)} 가격 자세히 보기">
@@ -538,7 +556,8 @@ function cardHTML(p) {
 }
 
 let PRODUCTS = [];
-const state = { cat: '전체', sort: 'rec' };
+const state = { cat: '전체', sort: 'rec', q: '' };
+const squash = (t) => String(t || '').toLowerCase().replace(/\s+/g, '');
 
 function sorted(list) {
   const by = {
@@ -551,8 +570,12 @@ function sorted(list) {
 }
 
 function renderGrid() {
-  const list = PRODUCTS.filter(p => state.cat === '전체' || (state.cat === FAV_CAT ? isFav(p.name) : p.category === state.cat));
-  document.getElementById('grid').innerHTML = sorted(list).map(cardHTML).join('');
+  const q = squash(state.q);
+  const list = PRODUCTS.filter(p => (state.cat === '전체' || (state.cat === FAV_CAT ? isFav(p.name) : p.category === state.cat))
+    && (!q || squash(p.name + p.title + p.category).includes(q)));
+  document.getElementById('grid').innerHTML = list.length
+    ? sorted(list).map(cardHTML).join('')
+    : `<div class="grid-empty">'${esc(state.q)}'에 맞는 상품이 없어요. <a href="mine/">내 상품</a>에 쿠팡 주소를 붙여 넣어 직접 담아 보세요.</div>`;
 }
 
 function renderChips() {
@@ -671,10 +694,11 @@ function verdictText(a) {
   if (a.key === 'rec') return `기록 <b>${a.n}번</b>째예요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.`;
   if (a.key === 'flat') return `기록하는 동안 <b>가격이 한 번도 안 바뀌었어요.</b> 급하면 그냥 사도 돼요.`;
   const rank = Math.round(a.pos * 100);
+  const since = a.sinceDays >= 7 && (a.change ?? 0) < 0 ? `<b>${a.sinceDays}일 만에</b> 가장 싼 가격이에요. ` : '';
   if (a.key === 'low') return `지금이 <b>기록 중 가장 싼 가격</b>이에요. 평균보다 <b>${won(a.avg - a.curr)}</b> 저렴해요.`;
-  if (a.key === 'buy') return `기록된 가격 중 <b>싼 쪽 ${Math.max(rank, 1)}%</b> 위치예요. 필요하면 지금 사도 좋아요.`;
-  if (a.key === 'wait') return `지금은 <b>비싼 편</b>이에요. 최저가보다 <b>${won(a.curr - a.min)}</b> 비싸니 조금 기다려봐요.`;
-  return `딱 <b>평소 가격</b>이에요. 급하지 않다면 더 싸질 때를 기다려봐도 좋아요.`;
+  if (a.key === 'buy') return since + `기록된 가격 중 <b>싼 쪽 ${Math.max(rank, 1)}%</b> 위치예요. 필요하면 지금 사도 좋아요.`;
+  if (a.key === 'wait') return since + `지금은 <b>비싼 편</b>이에요. 최저가보다 <b>${won(a.curr - a.min)}</b> 비싸니 조금 기다려봐요.`;
+  return since + `딱 <b>평소 가격</b>이에요. 급하지 않다면 더 싸질 때를 기다려봐도 좋아요.`;
 }
 
 // 제휴링크는 블로그와 같은 방식(go.html?u=Base64)으로 연결합니다
@@ -748,7 +772,7 @@ function openDetail(key, push = true) {
     </ol></div>` : ''}
     <a class="cta" href="${esc(link.href)}" target="_blank" rel="${link.affiliate ? 'sponsored nofollow noopener' : 'noopener'}">쿠팡에서 보기
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 13 13 5M7 5h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    <p class="fine">${fine}<br>가격은 매일 오전 9시쯤 확인한 값이라 지금과 다를 수 있어요.</p>`;
+    <p class="fine">${fine}<br>가격은 매일 오전 9시쯤 쿠팡 파트너스에서 확인한 <b>쿠폰 적용 전</b> 가격이에요. 쿠팡 화면에서는 쿠폰·카드 할인이 더해져 더 쌀 수 있어요.</p>`;
 
   const dlg = document.getElementById('detail');
   if (!dlg.open) dlg.showModal();
@@ -1161,6 +1185,7 @@ document.addEventListener('click', e => {
   if (chip) { state.cat = chip.dataset.cat; renderChips(); renderGrid(); }
 });
 document.getElementById('sort').addEventListener('change', e => { state.sort = e.target.value; renderGrid(); renderTiming(); });
+document.getElementById('q').addEventListener('input', e => { state.q = e.target.value; renderGrid(); });
 document.getElementById('d-close').addEventListener('click', () => dlg.close());
 dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
 dlg.addEventListener('close', () => { openKey = null; if (location.hash) history.replaceState(null, '', location.pathname + location.search); });

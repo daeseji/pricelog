@@ -14,7 +14,7 @@ SEARCH_PATH = "/v2/providers/affiliate_open_api/apis/openapi/v1/products/search"
 DELAY_SECONDS = 400
 MAX_CALLS_PER_RUN = 20
 # 못 찾은 상품은 products.json의 fallback_keywords로 한 번 더 찾아요. 그래도 한 번 실행에 최대 이만큼만 호출해요.
-MAX_TOTAL_CALLS = 28
+MAX_TOTAL_CALLS = 32
 SEARCH_LIMIT = 10
 HISTORY_LIMIT = 365
 
@@ -97,8 +97,12 @@ def main():
     for i, product in enumerate(products):
         key = product["name"]
         # 쿠팡 파트너스에서 검색하듯 상품명(옵션까지) 그대로 검색하고, 못 찾으면 짧은 검색어로 한 번 더 찾아요
+        # 1) 옵션까지 붙인 상품명 → 2) 상품명만 → 3) products.json의 fallback_keywords
+        #    쿠팡 API 검색은 옵션을 붙이면 다른 브랜드만 돌려줄 때가 있어서, 상품명만으로 한 번 더 찾아요
         keywords = [product.get("keyword") or product.get("title") or product["name"]]
-        keywords += [k for k in (product.get("fallback_keywords") or []) if k not in keywords]
+        for k in [product["name"], *(product.get("fallback_keywords") or [])]:
+            if k and k not in keywords:
+                keywords.append(k)
         match = None
         for kw in keywords:
             if calls >= MAX_TOTAL_CALLS:
