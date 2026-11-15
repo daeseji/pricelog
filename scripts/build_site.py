@@ -17,6 +17,7 @@ import json
 import math
 import pathlib
 import re
+import urllib.parse
 
 import markdown
 from markdown.extensions.toc import slugify_unicode
@@ -42,6 +43,16 @@ CSS_VER = _ver("site.css")
 ALERTS_VER = _ver("alerts.js")
 MINE_VER = _ver("mine.js")
 NOAFF_VER = _ver("noaff.js")
+
+
+def bookmarklet_href():
+    """assets/bookmarklet.js를 한 줄로 줄여 북마크 주소(javascript:)로 만들어요.
+    한글은 \\uXXXX로 바꾸고 나머지는 퍼센트 인코딩해서, 어느 브라우저에 저장해도 글자가 깨지지 않아요."""
+    src = (ROOT / "assets" / "bookmarklet.js").read_text(encoding="utf-8")
+    src = re.sub(r"/\*.*?\*/", "", src, flags=re.S)
+    js = " ".join(line.strip() for line in src.splitlines() if line.strip())
+    js = js.encode("ascii", "backslashreplace").decode("ascii")
+    return "javascript:" + urllib.parse.quote(js, safe="")
 
 # 카테고리: 이름 → (주소·색 이름, 소개, 대표 아이콘)
 CATS = {
@@ -705,14 +716,15 @@ NOAFF_BOX = """<label class="noaff" for="noaff-box"><input type="checkbox" id="n
 def build_mine(notes, links, icons):
     root = "../"
     steps = [
-        ("상품 주소 붙여 넣기", "쿠팡 앱이나 웹에서 상품을 열고 주소를 복사해 붙여 넣어요. 알아보기 쉬운 이름도 함께 적어 두세요."),
-        ("살 때마다 가격 적기", "장 볼 때 본 가격을 한 줄씩 적어 두면 최저가와 가격 흐름이 쌓여요. 싸다구가 매일 기록하는 상품이면 자동으로 채워져요."),
+        ("상품 담기", "쿠팡 상품 주소를 붙여 넣거나, PC에서는 쿠팡 다시 구매 목록을 한 번에 가져와요. 뺄 상품은 고를 때 체크만 풀면 돼요."),
+        ("가격 쌓기", "살 때 본 가격을 적거나, 다시 구매 화면에서 북마크를 다시 누르면 오늘 가격이 한꺼번에 기록돼요. 싸다구가 매일 기록하는 상품이면 자동으로 채워져요."),
         ("목표가에 닿으면 사기", "사고 싶은 가격을 정해 두면, 그 가격 이하가 기록됐을 때 목록에 '목표가 도달'이 붙어요."),
     ]
     steps_html = "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in steps)
     faq = [
         ("담은 상품은 어디에 저장돼요?", "지금 쓰는 기기의 브라우저에만 저장돼요. 싸다구 서버로 목록을 보내지 않아요. 다른 기기에서 보려면 '백업 받기'로 파일을 저장해 그 기기에서 '백업 불러오기'를 눌러 주세요. 방문 기록을 지우면 목록도 지워질 수 있으니 가끔 백업해 두면 좋아요."),
-        ("가격은 자동으로 바뀌나요?", "싸다구가 매일 아침 기록하는 상품과 같은 상품(옵션까지 같은 경우)이면 그 기록이 자동으로 보여요. 그 밖의 상품은 직접 적은 가격만 보여요. 쿠팡 파트너스 API는 호출 횟수 제한이 있어서 모든 상품을 자동으로 확인할 수는 없어요."),
+        ("가격은 자동으로 바뀌나요?", "싸다구가 매일 아침 기록하는 상품과 같은 상품(옵션까지 같은 경우)이면 그 기록이 자동으로 보여요. 그 밖의 상품은 기록된 가격만 보여요. PC에서 쿠팡 다시 구매 화면의 '싸다구로 보내기'를 다시 누르면, 담아 둔 상품의 그날 가격이 한꺼번에 기록돼요. 쿠팡 파트너스 API는 호출 횟수 제한이 있어서 모든 상품을 매일 자동으로 확인할 수는 없어요."),
+        ("쿠팡 '다시 구매' 목록을 한 번에 가져올 수 있나요?", "PC에서는 돼요. '싸다구로 보내기' 버튼을 북마크바에 끌어다 놓고, 쿠팡에 로그인한 상태로 다시 구매 화면에서 그 북마크를 누르면 목록이 이 화면으로 넘어와요. 담을 상품만 골라 담을 수 있고, 이미 담은 상품은 그날 가격만 기록돼요. 쿠팡 화면에 떠 있는 상품 이름, 상품 번호, 가격, 구매 횟수만 읽고, 로그인 정보나 주문·배송·결제 정보는 읽지 않아요. 휴대폰 쿠팡 앱에서는 쓸 수 없어서, PC에서 담은 뒤 '백업 받기'로 옮겨 주세요."),
         ("어떤 주소를 넣어야 하나요?", "주소에 coupang.com/vp/products/ 가 들어 있는 상품 페이지 주소면 돼요. 옵션(용량, 수량)을 고른 뒤 주소를 복사하면 그 옵션으로 담겨요. 쿠팡 앱의 줄인 공유 링크는 바로 읽을 수 없어서, 링크를 한 번 연 뒤 상품 페이지 주소를 복사해 주세요."),
         ("'쿠팡에서 보기'는 어떤 링크인가요?", "쿠팡 파트너스 링크예요. 이 링크로 구매하면 싸다구가 일정액의 수수료를 받을 수 있고, 구매하시는 가격은 똑같아요. 쿠팡은 버튼을 누를 때만 열리고, 자동으로 쿠팡 페이지를 띄우지 않아요. 링크를 만들 때는 상품 주소(상품 번호와 옵션 번호)만 쓰고, 목록이나 가격 기록은 보내지 않아요. 제휴 링크를 원하지 않으면 목록 아래의 '제휴 링크 끄기'를 켜 두세요."),
         ("쿠팡에서 본 가격과 달라요.", "직접 적은 가격은 그날 본 가격이고, 자동 기록은 매일 오전 9시쯤 쿠팡 파트너스 API로 확인한 값이에요. 쿠폰, 카드 할인, 회원 혜택은 반영되지 않으니 구매 전에는 쿠팡에서 최종 가격을 꼭 확인해 주세요."),
@@ -722,8 +734,26 @@ def build_mine(notes, links, icons):
   <header class="page-head">
     <div class="eyebrow">내 상품</div>
     <h1>자주 사는 물건,<br>내 목록으로 지켜봐요</h1>
-    <p>쿠팡 상품 주소를 붙여 넣으면 나만의 목록이 생겨요. 살 때 본 가격을 적어 두면 <b>평소 가격과 최저가</b>가 쌓이고, 싸다구가 매일 기록하는 상품이면 가격이 자동으로 채워져요.</p>
+    <p>쿠팡 상품 주소를 붙여 넣거나, PC에서는 쿠팡 <b>다시 구매</b> 목록을 한 번에 가져와 나만의 목록을 만들어요. 가격이 쌓이면 <b>평소 가격과 최저가</b>가 보이고, 싸다구가 매일 기록하는 상품이면 가격이 자동으로 채워져요.</p>
   </header>
+  <section class="sec imp" id="imp" hidden aria-labelledby="imp-title">
+    <div class="imp-box">
+      <h2 class="sec-title" id="imp-title">쿠팡 다시 구매에서 불러왔어요</h2>
+      <p class="sec-desc" id="imp-sum"></p>
+      <div class="imp-tools">
+        <button type="button" class="chip" data-imp-all="1">모두 고르기</button>
+        <button type="button" class="chip" data-imp-all="0">모두 빼기</button>
+        <label class="imp-search" for="imp-q"><span class="sr">불러온 상품에서 찾기</span><input type="search" id="imp-q" autocomplete="off" placeholder="불러온 상품에서 찾기"></label>
+      </div>
+      <ul class="imp-list" id="imp-list"></ul>
+      <p class="no-result imp-none" id="imp-none" hidden>찾는 상품이 없어요</p>
+      <p class="mine-error" id="imp-error" role="alert" hidden></p>
+      <div class="imp-cta">
+        <button type="button" class="btn" id="imp-ok">담기</button>
+        <button type="button" class="btn ghost" id="imp-cancel">취소</button>
+      </div>
+    </div>
+  </section>
   <section class="sec" aria-labelledby="h-add">
     <h2 class="sec-title" id="h-add">상품 담기</h2>
     <p class="sec-desc">쿠팡 앱이나 웹에서 상품을 열고 주소를 복사해 붙여 넣어 주세요</p>
@@ -735,6 +765,18 @@ def build_mine(notes, links, icons):
       <p class="mine-error" id="m-error" role="alert" hidden></p>
       <button class="btn" type="submit">목록에 담기</button>
     </form>
+  </section>
+  <section class="sec" aria-labelledby="h-fbi">
+    <h2 class="sec-title" id="h-fbi">쿠팡 다시 구매 목록, 한 번에 담기</h2>
+    <p class="sec-desc">PC 브라우저(크롬, 엣지, 웨일 등)에서 쓸 수 있어요. 한 번 담아 두면 다시 누를 때마다 오늘 가격이 한꺼번에 기록돼요</p>
+    <div class="fbi-box">
+      <ol class="fbi-steps">
+        <li><b>버튼을 북마크바로 끌어다 놓기</b><span>아래 버튼을 마우스로 잡고 브라우저 위쪽 북마크바에 놓아요. 북마크바가 안 보이면 Ctrl+Shift+B를 눌러요(맥은 ⌘+Shift+B).</span><a class="btn bm" id="m-bm" href="{bookmarklet_href()}" title="북마크바로 끌어다 놓으세요">싸다구로 보내기</a></li>
+        <li><b>쿠팡 다시 구매 화면 열기</b><span>쿠팡에 로그인한 뒤 <a href="https://www.coupang.com/np/fbi" target="_blank" rel="noopener">다시 구매</a> 화면을 열어요. 상품이 많으면 목록을 끝까지 내려서 모두 불러와 주세요.</span></li>
+        <li><b>북마크 누르고 고르기</b><span>북마크바의 '싸다구로 보내기'를 누르면 이 화면이 새 탭으로 열려요. 뺄 상품은 체크를 풀고 담으면 끝이에요.</span></li>
+      </ol>
+      <p class="fbi-note">쿠팡 화면에 이미 떠 있는 상품 이름, 상품 번호, 가격, 구매 횟수만 읽어서 이 브라우저 안에서 싸다구 탭으로 바로 넘겨요. 쿠팡 로그인 정보나 주문·배송·결제 정보는 읽지 않고, 싸다구 서버로도 보내지 않아요. 휴대폰 쿠팡 앱에서는 쓸 수 없으니 PC에서 담은 뒤 '백업 받기'로 옮겨 주세요.</p>
+    </div>
   </section>
   <section class="sec" aria-labelledby="h-list">
     <div class="list-head">
@@ -772,7 +814,7 @@ def build_mine(notes, links, icons):
     })
     js = f'<script src="{root}assets/noaff.js?v={NOAFF_VER}"></script><script src="{root}assets/mine.js?v={MINE_VER}"></script>'
     return page("mine/index.html", "내 상품 가격 기록 · 싸다구",
-                "쿠팡 상품 주소를 붙여 넣고 살 때 본 가격을 적어 두세요. 평소 가격과 최저가를 한눈에 보고, 목표가에 닿으면 바로 알 수 있어요.",
+                "쿠팡 상품 주소를 붙여 넣거나 쿠팡 다시 구매 목록을 한 번에 가져와 가격을 기록하세요. 평소 가격과 최저가를 한눈에 보고, 목표가에 닿으면 바로 알 수 있어요.",
                 "mine", body, notes, links, icons, extra_head=head, extra_js=js)
 
 

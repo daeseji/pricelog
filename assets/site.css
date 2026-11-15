@@ -385,3 +385,45 @@ a { color: inherit; }
 .mine-disc { margin: 18px 0 0; font-size: 13px; color: var(--muted); line-height: 1.65; }
 
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+/* 쿠팡 '다시 구매' 한 번에 담기: 북마크 안내와 고르기 화면 */
+.fbi-box { max-width: 720px; background: var(--surface); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); }
+@media (min-width: 720px) { .fbi-box { padding: 22px; } }
+.fbi-steps { margin: 0; padding: 0; list-style: none; counter-reset: f; display: grid; gap: 18px; }
+.fbi-steps li { counter-increment: f; position: relative; padding-left: 42px; display: grid; gap: 4px; justify-items: start; }
+.fbi-steps li::before { content: counter(f); position: absolute; left: 0; top: 0; width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: var(--brand-ink); display: grid; place-items: center; font-size: 13.5px; font-weight: 800; }
+.fbi-steps b { font-size: 15.5px; font-weight: 800; letter-spacing: -0.02em; line-height: 28px; }
+.fbi-steps span { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
+.fbi-steps span a { color: var(--ink); font-weight: 700; text-underline-offset: 3px; }
+.btn.bm { margin-top: 8px; background: var(--brand); color: var(--brand-ink); cursor: grab; box-shadow: inset 0 0 0 1.5px rgba(27,22,0,.12); }
+.btn.bm:active { cursor: grabbing; }
+.fbi-note { margin: 18px 0 0; padding-top: 14px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); line-height: 1.65; }
+.imp-box { max-width: 720px; background: var(--surface); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); outline: 2px solid var(--ink); outline-offset: -2px; }
+@media (min-width: 720px) { .imp-box { padding: 22px; } }
+.imp-box .sec-desc { line-height: 1.6; }
+.imp-tools { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.imp-tools .chip { font-family: inherit; cursor: pointer; }
+.imp-search { flex: 1 1 200px; min-width: 0; }
+.imp-search input { width: 100%; height: 40px; padding: 0 16px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; font-size: 14.5px; outline: none; transition: border-color .15s, box-shadow .15s; }
+.imp-search input:focus { border-color: var(--ink-2); box-shadow: 0 0 0 4px var(--surface-2); }
+.imp-list { list-style: none; margin: 0; padding: 0; max-height: min(60vh, 540px); overflow-y: auto; overscroll-behavior: contain; border: 1px solid var(--line); border-radius: 16px; }
+.imp-row { border-top: 1px solid var(--line); }
+.imp-row:first-child { border-top: 0; }
+.imp-row[hidden] { display: none; }
+.imp-row label { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; cursor: pointer; }
+.imp-row input { flex: none; width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--ink); cursor: pointer; }
+.imp-row input:disabled { cursor: default; }
+.imp-row input:disabled + .imp-text { opacity: .55; }
+.imp-text { min-width: 0; display: grid; gap: 3px; }
+.imp-name { font-size: 14.5px; font-weight: 700; line-height: 1.45; overflow-wrap: anywhere; }
+.imp-row:not(.on) .imp-name { color: var(--muted); font-weight: 600; }
+.imp-meta { font-size: 12.5px; color: var(--muted); }
+.imp-oos { color: var(--deal); font-weight: 700; }
+.imp-have { color: var(--good); font-weight: 700; }
+.imp-none { margin: 12px 0 0; }
+#imp-error { margin-top: 12px; }
+.imp-cta { display: flex; gap: 8px; margin-top: 14px; }
+.imp-cta .btn { border: 0; cursor: pointer; font-family: inherit; }
+.imp-cta .btn:first-child { flex: 1; }
+.imp-cta .btn.ghost { border: 1px solid var(--line); }
+.imp-cta .btn:disabled { opacity: .45; cursor: not-allowed; }

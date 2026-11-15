@@ -4,6 +4,7 @@
   const LINK_API = 'https://script.google.com/macros/s/AKfycbzWNp5tkBDJdaHOgaTs_LHKNCTsT6GMJLM_kCRRCTgJvxATpkM6i8ITHESp99WTc0W2/exec';
 
   const KEY = 'sadagu:mine:v1';
+  const MAX = 300;
   const ROOT = '../';
   const DATA = location.hostname.endsWith('.github.io') ? 'https://raw.githubusercontent.com/daeseji/pricelog/main/data' : ROOT + 'data';
   const HOSTS = ['www.coupang.com', 'coupang.com', 'm.coupang.com'];
@@ -13,6 +14,7 @@
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const won = (n) => Math.round(n).toLocaleString('ko-KR') + '원';
+  const squash = (s) => String(s || '').toLowerCase().replace(/\s+/g, '');
   const today = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
   const b64 = (s) => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
   const go = (url) => `${ROOT}go.html?u=${b64(url)}`;
@@ -71,6 +73,8 @@
       target: toNum(x.target) || null,
       prices,
       link: LINK_RE.test(x.link || '') ? x.link : '',
+      // 쿠팡 '다시 구매'에서 가져온 상품이면 쿠팡에서 산 횟수를 함께 적어 둬요
+      buys: Math.min(9999, Math.max(0, Number(x.buys) | 0)) || 0,
     };
   }
   function load() {
@@ -186,11 +190,12 @@
     if (last != null && item.target && last <= item.target) badge = '<span class="badge deal">목표가 도달</span>';
     else if (last != null && list.length >= 3 && last === min && max > min) badge = '<span class="badge good">기록 중 최저</span>';
     else if (auto) badge = '<span class="badge mute">매일 기록</span>';
-    const meta = auto
-      ? `싸다구가 매일 아침 기록해요 · ${list.length}번 기록`
-      : tracked(item)
-        ? `싸다구가 곧 매일 기록을 시작해요 · 직접 기록 ${list.length}번`
-        : `직접 기록 ${list.length}번 · ${esc(item.added)}에 담음`;
+    const meta =
+      (auto
+        ? `싸다구가 매일 아침 기록해요 · ${list.length}번 기록`
+        : tracked(item)
+          ? `싸다구가 곧 매일 기록을 시작해요 · 직접 기록 ${list.length}번`
+          : `직접 기록 ${list.length}번 · ${esc(item.added)}에 담음`) + (item.buys ? ` · 쿠팡에서 ${item.buys}번 구매` : '');
     const price =
       last == null
         ? '<b class="none">아직 기록이 없어요</b><span>살 때 본 가격을 적어 보세요</span>'
@@ -206,7 +211,7 @@
       : `<form class="mine-log" data-log="${id}"><label class="sr" for="log-${id}">${esc(item.name)} 오늘 본 가격</label><input id="log-${id}" type="text" inputmode="numeric" autocomplete="off" placeholder="오늘 본 가격(원)"><button class="btn ghost" type="submit">기록</button></form>`;
     return `<article class="mine-item" data-id="${id}">
       <div class="mine-top"><div><h3>${esc(item.name)}</h3><p class="mine-meta">${meta}</p>
-        <div class="mine-manage"><button class="mine-txt" type="button" data-target="${id}">목표가 정하기</button><button class="mine-txt" type="button" data-del="${id}">목록에서 빼기</button></div></div>${badge}</div>
+        <div class="mine-manage"><button class="mine-txt" type="button" data-target="${id}">목표가 정하기</button><button class="mine-txt" type="button" data-rename="${id}">이름 바꾸기</button><button class="mine-txt" type="button" data-del="${id}">목록에서 빼기</button></div></div>${badge}</div>
       <div class="mine-body"><div class="mine-price">${price}</div>${spark(list)}</div>
       ${log}
       <div class="mine-cta">${buy}</div>
@@ -244,7 +249,7 @@
     if (p.short) return showError('줄인 주소(공유 링크)는 읽을 수 없어요. 링크를 한 번 열어 쿠팡 상품 페이지가 뜨면, 주소창의 주소를 복사해 붙여 넣어 주세요.');
     if (!name) return showError('목록에서 알아보기 쉬운 상품 이름을 적어 주세요.');
     if (state.items.some((x) => x.url === p.url)) return showError('이미 목록에 있는 상품이에요.');
-    if (state.items.length >= 200) return showError('상품은 200개까지 담을 수 있어요. 안 쓰는 상품을 지운 뒤 다시 담아 주세요.');
+    if (state.items.length >= MAX) return showError(`상품은 ${MAX}개까지 담을 수 있어요. 안 쓰는 상품을 지운 뒤 다시 담아 주세요.`);
     showError('');
     const price = toNum($('m-price').value);
     const item = clean({
@@ -288,6 +293,19 @@
       save();
       render();
       return toast(item.target ? `목표가를 ${won(item.target)}으로 정했어요` : '목표가를 지웠어요');
+    }
+    const ren = ev.target.closest('[data-rename]');
+    if (ren) {
+      const item = state.items.find((x) => x.id === ren.dataset.rename);
+      if (!item) return;
+      const v = prompt('목록에 보일 이름을 적어 주세요. (60자까지)', item.name);
+      if (v === null) return;
+      const name = v.replace(/\s+/g, ' ').trim().slice(0, 60);
+      if (!name) return toast('이름을 비워 둘 수는 없어요');
+      item.name = name;
+      save();
+      render();
+      return toast('이름을 바꿨어요');
     }
     const del = ev.target.closest('[data-del]');
     if (del) {
@@ -338,7 +356,7 @@
       if (!d || d.app !== 'sadagu-mine' || !Array.isArray(d.items)) throw new Error('not ours');
       const have = new Set(state.items.map((x) => x.url));
       const added = d.items.map(clean).filter((x) => x && !have.has(x.url) && (have.add(x.url), true));
-      state.items = [...added, ...state.items].slice(0, 200);
+      state.items = [...added, ...state.items].slice(0, MAX);
       save();
       render();
       toast(`${added.length}개를 불러왔어요`);
@@ -347,7 +365,192 @@
     }
   });
 
+  /* ---------- 쿠팡 '다시 구매'에서 한 번에 담기 ----------
+     북마크 버튼(assets/bookmarklet.js)이 쿠팡 탭에서 이 탭으로 목록을 건네줘요.
+     받은 목록은 고르는 화면에만 보여 주고, '담기'를 눌러야 이 브라우저에 저장해요. 서버로는 보내지 않아요. */
+  const COUPANG = /^https:\/\/([a-z0-9-]+\.)*coupang\.com$/;
+  let incoming = [];
+
+  // 상품 번호가 같고, 둘 다 옵션 번호가 있으면 옵션까지 같아야 같은 상품이에요
+  function sameItem(a, b) {
+    const x = parse(a.url);
+    const y = parse(b.url);
+    if (!x || !y || x.short || y.short || x.productId !== y.productId) return false;
+    return x.itemId && y.itemId ? x.itemId === y.itemId : true;
+  }
+
+  function readIncoming(d) {
+    const rows = d && Array.isArray(d.items) ? d.items.slice(0, 500) : [];
+    const seen = new Set();
+    const out = [];
+    for (const r of rows) {
+      if (!Array.isArray(r)) continue;
+      const id = String(r[0] ?? '');
+      if (!/^\d{3,15}$/.test(id)) continue;
+      const q = new URLSearchParams();
+      const itemId = String(r[1] ?? '');
+      const vendorItemId = String(r[2] ?? '');
+      if (/^\d{1,15}$/.test(itemId)) q.set('itemId', itemId);
+      if (/^\d{1,15}$/.test(vendorItemId)) q.set('vendorItemId', vendorItemId);
+      const qs = q.toString();
+      const url = `https://www.coupang.com/vp/products/${id}${qs ? '?' + qs : ''}`;
+      const name = String(r[3] ?? '').replace(/\s+/g, ' ').trim().slice(0, 60);
+      if (!name || seen.has(url)) continue;
+      seen.add(url);
+      const row = { url, name, price: toNum(r[4]), buys: Math.min(9999, Math.max(0, Number(r[5]) | 0)), oos: !!r[6] };
+      row.have = state.items.find((x) => sameItem(x, row)) || null;
+      // 새 상품은 품절이 아니면 골라 두고, 이미 담은 상품은 가격이 있으면 오늘 가격만 기록해요
+      row.pick = row.have ? !!row.price : !row.oos;
+      out.push(row);
+    }
+    return out;
+  }
+
+  function importRow(r, i) {
+    const tags = [];
+    if (r.price) tags.push(`<span class="num">${won(r.price)}</span>`);
+    if (r.buys) tags.push(`${r.buys}번 구매`);
+    if (r.oos) tags.push('<b class="imp-oos">품절</b>');
+    if (r.have) tags.push(`<b class="imp-have">${r.price ? '이미 담음 · 오늘 가격만 기록' : '이미 담음'}</b>`);
+    const off = r.have && !r.price ? ' disabled' : '';
+    return `<li class="imp-row${r.pick ? ' on' : ''}"><label><input type="checkbox" data-pick="${i}"${r.pick ? ' checked' : ''}${off}><span class="imp-text"><span class="imp-name">${esc(r.name)}</span><span class="imp-meta">${tags.join(' · ')}</span></span></label></li>`;
+  }
+
+  function updateImport() {
+    const add = incoming.filter((r) => r.pick && !r.have).length;
+    const upd = incoming.filter((r) => r.pick && r.have).length;
+    const ok = $('imp-ok');
+    ok.textContent = add && upd ? `${add}개 담고 ${upd}개 가격 기록` : add ? `고른 ${add}개 담기` : upd ? `${upd}개 오늘 가격 기록` : '고른 상품이 없어요';
+    ok.disabled = !add && !upd;
+    $('imp-error').hidden = true;
+  }
+
+  function openImport(d) {
+    incoming = readIncoming(d);
+    if (!incoming.length) return toast('불러온 상품이 없어요');
+    const fresh = incoming.filter((r) => !r.have).length;
+    const total = Math.max(0, Number(d.total) | 0);
+    $('imp-title').textContent = `쿠팡 다시 구매에서 ${incoming.length}개를 불러왔어요`;
+    $('imp-sum').textContent = [
+      `새 상품 ${fresh}개, 이미 담은 상품 ${incoming.length - fresh}개예요.`,
+      total > incoming.length ? `쿠팡 목록 ${total}개 중 화면에 불러와진 ${incoming.length}개만 왔어요.` : '',
+      '뺄 상품은 체크를 풀고 담아 주세요.',
+    ]
+      .filter(Boolean)
+      .join(' ');
+    $('imp-q').value = '';
+    $('imp-list').innerHTML = incoming.map(importRow).join('');
+    $('imp-none').hidden = true;
+    updateImport();
+    const panel = $('imp');
+    panel.hidden = false;
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeImport() {
+    incoming = [];
+    $('imp').hidden = true;
+    $('imp-list').innerHTML = '';
+  }
+
+  $('imp-list').addEventListener('change', (ev) => {
+    const box = ev.target.closest('[data-pick]');
+    const r = box && incoming[Number(box.dataset.pick)];
+    if (!r) return;
+    r.pick = box.checked;
+    box.closest('.imp-row').classList.toggle('on', r.pick);
+    updateImport();
+  });
+
+  $('imp-q').addEventListener('input', () => {
+    const q = squash($('imp-q').value);
+    let shown = 0;
+    $('imp-list').querySelectorAll('.imp-row').forEach((li, i) => {
+      const hide = !!q && !squash(incoming[i].name).includes(q);
+      li.hidden = hide;
+      if (!hide) shown++;
+    });
+    $('imp-none').hidden = shown > 0;
+  });
+
+  // 모두 고르기·모두 빼기는 지금 보이는(검색에 걸린) 상품에만 적용돼요
+  $('imp').addEventListener('click', (ev) => {
+    const all = ev.target.closest('[data-imp-all]');
+    if (!all) return;
+    const on = all.dataset.impAll === '1';
+    $('imp-list').querySelectorAll('.imp-row').forEach((li, i) => {
+      const r = incoming[i];
+      if (li.hidden || (r.have && !r.price)) return;
+      r.pick = on;
+      li.classList.toggle('on', on);
+      li.querySelector('input').checked = on;
+    });
+    updateImport();
+  });
+
+  $('imp-cancel').addEventListener('click', () => {
+    closeImport();
+    toast('가져오기를 취소했어요');
+  });
+
+  $('imp-ok').addEventListener('click', () => {
+    const d = today();
+    const add = incoming.filter((r) => r.pick && !r.have);
+    const upd = incoming.filter((r) => r.pick && r.have && r.price);
+    const over = state.items.length + add.length - MAX;
+    if (over > 0) {
+      const e = $('imp-error');
+      e.textContent = `목록에는 ${MAX}개까지 담을 수 있어요. ${over}개를 더 빼 주세요.`;
+      e.hidden = false;
+      return;
+    }
+    let logged = 0;
+    for (const r of upd) {
+      const item = state.items.find((x) => x === r.have);
+      if (!item) continue;
+      item.prices = (item.prices || []).filter((x) => x.d !== d).concat({ d, p: r.price }).slice(-180);
+      if (r.buys) item.buys = r.buys;
+      logged++;
+    }
+    const fresh = add.map((r) => clean({ url: r.url, name: r.name, added: d, buys: r.buys, prices: r.price ? [{ d, p: r.price }] : [] })).filter(Boolean);
+    state.items = [...fresh, ...state.items];
+    if (!save()) return;
+    closeImport();
+    render();
+    $('h-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    toast(fresh.length && logged ? `${fresh.length}개를 담고 ${logged}개의 오늘 가격을 기록했어요` : fresh.length ? `${fresh.length}개를 담았어요` : `${logged}개의 오늘 가격을 기록했어요`);
+  });
+
+  function listenCoupang() {
+    if (new URLSearchParams(location.search).get('from') !== 'coupang') return;
+    // 주소창을 깔끔하게 되돌려요. 새로 고침해도 다시 가져오지 않아요.
+    // (이 파일의 history는 가격 기록이라, 브라우저 기록은 window.history로 불러요)
+    window.history.replaceState(null, '', location.pathname);
+    let got = false;
+    addEventListener('message', (e) => {
+      if (got || !COUPANG.test(e.origin) || !e.data || e.data.type !== 'sadagu-import') return;
+      got = true;
+      try {
+        if (e.source) e.source.postMessage({ type: 'sadagu-got' }, e.origin);
+      } catch {}
+      openImport(e.data);
+    });
+    setTimeout(() => {
+      if (!got) toast('쿠팡 탭에서 목록을 받지 못했어요. 북마크 버튼을 다시 눌러 주세요');
+    }, 25000);
+  }
+
+  // 이 화면에서 북마크 버튼을 누르면 쿠팡으로 넘어가지 않고, 끌어다 놓는 방법을 알려 줘요
+  const bm = $('m-bm');
+  if (bm) {
+    bm.addEventListener('click', (ev) => {
+      ev.preventDefault();
+      toast('이 버튼을 북마크바로 끌어다 놓아 주세요');
+    });
+  }
+
   document.addEventListener('sdg:noaff', render);
   render();
   loadCatalog();
+  listenCoupang();
 })();
