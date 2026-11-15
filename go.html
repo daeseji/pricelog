@@ -27,20 +27,36 @@
   <script>
     // go.html?u=<Base64> 형식의 제휴링크를 풀어서 쿠팡으로 이동합니다
     // (쿠팡 주소만 허용해서 다른 사이트로 악용되지 않게 막습니다)
+    // go.html?wait=1 은 '내 상품'이 링크를 만드는 동안 잠깐 보여 주는 화면이에요
     const ALLOWED = ['link.coupang.com', 'www.coupang.com', 'coupang.com', 'm.coupang.com', 'coupa.ng'];
+    // 검색 로봇, 링크 미리보기, 자동화 도구는 쿠팡으로 넘기지 않아요 (사람이 누르지 않은 클릭이 쌓이지 않게)
+    const BOT = /bot\b|bot\/|crawler|spider|slurp|mediapartners|bingpreview|yeti\/|daum\/\d|kakaotalk-scrap|facebookexternalhit|embedly|headlesschrome|lighthouse|phantomjs|python-|curl\/|wget\//i;
     function decode(b64) {
       let s = b64.trim().replace(/-/g, '+').replace(/_/g, '/');
       while (s.length % 4) s += '=';
       return atob(s);
     }
-    try {
-      const u = new URLSearchParams(location.search).get('u') || '';
-      const target = new URL(decode(u));
-      if (target.protocol !== 'https:' || !ALLOWED.includes(target.hostname)) throw new Error('not allowed');
-      location.replace(target.href);
-    } catch (e) {
-      document.getElementById('msg').textContent = '링크가 올바르지 않아요';
-      document.getElementById('sub').innerHTML = '<a href="./">싸다구로 돌아가기</a>';
+    const params = new URLSearchParams(location.search);
+    if (!params.has('wait')) {
+      try {
+        const target = new URL(decode(params.get('u') || ''));
+        if (target.protocol !== 'https:' || !ALLOWED.includes(target.hostname)) throw new Error('not allowed');
+        if (navigator.webdriver || BOT.test(navigator.userAgent)) {
+          document.getElementById('msg').textContent = '쿠팡 상품 페이지로 연결되는 주소예요';
+          const a = document.createElement('a');
+          a.href = target.href;
+          a.rel = 'nofollow sponsored noopener';
+          a.textContent = '쿠팡에서 보기';
+          const sub = document.getElementById('sub');
+          sub.textContent = '';
+          sub.appendChild(a);
+        } else {
+          location.replace(target.href);
+        }
+      } catch (e) {
+        document.getElementById('msg').textContent = '링크가 올바르지 않아요';
+        document.getElementById('sub').innerHTML = '<a href="./">싸다구로 돌아가기</a>';
+      }
     }
   </script>
 </body>

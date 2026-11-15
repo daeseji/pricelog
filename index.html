@@ -23,7 +23,7 @@
 <link rel="alternate" type="application/rss+xml" title="싸다구 장보기 노트" href="https://daeseji.github.io/pricelog/tips/feed.xml">
 <!-- /@seo -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="assets/site.css?v=35669bf4">
+<link rel="stylesheet" href="assets/site.css?v=3bb2739f">
 <style>
   /* 히어로 */
   .hero {
@@ -306,7 +306,7 @@
 <header class="top" id="top">
   <div class="wrap top-row">
     <a class="logo" href="./" aria-label="싸다구 홈"><img src="favicon.svg" alt="" width="30" height="30"><b>싸다구</b></a>
-    <nav class="nav" aria-label="메뉴"><a href="./" aria-current="page">가격</a><a href="tips/"><span class="lg">장보기 </span>노트</a><a href="about/">소개</a><a href="links/">링크</a></nav>
+    <nav class="nav" aria-label="메뉴"><a href="./" aria-current="page">가격</a><a href="mine/">내 상품</a><a href="tips/"><span class="lg">장보기 </span>노트</a><a href="about/">소개</a><a href="links/" class="opt">링크</a></nav>
   </div>
 </header>
 <!-- /@header -->
@@ -381,7 +381,7 @@
       </div>
       <div class="foot-col">
         <b>둘러보기</b>
-        <a href="./">오늘의 가격</a><a href="tips/">장보기 노트</a><a href="about/">싸다구 소개</a><a href="links/">링크 모음</a><a href="https://daeseji.github.io/pricelog/tips/feed.xml">RSS 구독</a>
+        <a href="./">오늘의 가격</a><a href="mine/">내 상품</a><a href="tips/">장보기 노트</a><a href="about/">싸다구 소개</a><a href="links/">링크 모음</a><a href="https://daeseji.github.io/pricelog/tips/feed.xml">RSS 구독</a>
       </div>
       <div class="foot-col">
         <b>노트 카테고리</b>
@@ -408,6 +408,7 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="backup-file" accept="application/json,.json" hidden>
 
+<script src="assets/noaff.js?v=9500ecbd"></script>
 <script src="assets/alerts.js?v=dfd8490f"></script>
 <script>
 const REPO_BASE = window.location.pathname.replace(/\/[^/]*\.html$/, '').replace(/\/$/, '');
@@ -669,6 +670,8 @@ function verdictText(a) {
 // 제휴링크는 블로그와 같은 방식(go.html?u=Base64)으로 연결합니다
 // 순서: 직접 넣은 링크(link_b64) → 수집할 때 받아온 파트너스 링크 → 일반 쿠팡 주소
 function productLink(p) {
+  // '제휴 링크 끄기'를 켠 브라우저에서는 일반 쿠팡 주소로 열어요 (assets/noaff.js)
+  if (window.SDG_NOAFF && window.SDG_NOAFF()) return { href: p.url, affiliate: false, off: true };
   let b64 = p.link_b64;
   if (!b64 && p.meta.link) {
     try { b64 = btoa(p.meta.link).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); } catch (e) {}
@@ -699,9 +702,11 @@ function openDetail(key, push = true) {
     return { e, d: prev == null ? 0 : Number(e.price) - prev };
   }).reverse();
   const link = productLink(p);
-  const fine = link.affiliate
-    ? '쿠팡 파트너스 링크예요. 구매하시면 일정액의 수수료를 받을 수 있어요.'
-    : '아직 제휴링크가 연결되기 전이라 쿠팡 일반 검색으로 연결돼요. 첫 가격이 기록되면 자동으로 제휴링크가 붙어요.';
+  const fine = link.off
+    ? '이 브라우저는 제휴 링크 끄기가 켜져 있어서 일반 쿠팡 주소로 열려요.'
+    : link.affiliate
+      ? '쿠팡 파트너스 링크예요. 구매하시면 일정액의 수수료를 받을 수 있어요.'
+      : '아직 제휴링크가 연결되기 전이라 쿠팡 일반 주소로 연결돼요. 첫 가격이 기록되면 자동으로 제휴링크가 붙어요.';
 
   document.getElementById('d-body').innerHTML = `
     <div class="d-top">
@@ -731,7 +736,7 @@ function openDetail(key, push = true) {
     ${recent.length ? `<div class="log"><h3>최근 기록</h3><ol>${recent.map(({ e, d }) => `
       <li><span class="when">${dateLabel(e.date, true)}</span><span class="num"><b>${won(e.price)}</b>${d ? `<span class="chg ${d < 0 ? 'down' : 'up'}">${d < 0 ? '▼' : '▲'} ${won(Math.abs(d))}</span>` : ''}</span></li>`).join('')}
     </ol></div>` : ''}
-    <a class="cta" href="${esc(link.href)}" target="_blank" rel="sponsored nofollow noopener">쿠팡에서 보기
+    <a class="cta" href="${esc(link.href)}" target="_blank" rel="${link.affiliate ? 'sponsored nofollow noopener' : 'noopener'}">쿠팡에서 보기
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M5 13 13 5M7 5h6v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     <p class="fine">${fine}<br>가격은 매일 오전 9시쯤 확인한 값이라 지금과 다를 수 있어요.</p>`;
 

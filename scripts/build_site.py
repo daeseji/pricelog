@@ -38,6 +38,8 @@ def _ver(name):
 
 CSS_VER = _ver("site.css")
 ALERTS_VER = _ver("alerts.js")
+MINE_VER = _ver("mine.js")
+NOAFF_VER = _ver("noaff.js")
 
 # 카테고리: 이름 → (주소·색 이름, 소개, 대표 아이콘)
 CATS = {
@@ -228,15 +230,17 @@ def page_head(title, desc, path, root, image="og.png", extra="", og_type="websit
 
 
 def header(root, active):
+    # 마지막 칸(opt)은 좁은 휴대폰 화면에서 숨겨요 (꼬리말에는 그대로 있어요)
     items = [
-        ("home", "", "가격"),
-        ("tips", "tips/", '<span class="lg">장보기 </span>노트'),
-        ("about", "about/", "소개"),
-        ("links", "links/", "링크"),
+        ("home", "", "가격", ""),
+        ("mine", "mine/", "내 상품", ""),
+        ("tips", "tips/", '<span class="lg">장보기 </span>노트', ""),
+        ("about", "about/", "소개", ""),
+        ("links", "links/", "링크", "opt"),
     ]
     nav = "".join(
-        f'<a href="{(root + href) or "./"}"{" aria-current=" + chr(34) + "page" + chr(34) if key == active else ""}>{label}</a>'
-        for key, href, label in items
+        f'<a href="{(root + href) or "./"}"{" class=" + chr(34) + cls + chr(34) if cls else ""}{" aria-current=" + chr(34) + "page" + chr(34) if key == active else ""}>{label}</a>'
+        for key, href, label, cls in items
     )
     home = root or "./"
     return f"""<header class="top" id="top">
@@ -261,7 +265,7 @@ def footer(root, notes, links, icons):
       </div>
       <div class="foot-col">
         <b>둘러보기</b>
-        <a href="{home}">오늘의 가격</a><a href="{root}tips/">장보기 노트</a><a href="{root}about/">싸다구 소개</a><a href="{root}links/">링크 모음</a><a href="{SITE_URL}tips/feed.xml">RSS 구독</a>
+        <a href="{home}">오늘의 가격</a><a href="{root}mine/">내 상품</a><a href="{root}tips/">장보기 노트</a><a href="{root}about/">싸다구 소개</a><a href="{root}links/">링크 모음</a><a href="{SITE_URL}tips/feed.xml">RSS 구독</a>
       </div>
       <div class="foot-col">
         <b>노트 카테고리</b>
@@ -638,11 +642,11 @@ def build_about(notes, links, icons):
     legend_html = "".join(f'<div><span class="badge {t}">{l}</span><p>{d}</p></div>' for t, l, d in legend)
     faq = [
         ("쿠팡에서 본 가격이랑 달라요.", "싸다구의 가격은 매일 오전 9시쯤 쿠팡 파트너스 API로 확인한 값이에요. 그 뒤에 가격이 바뀌었거나, 쿠폰·카드 할인, 회원 혜택처럼 사람마다 다른 할인은 반영되지 않아서 차이가 날 수 있어요. 구매 전에는 쿠팡에서 최종 가격을 꼭 확인해 주세요."),
-        ("왜 이 상품들만 있어요?", "싸다구는 만든 사람이 자주 사거나 눈여겨보는 상품만 골라 기록하는 개인 장보기 노트예요. 쿠팡 파트너스 API의 호출 제한을 지키기 위해 하루 한 번, 최대 20개 상품까지만 기록하고 있어요."),
+        ("왜 이 상품들만 있어요?", "싸다구는 자주 사거나 눈여겨보는 상품만 골라 기록하는 장보기 노트예요. 쿠팡 파트너스 API의 호출 제한을 지키기 위해 하루 한 번, 최대 20개 상품까지만 자동으로 기록해요. 다른 상품은 '내 상품'에 직접 담아 살 때 본 가격을 적어 둘 수 있어요."),
         ("판단 배지는 어떻게 정해져요?", "기록된 가격 중 최저가와 최고가 사이에서 지금 가격이 어디쯤인지로 정해요. 기록이 3번 이상 쌓여야 판단하고, 기록이 쌓일수록 더 정확해져요."),
-        ("'쿠팡에서 보기' 링크는 뭔가요?", "쿠팡 파트너스 링크예요. 이 링크를 통해 구매가 이루어지면 싸다구가 일정액의 수수료를 받을 수 있어요. 구매하시는 분이 내는 가격은 똑같아요. 아직 첫 기록 전인 상품은 일반 쿠팡 검색 링크로 연결돼요."),
+        ("'쿠팡에서 보기' 링크는 뭔가요?", "쿠팡 파트너스 링크예요. 이 링크를 통해 구매가 이루어지면 싸다구가 일정액의 수수료를 받을 수 있어요. 구매하시는 분이 내는 가격은 똑같아요. 아직 첫 기록 전인 상품은 일반 쿠팡 주소로 연결돼요. 제휴 링크를 원하지 않으면 아래 '제휴 링크 끄기'를 켜 두세요."),
         ("장보기 노트는 누가 쓰나요?", "싸다구를 만든 사람이 장보기와 요리, 살림에 도움이 되는 내용을 정리해 올려요. 식품 안전처럼 중요한 정보는 제품 표시와 공식 기관의 안내를 우선으로 확인해 주세요."),
-        ("가격이 떨어지면 알림도 받을 수 있나요?", "아직은 없어요. 대신 매일 아침 가격과 판단 배지가 새로 바뀌니, 즐겨찾기해 두고 필요할 때 들러 주세요."),
+        ("가격이 떨어지면 알림도 받을 수 있나요?", "네. 오늘의 가격에서 상품 사진 오른쪽 위 별(☆)을 눌러 관심 상품으로 담고, 상품을 열어 가격 알림을 켜 두면 돼요. 목표가 이하, 평균보다 몇 % 싸짐, 최근 며칠 중 최저가 같은 조건을 고를 수 있고, 조건에 맞는 가격이 기록되면 브라우저 알림으로 알려 드려요. 알림 설정은 그 브라우저에만 저장돼요."),
     ]
     faq_html = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in faq)
     body = f"""<main class="wrap">
@@ -674,6 +678,7 @@ def build_about(notes, links, icons):
     <h2 class="sec-title" id="h-faq">자주 묻는 질문</h2>
     <p class="sec-desc">가격과 배지, 링크에 대해 자주 받는 질문이에요</p>
     <div class="faq">{faq_html}</div>
+    {NOAFF_BOX}
   </section>
   <section class="sec" aria-labelledby="h-next">
     <h2 class="sec-title" id="h-next">이제 둘러보세요</h2>
@@ -688,7 +693,85 @@ def build_about(notes, links, icons):
         "@context": "https://schema.org", "@type": "FAQPage",
         "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq],
     })
-    return page("about/index.html", "싸다구 소개 · 쌀 때 사다구", "싸다구가 쿠팡 가격을 기록하는 방법, 배지 읽는 법, 자주 묻는 질문.", "about", body, notes, links, icons, extra_head=head)
+    js = f'<script src="{root}assets/noaff.js?v={NOAFF_VER}"></script>'
+    return page("about/index.html", "싸다구 소개 · 쌀 때 사다구", "싸다구가 쿠팡 가격을 기록하는 방법, 배지 읽는 법, 자주 묻는 질문.", "about", body, notes, links, icons, extra_head=head, extra_js=js)
+
+
+NOAFF_BOX = """<label class="noaff" for="noaff-box"><input type="checkbox" id="noaff-box" data-noaff><span><b>이 브라우저에서 제휴 링크 끄기</b><span class="noaff-desc">켜 두면 '쿠팡에서 보기'가 쿠팡 파트너스 링크 대신 일반 쿠팡 상품 주소로 열려요. 제휴 링크를 원하지 않으면 켜 두세요. 이 브라우저에만 저장돼요. <span data-noaff-state></span></span></span></label>"""
+
+
+def build_mine(notes, links, icons):
+    root = "../"
+    steps = [
+        ("상품 주소 붙여 넣기", "쿠팡 앱이나 웹에서 상품을 열고 주소를 복사해 붙여 넣어요. 알아보기 쉬운 이름도 함께 적어 두세요."),
+        ("살 때마다 가격 적기", "장 볼 때 본 가격을 한 줄씩 적어 두면 최저가와 가격 흐름이 쌓여요. 싸다구가 매일 기록하는 상품이면 자동으로 채워져요."),
+        ("목표가에 닿으면 사기", "사고 싶은 가격을 정해 두면, 그 가격 이하가 기록됐을 때 목록에 '목표가 도달'이 붙어요."),
+    ]
+    steps_html = "".join(f'<div class="step"><h3>{esc(t)}</h3><p>{esc(d)}</p></div>' for t, d in steps)
+    faq = [
+        ("담은 상품은 어디에 저장돼요?", "지금 쓰는 기기의 브라우저에만 저장돼요. 싸다구 서버로 목록을 보내지 않아요. 다른 기기에서 보려면 '백업 받기'로 파일을 저장해 그 기기에서 '백업 불러오기'를 눌러 주세요. 방문 기록을 지우면 목록도 지워질 수 있으니 가끔 백업해 두면 좋아요."),
+        ("가격은 자동으로 바뀌나요?", "싸다구가 매일 아침 기록하는 상품과 같은 상품(옵션까지 같은 경우)이면 그 기록이 자동으로 보여요. 그 밖의 상품은 직접 적은 가격만 보여요. 쿠팡 파트너스 API는 호출 횟수 제한이 있어서 모든 상품을 자동으로 확인할 수는 없어요."),
+        ("어떤 주소를 넣어야 하나요?", "주소에 coupang.com/vp/products/ 가 들어 있는 상품 페이지 주소면 돼요. 옵션(용량, 수량)을 고른 뒤 주소를 복사하면 그 옵션으로 담겨요. 쿠팡 앱의 줄인 공유 링크는 바로 읽을 수 없어서, 링크를 한 번 연 뒤 상품 페이지 주소를 복사해 주세요."),
+        ("'쿠팡에서 보기'는 어떤 링크인가요?", "쿠팡 파트너스 링크예요. 이 링크로 구매하면 싸다구가 일정액의 수수료를 받을 수 있고, 구매하시는 가격은 똑같아요. 쿠팡은 버튼을 누를 때만 열리고, 자동으로 쿠팡 페이지를 띄우지 않아요. 링크를 만들 때는 상품 주소(상품 번호와 옵션 번호)만 쓰고, 목록이나 가격 기록은 보내지 않아요. 제휴 링크를 원하지 않으면 목록 아래의 '제휴 링크 끄기'를 켜 두세요."),
+        ("쿠팡에서 본 가격과 달라요.", "직접 적은 가격은 그날 본 가격이고, 자동 기록은 매일 오전 9시쯤 쿠팡 파트너스 API로 확인한 값이에요. 쿠폰, 카드 할인, 회원 혜택은 반영되지 않으니 구매 전에는 쿠팡에서 최종 가격을 꼭 확인해 주세요."),
+    ]
+    faq_html = "".join(f"<details><summary>{esc(q)}</summary><p>{esc(a)}</p></details>" for q, a in faq)
+    body = f"""<main class="wrap">
+  <header class="page-head">
+    <div class="eyebrow">내 상품</div>
+    <h1>자주 사는 물건,<br>내 목록으로 지켜봐요</h1>
+    <p>쿠팡 상품 주소를 붙여 넣으면 나만의 목록이 생겨요. 살 때 본 가격을 적어 두면 <b>평소 가격과 최저가</b>가 쌓이고, 싸다구가 매일 기록하는 상품이면 가격이 자동으로 채워져요.</p>
+  </header>
+  <section class="sec" aria-labelledby="h-add">
+    <h2 class="sec-title" id="h-add">상품 담기</h2>
+    <p class="sec-desc">쿠팡 앱이나 웹에서 상품을 열고 주소를 복사해 붙여 넣어 주세요</p>
+    <form class="mine-form" id="mine-form" novalidate>
+      <label class="mine-field wide" for="m-url">쿠팡 상품 주소<input id="m-url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://www.coupang.com/vp/products/..."></label>
+      <label class="mine-field wide" for="m-name">상품 이름<input id="m-name" type="text" maxlength="60" autocomplete="off" placeholder="예: 생수 2L 12병"></label>
+      <label class="mine-field" for="m-price"><span>오늘 본 가격 <small>(선택)</small></span><input id="m-price" type="text" inputmode="numeric" autocomplete="off" placeholder="원"></label>
+      <label class="mine-field" for="m-target"><span>목표 가격 <small>(선택)</small></span><input id="m-target" type="text" inputmode="numeric" autocomplete="off" placeholder="원"></label>
+      <p class="mine-error" id="m-error" role="alert" hidden></p>
+      <button class="btn" type="submit">목록에 담기</button>
+    </form>
+  </section>
+  <section class="sec" aria-labelledby="h-list">
+    <div class="list-head">
+      <div>
+        <h2 class="sec-title" id="h-list">내 목록 <span class="list-count" id="m-count">0개</span></h2>
+        <p class="sec-desc" style="margin:0">이 기기의 브라우저에만 저장돼요</p>
+      </div>
+      <div class="mine-tools">
+        <button type="button" class="chip" id="m-export">백업 받기</button>
+        <label class="chip" for="m-import">백업 불러오기</label>
+        <input class="sr" type="file" id="m-import" accept="application/json,.json">
+      </div>
+    </div>
+    <p class="mine-disc">이 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. '쿠팡에서 보기'로 구매해도 가격은 똑같고, 쿠팡은 버튼을 누를 때만 열려요.</p>
+    <div class="mine-list" id="m-list"></div>
+    <p class="no-result" id="m-empty">아직 담은 상품이 없어요. 위에서 첫 상품을 담아 보세요.</p>
+    <noscript><p class="no-result">내 상품은 자바스크립트가 켜져 있어야 쓸 수 있어요.</p></noscript>
+    {NOAFF_BOX}
+  </section>
+  <section class="sec" aria-labelledby="h-how">
+    <h2 class="sec-title" id="h-how">이렇게 써요</h2>
+    <p class="sec-desc">가격은 기억보다 기록이 정확해요</p>
+    <div class="steps">{steps_html}</div>
+  </section>
+  <section class="sec" aria-labelledby="h-faq">
+    <h2 class="sec-title" id="h-faq">자주 묻는 질문</h2>
+    <p class="sec-desc">저장 위치, 자동 기록, 링크에 대해 자주 받는 질문이에요</p>
+    <div class="faq">{faq_html}</div>
+  </section>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>"""
+    head = breadcrumb_ld([("싸다구", ""), ("내 상품", "mine/")]) + ld({
+        "@context": "https://schema.org", "@type": "FAQPage",
+        "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in faq],
+    })
+    js = f'<script src="{root}assets/noaff.js?v={NOAFF_VER}"></script><script src="{root}assets/mine.js?v={MINE_VER}"></script>'
+    return page("mine/index.html", "내 상품 가격 기록 · 싸다구",
+                "쿠팡 상품 주소를 붙여 넣고 살 때 본 가격을 적어 두세요. 평소 가격과 최저가를 한눈에 보고, 목표가에 닿으면 바로 알 수 있어요.",
+                "mine", body, notes, links, icons, extra_head=head, extra_js=js)
 
 
 def build_404(notes, links, icons):
@@ -709,7 +792,7 @@ def build_404(notes, links, icons):
 
 def build_sitemap(notes):
     today = datetime.date.today().isoformat()
-    urls = [("", today), ("tips/", today), ("about/", today), ("links/", today)]
+    urls = [("", today), ("mine/", today), ("tips/", today), ("about/", today), ("links/", today)]
     urls += [(f"tips/c/{v[0]}/", today) for v in CATS.values()]
     urls += [(f"tips/{n['slug']}/", n.get("updated", n["date"])) for n in notes]
     items = "".join(f"  <url><loc>{SITE_URL}{u}</loc><lastmod>{d}</lastmod></url>\n" for u, d in urls)
@@ -760,6 +843,7 @@ def update_index(notes, links, icons):
     s = path.read_text(encoding="utf-8")
     s = re.sub(r'href="assets/site\.css(\?v=\w+)?"', f'href="assets/site.css?v={CSS_VER}"', s)
     s = re.sub(r'src="assets/alerts\.js(\?v=\w+)?"', f'src="assets/alerts.js?v={ALERTS_VER}"', s)
+    s = re.sub(r'src="assets/noaff\.js(\?v=\w+)?"', f'src="assets/noaff.js?v={NOAFF_VER}"', s)
     s = re.sub(r"<!-- @seo -->.*?<!-- /@seo -->", lambda m: "<!-- @seo -->\n" + home_seo() + "<!-- /@seo -->", s, flags=re.S)
     s = re.sub(r"<!-- @header -->.*?<!-- /@header -->", lambda m: "<!-- @header -->\n" + header("", "home") + "\n<!-- /@header -->", s, flags=re.S)
     s = re.sub(r"<!-- @footer -->.*?<!-- /@footer -->", lambda m: "<!-- @footer -->\n" + footer("", notes, links, icons) + "\n<!-- /@footer -->", s, flags=re.S)
@@ -797,13 +881,14 @@ def main():
     write("tips/feed.xml", build_feed(notes))
     write("links/index.html", build_links(notes, links, icons))
     write("about/index.html", build_about(notes, links, icons))
+    write("mine/index.html", build_mine(notes, links, icons))
     write("404.html", build_404(notes, links, icons))
     write("sitemap.xml", build_sitemap(notes))
     write_og_manifest(notes)
     update_index(notes, links, icons)
     with_og = sum(1 for n in notes if n["og"] != "og.png")
     counts = ", ".join(f"{k} {sum(1 for n in notes if n['category'] == k)}" for k in CATS)
-    print(f"✓ 노트 {len(notes)}편 ({counts}) · 공유 이미지 {with_og}장 · 카테고리·링크·소개·404·사이트맵·RSS·index.html")
+    print(f"✓ 노트 {len(notes)}편 ({counts}) · 공유 이미지 {with_og}장 · 카테고리·링크·소개·내 상품·404·사이트맵·RSS·index.html")
 
 
 if __name__ == "__main__":

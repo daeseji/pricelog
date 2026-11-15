@@ -1,10 +1,12 @@
 /**
- * 싸다구 제휴 링크 서버 (Cloudflare Workers)
+ * 싸다구 제휴 링크 서버 (Cloudflare Workers 버전)
+ *
+ * 지금 쓰는 서버는 같은 폴더의 apps-script.gs(Google Apps Script)예요.
+ * 나중에 Cloudflare로 옮기고 싶을 때 이 파일을 쓰면 돼요. 하는 일과 안전장치는 같아요.
  *
  * 하는 일
- *   방문자가 '내 상품'에 담은 쿠팡 상품 주소를 받아, 쿠팡 파트너스 딥링크 API로
- *   싸다구의 제휴 링크(https://link.coupang.com/a/...)를 만들어 돌려줘요.
- *   방문자가 '쿠팡에서 보기'를 직접 눌렀을 때만 불려요. 쿠팡을 자동으로 열지 않아요.
+ *   방문자가 '내 상품'에서 '쿠팡에서 보기'를 누르면, 그 상품 주소를 쿠팡 파트너스 딥링크 API로 보내
+ *   싸다구의 제휴 링크를 받아 돌려줘요. 쿠팡 페이지를 대신 열거나 클릭하지 않아요.
  *
  * 설정 (Workers > 이 Worker > Settings > Variables and Secrets)
  *   COUPANG_ACCESS_KEY, COUPANG_SECRET_KEY  비밀값(Secret)으로 넣어요
@@ -13,13 +15,16 @@
 
 const ALLOWED_ORIGINS = ["https://daeseji.github.io"];
 const PRODUCT_HOSTS = new Set(["www.coupang.com", "coupang.com", "m.coupang.com"]);
-const SHORT_HOSTS = new Set(["coupa.ng", "link.coupang.com"]);
 const API = "https://api-gateway.coupang.com";
 const DEEPLINK = "/v2/providers/affiliate_open_api/apis/openapi/v1/deeplink";
-const PER_IP_PER_HOUR = 30;
+const LINK_RE = /^https:\/\/(link\.coupang\.com|coupa\.ng)\/[A-Za-z0-9/_?=&.-]+$/;
+const PER_IP_PER_HOUR = 10;
+const PER_HOUR = 20; // 이 인스턴스 전체 합계
 
 const memory = new Map(); // 같은 인스턴스 안의 짧은 캐시
 const hits = new Map(); // IP별 시간당 요청 수
+let total = { hour: -1, n: 0 };
+let pausedUntil = 0;
 
 function corsHeaders(origin) {
   return {
@@ -38,7 +43,7 @@ function reply(body, status, origin) {
   });
 }
 
-/** 쿠팡 상품 주소만 받아 같은 모양으로 정리해요 (광고·추적 파라미터는 버려요) */
+/** 쿠팡 상품 페이지 주소만 받아 같은 모양으로 정리해요. 줄인 주소는 열어 보지 않아요 (열면 그 링크의 클릭으로 잡힐 수 있어요) */
 function normalize(raw) {
   let u;
   try {
@@ -46,9 +51,15 @@ function normalize(raw) {
   } catch {
     return null;
   }
-  if (!/^https?:$/.test(u.protocol) || !PRODUCT_HOSTS.has(u.hostname)) return null;
-  const m = u.pathname.match(/^\/(?:vp|vm)\/products\/(\d{3,15})/);
-  if (!m) return null;
+  if (!/^https?:$/.test(u.protocol)) return null;
+  let id = "";
+  if (PRODUCT_HOSTS.has(u.hostname)) {
+    id = (u.pathname.match(/^\/(?:vp|vm)\/products\/(\d{3,15})/) || [])[1] || "";
+  } else if (u.hostname === "link.coupang.com" && u.pathname.startsWith("/re/")) {
+    const k = u.searchParams.get("pageKey") || "";
+    id = /^\d{3,15}$/.test(k) ? k : "";
+  }
+  if (!id) return null;
   const digits = (v) => (/^\d{1,15}$/.test(v || "") ? v : "");
   const itemId = digits(u.searchParams.get("itemId"));
   const vendorItemId = digits(u.searchParams.get("vendorItemId"));
@@ -57,29 +68,9 @@ function normalize(raw) {
   if (vendorItemId) q.set("vendorItemId", vendorItemId);
   const qs = q.toString();
   return {
-    key: `p${m[1]}-i${itemId}-v${vendorItemId}`,
-    url: `https://www.coupang.com/vp/products/${m[1]}${qs ? "?" + qs : ""}`,
+    key: `p${id}-i${itemId}-v${vendorItemId}`,
+    url: `https://www.coupang.com/vp/products/${id}${qs ? "?" + qs : ""}`,
   };
-}
-
-/** 쿠팡 앱의 공유 링크(coupa.ng 등)를 따라가 원래 상품 주소를 찾아요 */
-async function resolveShort(raw) {
-  let current = String(raw || "").trim();
-  for (let i = 0; i < 4; i++) {
-    let u;
-    try {
-      u = new URL(current);
-    } catch {
-      return null;
-    }
-    if (PRODUCT_HOSTS.has(u.hostname)) return normalize(current);
-    if (!SHORT_HOSTS.has(u.hostname)) return null;
-    const res = await fetch(current, { method: "GET", redirect: "manual" });
-    const next = res.headers.get("Location");
-    if (!next) return null;
-    current = new URL(next, current).toString();
-  }
-  return normalize(current);
 }
 
 async function authorization(method, path, accessKey, secretKey) {
@@ -95,14 +86,17 @@ async function authorization(method, path, accessKey, secretKey) {
 
 function allowed(ip) {
   const hour = Math.floor(Date.now() / 3600000);
+  if (total.hour !== hour) total = { hour, n: 0 };
+  if (total.n >= PER_HOUR) return false;
   const cur = hits.get(ip);
   if (!cur || cur.hour !== hour) {
     if (hits.size > 5000) hits.clear();
     hits.set(ip, { hour, n: 1 });
-    return true;
+  } else {
+    if (cur.n >= PER_IP_PER_HOUR) return false;
+    cur.n += 1;
   }
-  if (cur.n >= PER_IP_PER_HOUR) return false;
-  cur.n += 1;
+  total.n += 1;
   return true;
 }
 
@@ -117,26 +111,16 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
     if (request.method === "GET") return reply({ ok: true, service: "sadagu-link" }, 200, origin);
     if (request.method !== "POST") return reply({ error: "method_not_allowed" }, 405, origin);
-    if (origin && !ALLOWED_ORIGINS.includes(origin)) return reply({ error: "forbidden_origin" }, 403, origin);
+    if (!ALLOWED_ORIGINS.includes(origin)) return reply({ error: "forbidden_origin" }, 403, origin);
     if (!env.COUPANG_ACCESS_KEY || !env.COUPANG_SECRET_KEY) return reply({ error: "not_configured" }, 503, origin);
 
     let body;
     try {
-      body = await request.json();
+      body = JSON.parse(await request.text()); // 일반 텍스트로 와도 읽어요
     } catch {
       return reply({ error: "bad_request" }, 400, origin);
     }
-
-    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-    let target = normalize(body && body.url);
-    if (!target) {
-      if (!allowed(ip)) return reply({ error: "rate_limited" }, 429, origin);
-      try {
-        target = await resolveShort(body && body.url);
-      } catch {
-        target = null;
-      }
-    }
+    const target = normalize(body && body.url);
     if (!target) return reply({ error: "invalid_url" }, 400, origin);
 
     const inMemory = memory.get(target.key);
@@ -149,7 +133,9 @@ export default {
       }
     }
 
-    if (!allowed(ip)) return reply({ error: "rate_limited" }, 429, origin);
+    if (Date.now() < pausedUntil) return reply({ error: "busy" }, 503, origin);
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    if (!allowed(ip)) return reply({ error: "busy" }, 429, origin);
 
     try {
       const res = await fetch(API + DEEPLINK, {
@@ -159,16 +145,20 @@ export default {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ coupangUrls: [target.url] }),
+        redirect: "manual",
       });
+      if (res.status !== 200) {
+        pausedUntil = Date.now() + 3600000; // 인증, 호출 한도, 쿠팡 서버 문제: 한 시간 쉬어요
+        return reply({ error: "upstream" }, 502, origin);
+      }
       const data = await res.json().catch(() => null);
       const link = data && Array.isArray(data.data) && data.data[0] && data.data[0].shortenUrl;
-      if (!res.ok || !data || String(data.rCode) !== "0" || !link || !/^https:\/\/link\.coupang\.com\//.test(link)) {
-        return reply({ error: "upstream", code: data ? data.rCode : res.status }, 502, origin);
-      }
+      if (!data || String(data.rCode) !== "0" || !LINK_RE.test(link || "")) return reply({ error: "no_link" }, 502, origin);
       remember(target.key, link);
       if (env.LINKS) ctx.waitUntil(env.LINKS.put(target.key, link));
       return reply({ link, product: target.url }, 200, origin);
     } catch {
+      pausedUntil = Date.now() + 600000;
       return reply({ error: "upstream" }, 502, origin);
     }
   },

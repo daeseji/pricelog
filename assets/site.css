@@ -344,4 +344,44 @@ a { color: inherit; }
 .disc { margin-top: 28px; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; color: var(--ink-2); }
 .copy { margin-top: 14px; font-size: 12.5px; }
 
+/* 내 상품 */
+@media (max-width: 420px) { .nav a.opt { display: none; } }
+.mine-form { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; max-width: 720px; background: var(--surface); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); }
+@media (min-width: 720px) { .mine-form { padding: 22px; } }
+.mine-field { display: grid; gap: 6px; font-size: 13.5px; font-weight: 700; color: var(--ink-2); min-width: 0; }
+.mine-field.wide { grid-column: 1 / -1; }
+.mine-field small { font-weight: 500; color: var(--muted); }
+.mine-field input, .mine-log input { width: 100%; min-width: 0; height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; font-size: 15px; outline: none; transition: border-color .15s, box-shadow .15s; }
+.mine-field input:focus, .mine-log input:focus { border-color: var(--ink-2); box-shadow: 0 0 0 4px var(--surface-2); }
+.mine-form .btn { grid-column: 1 / -1; border: 0; cursor: pointer; font-family: inherit; }
+.mine-error { grid-column: 1 / -1; margin: 0; padding: 11px 14px; border-radius: 12px; background: var(--deal-bg); color: var(--deal); font-size: 14px; font-weight: 600; line-height: 1.55; }
+.mine-tools { display: flex; gap: 8px; flex-wrap: wrap; }
+.mine-tools .chip { font-family: inherit; }
+.mine-list { display: grid; gap: 14px; grid-template-columns: 1fr; }
+@media (min-width: 760px) { .mine-list { grid-template-columns: repeat(2, 1fr); } }
+.mine-item { display: flex; flex-direction: column; gap: 14px; background: var(--surface); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); min-width: 0; }
+.mine-top { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.mine-top > div { min-width: 0; }
+.mine-top h3 { margin: 0; font-size: 17px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.4; overflow-wrap: anywhere; }
+.mine-meta { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+.mine-body { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.mine-price b { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.03em; }
+.mine-price b.none { font-size: 17px; color: var(--ink-2); }
+.mine-price span { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+.mine-spark { width: 120px; height: 40px; color: var(--good); flex: none; }
+.mine-log { display: flex; gap: 8px; }
+.mine-log .btn { height: 46px; flex: none; padding: 0 16px; cursor: pointer; font-family: inherit; }
+.mine-manage { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-top: 6px; }
+.mine-txt { padding: 6px 0; border: 0; background: none; color: var(--ink-2); font: inherit; font-size: 13px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--line); cursor: pointer; }
+.mine-txt:hover { color: var(--ink); text-decoration-color: currentColor; }
+.mine-cta { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); }
+.mine-cta .btn { width: 100%; border: 0; cursor: pointer; font-family: inherit; }
+.mine-cta .btn:disabled { opacity: .6; cursor: progress; }
+.noaff { display: flex; gap: 12px; align-items: flex-start; margin-top: 14px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.noaff input { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--ink); }
+.noaff b { display: block; font-size: 14.5px; }
+.noaff-desc { display: block; margin-top: 3px; font-size: 13px; color: var(--muted); line-height: 1.6; }
+.mine-disc { margin: 0 0 14px; }
+.mine-disc { margin: 18px 0 0; font-size: 13px; color: var(--muted); line-height: 1.65; }
+
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
