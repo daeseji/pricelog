@@ -56,7 +56,7 @@
 | `/tips/c/<카테고리>/` | 카테고리별 노트 (쇼핑 팁·재료 고르기·보관·요리·레시피·살림) | 자동 |
 | `/tips/<글 주소>/` | 노트 글 (목차, 관련 상품 가격, 공유 버튼) | `content/tips/<글 주소>.md` |
 | `/about/` | 싸다구 소개·배지 읽는 법·FAQ | `scripts/build_site.py` |
-| `/links/` | SNS·직접 만든 사이트·공식 정보·레시피·파트너 사이트 | `content/links.json` |
+| `/links/` | 식품 안전·가격·레시피·영양·살림 공식 정보 모음 | `content/links.json` |
 | `/tips/feed.xml`, `/sitemap.xml` | RSS, 사이트맵 | 자동 |
 
 노트 글을 추가하거나 링크를 바꾼 뒤에는 페이지를 다시 만들어 주세요.

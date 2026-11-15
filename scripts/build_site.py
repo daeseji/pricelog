@@ -26,10 +26,18 @@ SITE_URL = "https://daeseji.github.io/pricelog/"
 SITE_BASE = "/pricelog/"  # 404 페이지처럼 주소가 정해지지 않은 곳에서 쓰는 절대 경로
 FONT_CSS = "https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
 DATA_REMOTE = "https://raw.githubusercontent.com/daeseji/pricelog/main/data"
-AUTHOR = "스타차일드"
+AUTHOR = "싸다구"
 # 디자인 파일이 바뀔 때마다 주소 뒤 버전이 바뀌어서, 브라우저가 예전 파일을 쓰지 않아요
-CSS_VER = hashlib.md5((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:8]
-ALERTS_VER = hashlib.md5((ROOT / "assets" / "alerts.js").read_bytes()).hexdigest()[:8]
+# 줄바꿈 방식(윈도우 CRLF, 리눅스 LF)이 달라도 같은 버전이 나오게 맞춘 뒤 계산해요
+
+
+def _ver(name):
+    data = (ROOT / "assets" / name).read_bytes().replace(b"\r\n", b"\n")
+    return hashlib.md5(data).hexdigest()[:8]
+
+
+CSS_VER = _ver("site.css")
+ALERTS_VER = _ver("alerts.js")
 
 # 카테고리: 이름 → (주소·색 이름, 소개, 대표 아이콘)
 CATS = {
@@ -244,17 +252,12 @@ def footer(root, notes, links, icons):
     picks = [n for n in notes if n["order"] <= 10][:5]
     top_notes = "".join(f'<a href="{root}tips/{n["slug"]}/">{esc(n["title"])}</a>' for n in picks)
     cats = "".join(f'<a href="{root}tips/c/{v[0]}/">{esc(k)}</a>' for k, v in CATS.items())
-    sns = "".join(
-        f'<a href="{esc(s["url"])}" target="_blank" rel="noopener" aria-label="{esc(s["name"])}">{brand_svg(icons[s["icon"]])}</a>'
-        for s in links["sns"] if s["icon"] in ("instagram", "threads", "x", "youtube", "github")
-    )
     return f"""<footer class="site-foot">
   <div class="wrap">
     <div class="foot-grid">
       <div>
         <a class="logo" href="{home}"><img src="{root}favicon.svg" alt="" width="26" height="26"><b>싸다구</b></a>
         <p>자주 사는 것만 골라 매일 아침 가격을 적어두는 개인 장보기 노트예요. 가격은 쿠팡 파트너스 API 기준이며, 쿠폰·카드 할인이나 실시간 변동은 반영되지 않을 수 있어요.</p>
-        <div class="sns">{sns}</div>
       </div>
       <div class="foot-col">
         <b>둘러보기</b>
@@ -270,7 +273,7 @@ def footer(root, notes, links, icons):
       </div>
     </div>
     <p class="disc">이 사이트는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-    <p class="copy">© 2026 싸다구 · 만든 사람 {AUTHOR}</p>
+    <p class="copy">© 2026 싸다구</p>
   </div>
 </footer>"""
 
@@ -538,7 +541,7 @@ def build_note(n, notes, links, icons):
         "@context": "https://schema.org", "@type": "BlogPosting",
         "headline": n["title"], "description": n["description"], "inLanguage": "ko-KR",
         "datePublished": n["date"], "dateModified": n.get("updated", n["date"]),
-        "author": {"@type": "Person", "name": AUTHOR, "url": SITE_URL + "about/"},
+        "author": {"@type": "Organization", "name": AUTHOR, "url": SITE_URL + "about/"},
         "publisher": {"@type": "Organization", "name": "싸다구", "logo": {"@type": "ImageObject", "url": SITE_URL + "apple-touch-icon.png"}},
         "image": SITE_URL + image, "mainEntityOfPage": url, "articleSection": n["category"],
     }
@@ -546,7 +549,7 @@ def build_note(n, notes, links, icons):
     if n["category"] == "레시피" and n["ingredients"] and n["steps"]:
         recipe = {
             "@context": "https://schema.org", "@type": "Recipe", "name": n["title"], "description": n["description"],
-            "image": [SITE_URL + image], "author": {"@type": "Person", "name": AUTHOR}, "datePublished": n["date"],
+            "image": [SITE_URL + image], "author": {"@type": "Organization", "name": AUTHOR}, "datePublished": n["date"],
             "recipeCategory": n.get("dish", "반찬"), "recipeCuisine": "한식", "inLanguage": "ko-KR",
             "recipeIngredient": n["ingredients"],
             "recipeInstructions": [{"@type": "HowToStep", "text": s} for s in n["steps"]],
@@ -592,23 +595,11 @@ LINKS_JS = """<script>
 
 def build_links(notes, links, icons):
     sections = []
-    sns = "".join(
-        link_card(s, brand_svg(icons[s["icon"]]) if s["icon"] else esc(s.get("initial", s["name"][0])), s["color"], sub=s["handle"])
-        for s in links["sns"]
-    )
-    sections.append(("sns", "SNS", "만든 사람의 일상과 개발, 트레이딩 이야기", sns))
-    projects = "".join(link_card(p, esc(p["initial"]), p["color"], sub=domain(p["url"]), tag=p["tag"]) for p in links["projects"])
-    sections.append(("projects", "직접 만든 사이트", "싸다구를 만든 사람이 함께 운영하는 곳이에요", projects))
     for sec in links.get("resources", []):
         color = SECTION_COLORS.get(sec["id"], "#364FC7")
         cards = "".join(link_card(it, esc(it["name"][0]), color, sub=domain(it["url"]), tag=it.get("tag", ""), small=True) for it in sec["items"])
         sections.append((sec["id"], sec["title"], sec["desc"], cards))
-    partners = "".join(
-        link_card(p, esc(p["name"][0]), PARTNER_COLORS[i % len(PARTNER_COLORS)], sub=domain(p["url"]), tag=p["tag"], small=True)
-        for i, p in enumerate(links["partners"])
-    )
-    sections.append(("partners", "파트너 사이트", "살림·금융·테크까지 함께하는 이웃 블로그", partners))
-    total = len(links["sns"]) + len(links["projects"]) + len(links["partners"]) + sum(len(s["items"]) for s in links.get("resources", []))
+    total = sum(len(s["items"]) for s in links.get("resources", []))
     chips = "".join(f'<a class="chip" href="#{sid}">{esc(title)}</a>' for sid, title, _, _ in sections)
     secs_html = "".join(f"""
   <section class="sec" id="{sid}" data-sec aria-labelledby="h-{sid}">
@@ -620,7 +611,7 @@ def build_links(notes, links, icons):
   <header class="page-head">
     <div class="eyebrow">링크 모음 · {total}곳</div>
     <h1>장보기와 살림에 쓸모 있는 곳</h1>
-    <p>식품 안전과 가격 정보를 확인할 수 있는 공식 사이트, 믿을 만한 레시피 사이트, 영양·살림 정보, 그리고 만든 사람의 SNS와 이웃 사이트까지 한곳에 모았어요.</p>
+    <p>식품 안전과 가격 정보를 확인할 수 있는 공식 사이트, 믿을 만한 레시피 사이트, 영양·살림 정보를 주제별로 모았어요.</p>
     <label class="search" style="margin-top:20px"><span class="sr">링크 검색</span>{SEARCH_ICON}<input id="lq" type="search" placeholder="예: 레시피, 가격, 식품안전" autocomplete="off"></label>
     <nav class="chips" aria-label="섹션" style="margin-top:14px">{chips}</nav>
   </header>
@@ -629,7 +620,7 @@ def build_links(notes, links, icons):
   <p class="sec-desc" style="margin-top:36px">외부 사이트의 내용과 주소는 운영 기관 사정에 따라 바뀔 수 있어요.</p>
 </main>"""
     head = breadcrumb_ld([("싸다구", ""), ("링크 모음", "links/")])
-    return page("links/index.html", "링크 모음 · 싸다구", "식품 안전·가격 정보 공식 사이트, 레시피 사이트, 영양·살림 정보와 싸다구 만든 사람의 SNS 모음.",
+    return page("links/index.html", "링크 모음 · 싸다구", "식품 안전·가격 정보 공식 사이트, 믿을 만한 레시피 사이트, 영양·살림 정보를 주제별로 모았어요.",
                 "links", body, notes, links, icons, extra_head=head, extra_js=LINKS_JS)
 
 
@@ -681,14 +672,14 @@ def build_about(notes, links, icons):
   </section>
   <section class="sec" aria-labelledby="h-faq">
     <h2 class="sec-title" id="h-faq">자주 묻는 질문</h2>
-    <p class="sec-desc">궁금한 게 더 있으면 SNS로 편하게 물어봐 주세요</p>
+    <p class="sec-desc">가격과 배지, 링크에 대해 자주 받는 질문이에요</p>
     <div class="faq">{faq_html}</div>
   </section>
-  <section class="sec" aria-labelledby="h-maker">
-    <h2 class="sec-title" id="h-maker">만든 사람</h2>
-    <p class="sec-desc">{AUTHOR} · 개발하고, 기록하고, 가끔 장을 봐요</p>
+  <section class="sec" aria-labelledby="h-next">
+    <h2 class="sec-title" id="h-next">이제 둘러보세요</h2>
+    <p class="sec-desc">오늘 가격부터 보고, 시간이 나면 노트도 읽어 보세요</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
-      <a class="btn" href="{root}links/">SNS와 사이트 보기</a>
+      <a class="btn" href="{root}">오늘의 가격 보기</a>
       <a class="btn ghost" href="{root}tips/">장보기 노트 읽기</a>
     </div>
   </section>
@@ -761,7 +752,6 @@ def home_seo():
     }) + ld({
         "@context": "https://schema.org", "@type": "Organization", "name": "싸다구", "url": SITE_URL,
         "logo": SITE_URL + "apple-touch-icon.png",
-        "sameAs": ["https://www.instagram.com/wait_secs/", "https://x.com/wait_secs", "https://www.threads.com/@wait_secs/", "https://github.com/daeseji"],
     }) + f'<link rel="canonical" href="{SITE_URL}">\n<link rel="alternate" type="application/rss+xml" title="싸다구 장보기 노트" href="{SITE_URL}tips/feed.xml">\n'
 
 
