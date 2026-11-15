@@ -13,6 +13,8 @@ SEARCH_PATH = "/v2/providers/affiliate_open_api/apis/openapi/v1/products/search"
 # - 실패하면 재시도하지 않고 바로 멈춥니다. (연속 오류로 차단되는 것 방지)
 DELAY_SECONDS = 400
 MAX_CALLS_PER_RUN = 20
+# 못 찾은 상품은 products.json의 fallback_keywords로 한 번 더 찾아요. 그래도 한 번 실행에 최대 이만큼만 호출해요.
+MAX_TOTAL_CALLS = 28
 SEARCH_LIMIT = 10
 HISTORY_LIMIT = 365
 
@@ -90,23 +92,39 @@ def main():
         print(f"⚠️ 상품이 {len(products)}개예요. 안전을 위해 앞의 {MAX_CALLS_PER_RUN}개만 조회합니다.")
         products = products[:MAX_CALLS_PER_RUN]
 
+    calls = 0
+    stop = False
     for i, product in enumerate(products):
-        if i > 0:
-            time.sleep(DELAY_SECONDS)
-        print(f"\n조회 중 ({i + 1}/{len(products)}): {product['name']}")
-        try:
-            # 쿠팡 파트너스에서 검색하듯 상품명(옵션까지) 그대로 검색해요
-            results = search(product.get("keyword") or product.get("title") or product["name"])
-        except ApiError as e:
-            print(f"  ⛔ API 오류로 여기서 멈춥니다 (재시도 안 함): {e}")
-            break
-
         key = product["name"]
-        match = find_product(product, results, meta.get(key, {}).get("itemId"))
-        if match is None:
-            print("  ❌ 검색 결과에서 같은 상품(옵션)을 못 찾아서 기록하지 않았어요. 검색 결과:")
+        # 쿠팡 파트너스에서 검색하듯 상품명(옵션까지) 그대로 검색하고, 못 찾으면 짧은 검색어로 한 번 더 찾아요
+        keywords = [product.get("keyword") or product.get("title") or product["name"]]
+        keywords += [k for k in (product.get("fallback_keywords") or []) if k not in keywords]
+        match = None
+        for kw in keywords:
+            if calls >= MAX_TOTAL_CALLS:
+                print(f"\n⚠️ 이번 실행의 호출 한도({MAX_TOTAL_CALLS}회)에 닿아서 남은 검색은 건너뛰어요.")
+                stop = True
+                break
+            if calls > 0:
+                time.sleep(DELAY_SECONDS)
+            calls += 1
+            print(f"\n조회 중 ({i + 1}/{len(products)}): {product['name']}  [검색어: {kw}]")
+            try:
+                results = search(kw)
+            except ApiError as e:
+                print(f"  ⛔ API 오류로 여기서 멈춥니다 (재시도 안 함): {e}")
+                stop = True
+                break
+            match = find_product(product, results, meta.get(key, {}).get("itemId"))
+            if match is not None:
+                break
+            print("  ❌ 이 검색어로는 같은 상품(옵션)을 못 찾았어요. 검색 결과:")
             for p in results:
                 print(f"     - [상품 {p.get('productId')} / 옵션 {item_id(p)}] {p.get('productName')} / {p.get('productPrice')}원")
+        if stop:
+            break
+        if match is None:
+            print("  ↪ 모든 검색어로 못 찾아서 이번에는 기록하지 않았어요.")
             continue
 
         price = match.get("productPrice")

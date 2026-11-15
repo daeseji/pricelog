@@ -22,7 +22,11 @@
       "category": "음료",
       "url": "https://www.coupang.com/vp/products/6456346159?itemId=18170876257&vendorItemId=81283083888",
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOcEQxTlROSQ",
-      "item_id": "18170876257"
+      "item_id": "18170876257",
+      "fallback_keywords": [
+        "티젠 콤부차 파인애플",
+        "티젠 콤부차"
+      ]
     },
     {
       "name": "제이웨이브 듀오덤 스팟패치",
@@ -30,7 +34,11 @@
       "category": "뷰티·건강",
       "url": "https://www.coupang.com/vp/products/7353151170?itemId=25367401878&vendorItemId=92361610913",
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJOczFUT1JFRw",
-      "item_id": "25367401878"
+      "item_id": "25367401878",
+      "fallback_keywords": [
+        "듀오덤 스팟패치",
+        "제이웨이브 듀오덤"
+      ]
     },
     {
       "name": "라운드랩 독도 토너",
@@ -153,7 +161,11 @@
       "url": "https://www.coupang.com/vp/products/8049883644?itemId=20339928917&vendorItemId=88356648880",
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJWYzBmQnV4TQ",
       "item_id": "20339928917",
-      "keyword": "샤프란 섬유유연제 코튼 베이비파우더 본품"
+      "keyword": "샤프란 섬유유연제 코튼 베이비파우더 본품",
+      "fallback_keywords": [
+        "샤프란 코튼 베이비파우더 3.1L",
+        "샤프란 섬유유연제"
+      ]
     },
     {
       "name": "헤드앤숄더 클리니컬 스트렝스 샴푸",
@@ -162,7 +174,11 @@
       "url": "https://www.coupang.com/vp/products/8575093013?itemId=13660115060&vendorItemId=92286493712",
       "link_b64": "aHR0cHM6Ly9saW5rLmNvdXBhbmcuY29tL2EvaHJWZVdyZkx5MA",
       "item_id": "13660115060",
-      "keyword": "헤드앤숄더 클리니컬 스트렝스 댄드러프 디펜스 인텐시브 앤 쿨링 이치 릴리프 샴푸"
+      "keyword": "헤드앤숄더 클리니컬 스트렝스 댄드러프 디펜스 인텐시브 앤 쿨링 이치 릴리프 샴푸",
+      "fallback_keywords": [
+        "헤드앤숄더 클리니컬 스트렝스 샴푸",
+        "헤드앤숄더 클리니컬"
+      ]
     }
   ]
 }

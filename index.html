@@ -455,7 +455,11 @@ const VERDICTS = {
   wait: { label: '존버 추천',      tone: 'dark', rank: 4 },
   rec:  { label: '기록 중',        tone: 'mute', rank: 5 },
   none: { label: '첫 기록 대기',   tone: 'mute', rank: 6 },
+  old:  { label: '확인 지연',      tone: 'mute', rank: 7 },
 };
+
+// 마지막 기록이 이보다 오래되면 지금 가격으로 보여 주지 않아요 (쿠팡 검색에서 상품을 못 찾는 중일 수 있어요)
+const STALE_DAYS = 3;
 
 function analyze(history) {
   const prices = history.map(h => Number(h.price));
@@ -477,6 +481,10 @@ function analyze(history) {
   else if (a.pos <= 0.3) a.key = 'buy';
   else if (a.pos >= 0.7) a.key = 'wait';
   else a.key = 'mid';
+  const lp = parseDate(history[n - 1].date);
+  a.last = history[n - 1].date;
+  a.ageDays = (Date.now() - new Date(lp.y, lp.m - 1, lp.d, lp.h || 0, lp.mi || 0).getTime()) / 864e5;
+  if (a.ageDays > STALE_DAYS) { a.stale = true; a.key = 'old'; a.change = null; }
   return a;
 }
 
@@ -658,6 +666,7 @@ function drawChart(box, history) {
 }
 
 function verdictText(a) {
+  if (a.key === 'old') return `<b>${dateLabel(a.last)}</b> 이후로 가격을 확인하지 못했어요. 쿠팡 검색 결과에서 이 상품이 잠시 안 보여서 그래요. <b>지금 가격과 다를 수 있으니</b> 쿠팡에서 확인해 주세요.`;
   if (a.key === 'none') return '아직 기록이 없어요. <b>매일 오전 9시쯤</b> 가격을 적어둘게요.';
   if (a.key === 'rec') return `기록 <b>${a.n}번</b>째예요. 3번 이상 쌓이면 지금 사도 되는지 알려드릴게요.`;
   if (a.key === 'flat') return `기록하는 동안 <b>가격이 한 번도 안 바뀌었어요.</b> 급하면 그냥 사도 돼요.`;
