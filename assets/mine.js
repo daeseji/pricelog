@@ -1,7 +1,7 @@
 // 싸다구 '내 상품': 방문자가 직접 담은 쿠팡 상품과 가격 기록 (이 기기의 브라우저에만 저장돼요)
 (() => {
   // 제휴 링크 서버 주소 (worker/README.md 참고). 비어 있으면 쿠팡 상품 페이지로 바로 연결해요.
-  const LINK_API = '';
+  const LINK_API = 'https://script.google.com/macros/s/AKfycbzWNp5tkBDJdaHOgaTs_LHKNCTsT6GMJLM_kCRRCTgJvxATpkM6i8ITHESp99WTc0W2/exec';
 
   const KEY = 'sadagu:mine:v1';
   const ROOT = '../';
