@@ -5,16 +5,22 @@
         [
           "2026-11-16",
           19980
+        ],
+        [
+          "2026-11-17",
+          21220
         ]
       ],
       "added": "2026-11-16",
       "t": "코카콜라 오리지널, 2L, 8개",
       "seen": "2026-11-16",
       "on": true,
-      "ok": "2026-11-16",
+      "ok": "2026-11-17",
       "miss": 0,
       "name": "코카콜라 오리지널",
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8114968257&itemId=22510370880&vendorItemId=88377579910&traceid=V0-153-8366823466797979&requestid=20261116070444406089576699&token=31850C%7CMIXED&pt=0&slot=7"
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8114968257&itemId=22510370880&vendorItemId=88377579910&traceid=V0-153-8366823466797979&requestid=20261117045457500021627736&token=31850C%7CMIXED&pt=0&slot=6",
+      "img": "https://ads-partners.coupang.com/image1/CQlIx-o2--yA1L4jCeZ5zoZYXcSMm0YLdKwdH7XOdGn-1mH1yWqGDW1RFpSgSjVFGBd-qREHW1OSUMGMWL-xiveGw2PEPHpb4taJ-42v_IRZ9lqm_W5dxvDU0BAi_D744rs-0le7Nc4hKXWLaHHQ2gajHzayfEDgzXMoetlBpiVI1_59oHohXEp8fx1zr-OzsN1XXhzc8XxjRs39fGEYfWSzPQb4SD_SeNNLMjvUBnCeCvbn7LNHOdrFS1dP4_2yH3IOS-owwDz5GiDYoFWrAygStLQquxZ_1xweLxGOf6a2FkR4LgGT5Jh5wvCT9OI0HLLbJSxnFKMburZou4VIlB0YUxA5jNLqxJuCMttJo-KtueAm8_sOabUOt4SsOqpzHeJQi-vladZCgiU_8nSZsPWacEl35y02ewhNwygBnXJd9UYyBDGGpQcBGxxFQNYlgUC_j53lJoyy8V8QblSntTcSC4QXh16WKaWxsyfFyz-4WlSKq2cK6xA63yUcOgi2E4MgOXftwhmCvFs06QdB3kflARFQeZa439hT4Udf6tBYUUZeZKU7n2JeMIGt1Rq4Mc38MF3J4NhV0i-OTPLm",
+      "r": true
     },
     "9131630521:27190263852": {
       "h": [],
@@ -409,5 +415,5 @@
       "on": true
     }
   },
-  "updated": "2026-11-16 18:42"
+  "updated": "2026-11-17 04:52"
 }
