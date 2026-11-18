@@ -55,6 +55,10 @@
         [
           "2026-11-17",
           14500
+        ],
+        [
+          "2026-11-18",
+          14500
         ]
       ],
       "added": "2026-11-16",
@@ -62,11 +66,11 @@
       "v": "91045371333",
       "seen": "2026-11-16",
       "on": true,
-      "ok": "2026-11-17",
+      "ok": "2026-11-18",
       "miss": 0,
-      "name": "졸리마켓 강아지 대용량 육포",
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8129382339&itemId=24024896806&vendorItemId=91045371333&traceid=V0-153-280649b62cb6d0ed&requestid=20261117205343037161493085&token=31850C%7CMIXED&pt=0&slot=6",
-      "img": "https://ads-partners.coupang.com/image1/SmC40UZuWZ4JG7QsSkUtMlszZq1W5niiWf0y71epp2iOf8gHW6R7v79L01kwzqBw7VF0m_BYxkIoz5qy8ruTNeVfKypPzG_Ud4MP7UMKjd-4g7e8XK5BE3FO7m4yK9g1xthk5ux9EUF_1BjXpsBh49D0ZwaU7NlCu0B99W0RN1E77xSVepCNb8ppTEjOv6ZzQjETl86oG8Ct6-_TtXJKZFDm0pMOf_XPomCbKAhZ3uQ9DAD-GtMDKLe9UuOSs0rwtqk1xMdrmfjlaf3ebBhqjDK_QNay8gQziFfecGny96BF_h_2A1m49_NhtteW3KE0mSGtGHk7K3cJisYhLLSIRpH2Tm-HwJskqTAE8duRDC0bK47GK7ESV0fGMhc_EOxd29HlJpA0nfV7njGyyx1nXisdmFDpIHO1J_p6wFUdu_lTixMYqVNbtJyKwWGg3bZPUSST2kX2JPbknHDi2iK2UW6CGhUzxpEfDLsBvafLZxdWSvCdHzHYSSxpdjpP9g9-4WNAiZ9_AdLGy5iCKIoGinxbGvNSn_YoH-IJVL-Axw89V2uUdfH9REMqe0D0ZilGMqQtRPZ_Cy_vP-HwFiEs6MlsKaPtVjA4ccxyHy02Jw==",
+      "name": "졸리마켓 강아지 대용량 육포, 말랑 닭가슴살 슬라이스, 1kg, 1개",
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8129382339&itemId=24024896806&vendorItemId=91045371333&traceid=V0-153-280649b62cb6d0ed&clickBeacon=3cae71f0-e345-11f1-9f4c-effd71e91798%7E3&requestid=20261118204313432297875861&token=31850C%7CMIXED&pt=1&slot=1",
+      "img": "https://ads-partners.coupang.com/image1/5fp-SxCBzkpKJH255ST5aHnYgda2VnMAXF2JOq9ZwdZmAtyfFcTIG_QxmiUj9zjo4N73cQfeyiy2vmX9C4VgebQLl0JAJ-os_wr88RxoF1wJnIvNDgiKpu45OPgzT2AT-lslELAi_6IOB8aTmfCMKnL6KAWNbu693ppzeHFyeJbQc9pwrsXlHsLAKmN7R5vnoIK9nF6ZoYTivcHyq7jta2nrYSqGKOOwBQ5FXnqj284X7_2bDrH00vOoea9HiDlYWaifjoQwgQ74eJ6kxJ2p9RUQ9Gh5apoLPWy4KLVtv8B8JiT3GhqjU779y1cdtyylOq9gNtVuXuOIQkqQ-oQ0_r3AwHt7HYEbXO_fxmrdCbmIEgmsTUHxkXIutYKCOaSJ39lo9jePQzlfEkHPAOSShzA4OYjxcFFKaULzO2FgcP16aDHKSdO7aNQaG33NtU3dPL9yJrdTZnrV1Y2n8Ws0bYs1fZf-CjmcI_Zltw2UGExQ5jUs7aLIe9xCGq9R-Fm5l3OzfJKiZ3UM_vWrDQyneA==",
       "r": true
     },
     "7710710222:21524204946": {
@@ -430,5 +434,5 @@
       "on": true
     }
   },
-  "updated": "2026-11-18 11:53"
+  "updated": "2026-11-18 20:40"
 }
