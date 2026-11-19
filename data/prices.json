@@ -68,6 +68,10 @@
       {
         "date": "2026-11-19 10:30",
         "price": 9180
+      },
+      {
+        "date": "2026-11-20 03:40",
+        "price": 29400
       }
     ],
     "라운드랩 독도 토너": [
@@ -787,6 +791,10 @@
       },
       {
         "date": "2026-11-19 04:37",
+        "price": 16540
+      },
+      {
+        "date": "2026-11-20 03:40",
         "price": 16540
       }
     ],
@@ -2116,6 +2124,10 @@
       {
         "date": "2026-11-19 04:37",
         "price": 19000
+      },
+      {
+        "date": "2026-11-20 03:40",
+        "price": 19000
       }
     ],
     "도비 전연령 강아지 밸런스 건식사료": [
@@ -2889,10 +2901,10 @@
       "productId": 6456346159,
       "itemId": "18170876257",
       "productName": "티젠 파인애플 콤부차",
-      "image": "https://ads-partners.coupang.com/image1/AnqXeVHFXYFGsx8vAuPQxaElIo2dmX44sF3wiSHuSLONkLMjpxm__U6ZirxdIGOjNXoCQiA7PDp-bMmMNFFuumLSdacih9FvFR0mccZRMR4MZgHP8Oh_ROwiHaPQypy1ZuzKTiwrB-Kr_5PRHjzn7z7InoM4Lsu3cYkw0IwfQj4yxOU5zWPaeryb6fVD0YYAi-NggvmWosfnEb_vfuWWea_TNr4qapWv2NZ-XK8v_T9LbcbGrliw6Y5kbHcCQzNbHRIf0_hLf6joM4aG1NpOiDPIDoDE_MI6i3OpZHHmHppq0G3hg1B1YVTb57Kdb91EwLwGesdZdi9M0SDkJLtws4Q2e4A3OG5qO8xrxYsxhvU2i20ujuyv_I1s6P8SFqhE5bB6VF2lnhQW89Bq1wS6FSbCDi5YurGyHgHFpOp9YxZ8fj-80TtU64mt9mCuA79efWs890z4tmJSvJ4YN2aNKEKIyrGt5L_unyXmgLP1v_rqyDm0mt_GH5jm4YQgkvL6JWXtyx7rtGVrPMybNFkDzQ5mSg==",
-      "rocket": true,
-      "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=6456346159&itemId=18170876257&vendorItemId=81283083888&traceid=V0-153-3603369f1fc2f025&requestid=20261119103323559022084586&token=31850C%7CMIXED&pt=0&slot=5"
+      "image": "https://ads-partners.coupang.com/image1/dOTm9gRjZan5ouTddJXDcOJ27JArj-7kRL4k3cX322xaHn59RQik6ZOiTbrp2CvnZMgf8T-MWsM1ydyAZt_S414xVtYpqBM4Q3dRn75vauKNc7ByX5gg4AigSrrmbyYJsZMoHHE2P_5sQbvtlkUyKD7TkNPZ6efTDNSjM20psbvSJ_bpZ_aU4Pj3vc1glDhcs42mMRiplZc6SSVOqEsXmXxBGNVUB8JUtfYDj3FciSyRde7WV31MtNDMTZWdkGFz1fS8iKuevNEnu0ocdwY006NG3NT29bAU43zLQAco-h8NakVDPZXLgohuZjmQDm03yY0JH6b5NEgsEHcT58CICr99bIUYyaZwaM9z4AMbl_CJ2NyPHS2eMZdPhzY61L8I9CMuqg3Tuyz3cosGXoguAu0IWNAXmuioowE1IpGXt2gbRB_xNqlpVluO2VfWN1KT1UQUO20DdhC7hN79eIIG_ITU8zfCMzdit8Bly7AXTRnkvRiEOS7HRzQEM1W4wxtl4KdPLZuw0ayUCnOCVapxv9edZLhLJMPSxKHGdgb-WERLMjKPncTHomMXv3MvSvz2q3qwCOiNEyuD1v51Tms=",
+      "rocket": false,
+      "freeShipping": true,
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=6456346159&itemId=18170876257&vendorItemId=96322929891&traceid=V0-153-3603369f1fc2f025&requestid=20261120034339348193056268&token=31850C%7CMIXED&pt=0&slot=6"
     },
     "라운드랩 독도 토너": {
       "localImage": "img/18355752168.jpg",
@@ -2929,10 +2941,10 @@
       "productId": 8538186683,
       "itemId": "24718036579",
       "productName": "미국산 삼겹살 구이용 (냉장)",
-      "image": "https://ads-partners.coupang.com/image1/RQ-NQFoI0qE1reBgRYhNvdqI1rPEJHCLIkrh0Tr7ZFjAcUEanKFw2BNIgzEyffBa4EsTIWkHIpV5jHwOLna0gjgzp7mHGaa5HllmYhYAtre2yTsU5LWw3PSjHfwCze-nIwoGLGQPW938u2xzK6JUpZWDwXA4rTmdPMJe37ABA6kTJhg1uWzSWq6YYFgDsxk9lULATDz9lc4AilKkb2GvgKPSZqN-IgnzLy7amskuRV3Oe_dYGjB4EqgBANsGuh3dhEMbiPuVtbKJro8ewURNqIec8rHPjeHNhvPhVYKDR2tg68Hueomb8pXYeWwm6gqWkPlZrXvuLWW9k369D2ua2YHXXlyuMW7NDbWpGpiFllTVKbpgMy2QAMcjLm6rOp0WuOnUdLKRdpqnNtgQMyI6WdjL_Fmvcx-MQUZ2ZuxRNFR4xS7rB-KawTDe1kzvbNDRJsB4c1_73vH65_wd4dduYMWsvPFn6wGW37QIv_xNhOATvb6TpOpec2T1XI66QAcTduB0nSUGeXeAEWwLhuRbO7tKpnWjmwxFaCmrLgdydKoOzhf6Iz216zPb0-GYhrvJu6_Nag==",
+      "image": "https://ads-partners.coupang.com/image1/7eztIKwepOKIt0Qg7fIRkuZEXtPTDtb-YSgdaeIMEcEz0Bpso27wycgEDQSCcUCg2J_eAI_SfVtf6pqdpIkeigzIl6lb8dSyD8AapiMSzNTxv8VWpXttcPEUvYKyVd0y6AKsfLZ7TmI_0qB2-qBS4s1GTAFbsnQ3rDhV3OPlpGTZU90ot1al0LpFRfbjyp7qtpbUeMTE8lNJNLyv1CLj0KqdLEClBqCCZx3cbNce_JVn31WCmV730QyPgNjOmapfpiGAmM1hJxHL0mcuW7qpXKFlWePbcM5ekK-XVj-No-Mr_0lwoxE3BxbKiQBXgf9ymSwm7PghYdg0B-ECvaf-83A5q0ap_MYfUMFMAnpyJElg5KO3LDLD21FXPxGZTOdD1UOTeqltIgbn3NFCKil8V4NB4GzgroK75dntLCsMjDxyRr21mNNyhInA8Iy4Q9H10NQBLZLn6ldgZTv5WOq6S02D1TFKZl8DBYGhTcPsPMk1Goy6wyGOXwEEcpx-TnMAeMQGV0d1Z2pnYIU=",
       "rocket": true,
       "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8538186683&itemId=24718036579&vendorItemId=91727336120&traceid=V0-153-12efbe7b30860683&requestid=20261119043907148315141006&token=31850C%7CGM&pt=0&slot=2"
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8538186683&itemId=24718036579&vendorItemId=91727336120&traceid=V0-153-12efbe7b30860683&requestid=20261120034218408263640592&token=31850C%7CMIXED&pt=0&slot=7"
     },
     "청정원 허브맛솔트 마늘&양파": {
       "productId": 9101343857,
@@ -3009,10 +3021,10 @@
       "productId": 8114968257,
       "itemId": "22510370880",
       "productName": "코카콜라 오리지널",
-      "image": "https://ads-partners.coupang.com/image1/kcCZtA9n78hK7aWakaX5-j7utbN9laGGdIqQkXLroFDRE-6cEpNvza8yT2Qz7R_RUhlK7WcSl047seqioDwZ2oE40azm1d-gVl_zpR0Td5kfduvv701LaVVVNA035K0-52srgtCHtCxgLOgW8MMy05fnucHPyjuuxDq7Q_FSK1wFCINZl0-qUtCaAGSs594jakDVCOadVeevbuKl-L_yP6I5rZALLD-EEkfqwSZiwVY4wFyYLE04OlZXzMDeGvHqXh7ExuXUaCreKUMU2LOal_Fqf4BOaf85wWtBlHrmW-hvHXQWzZgXF3c0BgrlrtDmfzWaeHOxzDQi-ABWuhtFEmLwbWwDjD4fVJMdwqF23cWAvya9D2_nILJhiqbD41QizXZfteM27YQDkBwT8qSrGUdttwZj-JxEF4W990maMlk-G2uhOZbwUYsyW30S_mpZh1oBZsqTzGdRtmIADpsScQy88miUjj6ddnBqVXCYAGxuosc0APxtddJJV9wrISx9OHatH6Y9oQW75lTlIoi-SGLInaHnZ7yufVNSGAzHqnHAE8o40ZQdrb_G8jxySfZ9e89zTnlaXJQIPZnKPiqh",
+      "image": "https://ads-partners.coupang.com/image1/N4jwDpqR4pf9L0anNx8iK8waMn-PAvGe_bvNkSG5dIlsEhbkUyYOwOzWkikxl8MOkbgUcL2Zflu1hoIIf7MDmz8P_VxARPIHDG5wkbscozuNubuYprInbO0ARzSGDikUOG_f2lxu_Hx8ggha_62H-VGQIZO_AXxYFGKXb8_wf9NFXpomc4qtrOpLIh9Nw5evBGg4Xh8VXO4AeJ0V7RY4E-ZsOrI4c_oNvpyHGUbat4rPgjiaC3SidYZGQpXZfoRJf5xGEHVZOMtGn9v67wyJMvL_LG246VF0ejHFlEJRpHR4epC1FEwmU2SalOMOwm2-uRYVivdMc5xdI5kF3W7yQAS2zj6mfGZQAGxOAnDew6zWajt5VqdnkDcFC4xlGudGORNkXo9Mlxmbkr3WqMMUrnDlnV4Xp3JXL08xlRtww2v-O39PNmUQfw7rmakMd_N_6z_lPaA6azGEEJRfo6g6K0zt5JE7SCu2j_UJCojixlCi2idN_SFCyklQ18K539qqzu_UZPPAczAut0Y_UqXS1u2gwA1icO0uoqzZKk6zypaCg6g0EzMhUZmnXL4Irubu21ZZw8Zpvzxw4Qfrq2cgoQ==",
       "rocket": true,
       "freeShipping": false,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8114968257&itemId=22510370880&vendorItemId=88377579910&traceid=V0-153-8366823466797979&requestid=20261119043947904248841310&token=31850C%7CMIXED&pt=0&slot=8"
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8114968257&itemId=22510370880&vendorItemId=88377579910&traceid=V0-153-8366823466797979&requestid=20261120034258912095000317&token=31850C%7CMIXED&pt=0&slot=9"
     },
     "도비 전연령 강아지 밸런스 건식사료": {
       "productId": 7104723957,
