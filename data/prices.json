@@ -72,6 +72,10 @@
       {
         "date": "2026-11-20 03:40",
         "price": 29400
+      },
+      {
+        "date": "2026-11-21 08:21",
+        "price": 9180
       }
     ],
     "라운드랩 독도 토너": [
@@ -2913,10 +2917,10 @@
       "productId": 6456346159,
       "itemId": "18170876257",
       "productName": "티젠 파인애플 콤부차",
-      "image": "https://ads-partners.coupang.com/image1/dOTm9gRjZan5ouTddJXDcOJ27JArj-7kRL4k3cX322xaHn59RQik6ZOiTbrp2CvnZMgf8T-MWsM1ydyAZt_S414xVtYpqBM4Q3dRn75vauKNc7ByX5gg4AigSrrmbyYJsZMoHHE2P_5sQbvtlkUyKD7TkNPZ6efTDNSjM20psbvSJ_bpZ_aU4Pj3vc1glDhcs42mMRiplZc6SSVOqEsXmXxBGNVUB8JUtfYDj3FciSyRde7WV31MtNDMTZWdkGFz1fS8iKuevNEnu0ocdwY006NG3NT29bAU43zLQAco-h8NakVDPZXLgohuZjmQDm03yY0JH6b5NEgsEHcT58CICr99bIUYyaZwaM9z4AMbl_CJ2NyPHS2eMZdPhzY61L8I9CMuqg3Tuyz3cosGXoguAu0IWNAXmuioowE1IpGXt2gbRB_xNqlpVluO2VfWN1KT1UQUO20DdhC7hN79eIIG_ITU8zfCMzdit8Bly7AXTRnkvRiEOS7HRzQEM1W4wxtl4KdPLZuw0ayUCnOCVapxv9edZLhLJMPSxKHGdgb-WERLMjKPncTHomMXv3MvSvz2q3qwCOiNEyuD1v51Tms=",
-      "rocket": false,
-      "freeShipping": true,
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=6456346159&itemId=18170876257&vendorItemId=96322929891&traceid=V0-153-3603369f1fc2f025&requestid=20261120034339348193056268&token=31850C%7CMIXED&pt=0&slot=6"
+      "image": "https://ads-partners.coupang.com/image1/41J3VxR-arnW5sVt4xkr0oIzW0ftuO0M3bZUuOG8EnvAvEBPGkFaz7VGM8JhXEXBYgTQ9JFIYb16SaObgN4QUaDKnP4gMzEjGW57YaEfV3tRcoT8XoOjrNpBVKbxk6kfQHsdcUzMlPFxxB9MUEXX0_GLg3HOsocz-LzBjx2qbMrCBrDCJk3_dvJ6eWSALNhteu1F3DQw6_Ht95AizGsJshC4pn3GjhWCc0SrWAo9HEtWiAbX62W4FIEgF-0tfWzWGjF7vQV-YNnym1wdno_hhnNr-0ne-ga7C9Bf2n462eaOsK7a4VADk1lc9aPIraxBdgji7h92o62a6RjuloDQtIInll44Aj0cVrsl0HEwImrt-indnGu-C80xkS0CLPb4rr_sZ9pUrBMwk6aGQRZGFmcC11hreiDpR18rrwrzfiAYU08gIOBzL7hvKerrA6-CuA8nr-WaplCwyD-0KSOa01fP04DWgVBD0jxlJ03spNvptS0xE6V_mjF1NBpL6CqpyIKnQ58afYpZTLcHGmkRzCEujkw4TJUj5E3DJjIMOi0VW9E5a27SLtupsSZj0gxST7X6NXwdsxPBXGCVrxnNGA==",
+      "rocket": true,
+      "freeShipping": false,
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=6456346159&itemId=18170876257&vendorItemId=81283083888&traceid=V0-153-3603369f1fc2f025&requestid=20261121082424710292633012&token=31850C%7CMIXED&pt=0&slot=6"
     },
     "라운드랩 독도 토너": {
       "localImage": "img/18355752168.jpg",
