@@ -75,6 +75,10 @@
         [
           "2026-11-19",
           14500
+        ],
+        [
+          "2026-11-21",
+          14500
         ]
       ],
       "added": "2026-11-16",
@@ -82,11 +86,11 @@
       "v": "91045371333",
       "seen": "2026-11-16",
       "on": true,
-      "ok": "2026-11-19",
+      "ok": "2026-11-21",
       "miss": 0,
-      "name": "졸리마켓 강아지 대용량 육포, 말랑 닭가슴살 슬라이스, 1kg, 1개",
-      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8129382339&itemId=24024896806&vendorItemId=91045371333&traceid=V0-153-280649b62cb6d0ed&clickBeacon=3ce0b860-e3fc-11f1-89cc-c03f89a9baee%7E3&requestid=20261119183311663104917762&token=31850C%7CMIXED&pt=1&slot=1",
-      "img": "https://ads-partners.coupang.com/image1/b1V0zeZUju-9dvKkb61_S4qQAb-I0cKETv15Qp6ws8QAMr3IvQdOu_9pvkrb6Gsu8DGjjitFRxNwRI2dcExKwQ_tFP8fmnOKw0F0jdBATBeLoJk38ba2ni7ncVllA3oQDxCPD-B5zKBpVAQR8wO5JFar9nJ3j-qe_hgsasjmG9As9QAvqpQcGTW8sS3IoVhiTxj8l_E1_7E9AFp_GkEOF9x4mYjx8_loJq73u-Ufup7f-1JIp120FHaWVBREyiLL7h5RwyN-IXM_6MekDWNewP43j1n12JanHV8klWTvB5ICPKk3pFrWPxt0nTgrX2XajccJJMe6omPFJKvKdiyEbp-_dWHo_POb5Hpzna1iIJ-8aVWuUk1PgRkUHGWHAszgO9MKa1BoXnnkEQqP9TMX76kwbEv_hnrsGrxkzFCHXyaZ1aKHyHmtd8vgI_W5zZP6L9bRMPWSHpK-Ufe0QrzMFM7ttAvz_zIfbyvK2sQWsCaHObcVfCjNdGl7u_vcYk-72oWA8dBkcBq1wh14sN-Mow==",
+      "name": "졸리마켓 강아지 대용량 육포",
+      "link": "https://link.coupang.com/re/AFFSDP?lptag=AF0595473&pageKey=8129382339&itemId=24024896806&vendorItemId=91045371333&traceid=V0-153-280649b62cb6d0ed&requestid=20261121132039308095008005&token=31850C%7CMIXED&pt=0&slot=2",
+      "img": "https://ads-partners.coupang.com/image1/kr6DbiBa1IiSMCq3kpr6ZkvGOgac-Srcc4najAnDm_yPGYZlAMIc9_VU5yDbp5Hnf34dtQdrjI8C12riR-waIOF0rELBIlF4R-leT66nVKcSvI2zz3_VwnNSy7dW8aVs99O4CvgmiOt2166eMJUjS9uLaIuRnUfZhijlrgWJIksbgxdtx2ypqgTt8GAQXlVA9fROnu5oLB6LzhEFqoDOfh1vxBospqhQKsMWdhyHoz7n6Ha1UU2oeDN0-DCZ6zVEHco2A_UFXfBubvnH0cWPRBv3BJWRQ1S18upVsGzXh4qKAz2mTtqTBzhD5ZuDIgZc6VS1GM-s_nl0flJWjossn3cLyAi275edWWC7x4FcYolAyL7L6ZgNHoMF0gHhmqCwnvITKA6Ugs5xvfDDz0C7qsM7t9DFw_Sn7_7WtGDofSgBc1X4ZJR400LMW3bftrvLS6esAEOitSZVz87CagfTvaqi1h2lJzX5nLBwuxgGF4XjNSHXG7dNdc9jeDwe26jAZOhWmHwHfXZPPxJlyrPLLys0IHdioUZIOoT1CEaCLb4EV6lEXYjVBM-sETc0xgJKIJx3mfGLzR5ArxtN28Of7vsAfrAZEhedK9mYjLpH",
       "r": true
     },
     "7710710222:21524204946": {
@@ -450,5 +454,5 @@
       "on": true
     }
   },
-  "updated": "2026-11-21 08:21"
+  "updated": "2026-11-21 13:17"
 }
